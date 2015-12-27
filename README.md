@@ -6,4 +6,4 @@ Das Spiel Risiko soll nachprogramiert werden. Yay ^^
 * Funktionierendes Spiel 
 * Ein bisschen AI 
 * Code soll halbwegs 'schön' sein ^^
-* "Eyecandy" (Ein bisschen UI schadet nicht) 
+* "Eyecandy" (Ein bisschen UI schadet nicht)
