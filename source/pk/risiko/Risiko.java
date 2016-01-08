@@ -2,10 +2,15 @@ package pk.risiko;
 
 import pk.risiko.pojo.Capital;
 import pk.risiko.pojo.GameMap;
+import pk.risiko.pojo.Player;
 import pk.risiko.pojo.Territory;
+import pk.risiko.ui.GamePanel;
 import pk.risiko.ui.GameWindow;
+import pk.risiko.ui.MenuPanel;
+import pk.risiko.util.GameStateMachine;
 
 import java.awt.*;
+import java.util.Arrays;
 import java.util.Collections;
 
 /**
@@ -19,6 +24,7 @@ import java.util.Collections;
 public class Risiko {
 
     private GameWindow gameWindow;
+    private GameStateMachine stateMachine;
 
     public static void main(String[] args) {
         /* TODO: implement some useful stuff:
@@ -35,8 +41,14 @@ public class Risiko {
     }
 
     public Risiko(GameMap map) {
-        GameWindow gameWindow = new GameWindow(map);
+        this.gameWindow = new GameWindow();
+        this.stateMachine = new GameStateMachine(gameWindow,new MenuPanel());
+
         gameWindow.setVisible(true);
+        this.stateMachine.showGame(new GamePanel(map
+                                                ,Arrays.asList(new Player("TestPlayer",Color.BLUE))
+                                                ,this.stateMachine)
+                                    );
     }
 
     /** Every UI Modification and Event must be dispatched by the EventQueue! **/

@@ -12,11 +12,14 @@ import java.util.List;
  */
 public class Territory implements Drawable {
 
+    private static final Color DEFAULT_COLOR = new Color(181, 132, 12);
+
     private String name;
     private Capital capital;
     private List<Territory> neighbours;
     private Polygon land;
 
+    private Player owner;
     /* TODO: Implement some nice things we might need the later:
     * private Player holdBy
     * private int currentArmyCount
@@ -28,6 +31,14 @@ public class Territory implements Drawable {
         this.capital = capital;
         this.land = land;
         this.neighbours = new ArrayList<>();
+    }
+
+    public void setOwner(Player player) {
+        this.owner = player;
+    }
+
+    public Player getOwner() {
+        return this.owner;
     }
 
     public String getName() {
@@ -44,6 +55,9 @@ public class Territory implements Drawable {
 
     @Override
     public void paint(Graphics g) {
+        g.setColor(this.owner!=null?this.owner.getColor():DEFAULT_COLOR);
+        g.fillPolygon(this.land);
+        g.setColor(Color.BLACK);
         g.drawPolygon(this.land);
         this.capital.paint(g);
     }
