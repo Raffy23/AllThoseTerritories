@@ -15,4 +15,7 @@ public class CyclicList<T> extends ArrayList<T> {
     public T peek() {
         return  super.get(Math.abs(currentCount % super.size()));
     }
+    public boolean isAtBeginning() {
+        return Math.abs(currentCount % super.size()) == 0;
+    }
 }

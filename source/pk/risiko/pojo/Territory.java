@@ -1,6 +1,10 @@
 package pk.risiko.pojo;
 
-import java.awt.*;
+import pk.risiko.ui.elements.UIElement;
+
+import java.awt.Color;
+import java.awt.Graphics;
+import java.awt.Polygon;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -10,9 +14,10 @@ import java.util.List;
  * @author Raphael Ludwig
  * @version 27.12.2015
  */
-public class Territory implements Drawable {
+public class Territory extends UIElement {
 
     private static final Color DEFAULT_COLOR = new Color(181, 132, 12);
+    private static final Color HOVER_COLOR = DEFAULT_COLOR.brighter();
 
     private String name;
     private Capital capital;
@@ -53,12 +58,36 @@ public class Territory implements Drawable {
         return neighbours;
     }
 
+    private Color getDrawingColor() {
+        if( this.getMouseState() == MouseState.NORMAL)
+            return this.owner!=null?this.owner.getColor():DEFAULT_COLOR;
+        else
+            return this.owner!=null?this.owner.getColor().brighter():HOVER_COLOR;
+    }
+
     @Override
     public void paint(Graphics g) {
-        g.setColor(this.owner!=null?this.owner.getColor():DEFAULT_COLOR);
+        g.setColor(this.getDrawingColor());
         g.fillPolygon(this.land);
-        g.setColor(Color.BLACK);
+
+        g.setColor(this.getMouseState()==MouseState.CLICKED?Color.RED:Color.BLACK);
         g.drawPolygon(this.land);
+
         this.capital.paint(g);
     }
+
+    @Override
+    public boolean isMouseIn(int x, int y) {
+        return this.land.contains(x,y);
+    }
+
+    @Override
+    public boolean mouseClicked() {
+        //TODO: add units / attack / or something else
+
+        return false;
+    }
+
+    @Override
+    public boolean keyEntered(char key) { /** Not needed here **/ return false; }
 }

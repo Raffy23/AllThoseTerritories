@@ -1,6 +1,5 @@
 package pk.risiko.pojo;
 
-import java.awt.*;
 import java.util.List;
 
 /**
@@ -10,7 +9,7 @@ import java.util.List;
  * @author Raphael Ludwig
  * @version 27.12.2015
  */
-public class GameMap implements Drawable {
+public class GameMap {
     private String mapName;
     private List<Territory> territories;
 
@@ -23,8 +22,7 @@ public class GameMap implements Drawable {
         return this.mapName;
     }
 
-    @Override
-    public void paint(Graphics g) {
-        this.territories.forEach(territory -> territory.paint(g));
+    public List<Territory> getTerritories() {
+        return this.territories;
     }
 }

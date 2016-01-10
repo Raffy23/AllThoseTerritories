@@ -1,6 +1,6 @@
-package pk.risiko.pojo;
+package pk.risiko.ui;
 
-import java.awt.*;
+import java.awt.Graphics;
 
 /**
  * All Objects / Classes which can be drawn into a Grahpics buffer

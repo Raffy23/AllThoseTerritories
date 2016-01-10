@@ -1,6 +1,4 @@
-package pk.risiko.ui;
-
-import pk.risiko.pojo.Player;
+package pk.risiko.pojo;
 
 /**
  * TODO: Placeholder for the AI of this game ...

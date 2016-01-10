@@ -4,14 +4,14 @@ import pk.risiko.pojo.Capital;
 import pk.risiko.pojo.GameMap;
 import pk.risiko.pojo.Player;
 import pk.risiko.pojo.Territory;
-import pk.risiko.ui.GamePanel;
 import pk.risiko.ui.GameWindow;
-import pk.risiko.ui.MenuPanel;
-import pk.risiko.util.GameStateMachine;
+import pk.risiko.ui.screens.GamePanel;
 
-import java.awt.*;
+import java.awt.Color;
+import java.awt.EventQueue;
+import java.awt.Polygon;
+import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 
 /**
  * This is the Main class, it does handle all
@@ -21,10 +21,7 @@ import java.util.Collections;
  * @author Raphael Ludwig
  * @version 27.12.2015
  */
-public class Risiko {
-
-    private GameWindow gameWindow;
-    private GameStateMachine stateMachine;
+public class Risiko extends GameWindow {
 
     public static void main(String[] args) {
         /* TODO: implement some useful stuff:
@@ -41,14 +38,13 @@ public class Risiko {
     }
 
     public Risiko(GameMap map) {
-        this.gameWindow = new GameWindow();
-        this.stateMachine = new GameStateMachine(gameWindow,new MenuPanel());
+        super();
 
-        gameWindow.setVisible(true);
-        this.stateMachine.showGame(new GamePanel(map
-                                                ,Arrays.asList(new Player("TestPlayer",Color.BLUE))
-                                                ,this.stateMachine)
+        this.getGameScreenManager().showGame(new GamePanel(map
+                                                ,Arrays.asList(new Player("Me",Color.BLUE),new Player("You",Color.RED))
+                                                ,this.getGameScreenManager())
                                     );
+        this.setVisible(true);
     }
 
     /** Every UI Modification and Event must be dispatched by the EventQueue! **/
@@ -62,10 +58,19 @@ public class Risiko {
         //otherwise it does draw under the Taskbar (at least in Windows 10)
 
         Capital cp = new Capital("Western",145,145);
-        Polygon p1 = new Polygon(new int[]{120,170,170,120},new int[]{120,120,170,120},4);
+        Polygon p1 = new Polygon(new int[]{120,170,170,120,120,120},
+                                 new int[]{120,120,170,170,120,120},5);
         Territory western = new Territory("Western",cp,p1);
 
-        return new GameMap("squares.map (DEBUG)", Collections.singletonList(western));
+        Capital cp1 = new Capital("Estern",295,295);
+        Polygon p2 = new Polygon(new int[]{220,370,370,220,220,220},
+                                 new int[]{220,220,370,370,220,220},5);
+        Territory estern = new Territory("Western",cp1,p2);
+
+        western.getNeighbours().add(estern);
+        estern.getNeighbours().add(western);
+
+        return new GameMap("squares.map (DEBUG)", new ArrayList<>(Arrays.asList(western,estern)));
     }
 
 }

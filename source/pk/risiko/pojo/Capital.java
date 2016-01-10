@@ -1,6 +1,10 @@
 package pk.risiko.pojo;
 
-import java.awt.*;
+import pk.risiko.ui.Drawable;
+
+import java.awt.Color;
+import java.awt.Graphics;
+import java.awt.Point;
 
 /**
  * This class does store name and location of the
@@ -26,6 +30,7 @@ public class Capital implements Drawable {
 
     @Override
     public void paint(Graphics g) {
+        g.setColor(Color.BLACK);
         g.fillRect(coords.x,coords.y,SIZE,SIZE);
         g.drawString(name,coords.x,coords.y); //Eyecandy: show name on hoofer only
     }

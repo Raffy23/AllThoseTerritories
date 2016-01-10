@@ -1,6 +1,6 @@
 package pk.risiko.pojo;
 
-import java.awt.*;
+import java.awt.Color;
 
 /**
  * This Class does represent the Player Entity

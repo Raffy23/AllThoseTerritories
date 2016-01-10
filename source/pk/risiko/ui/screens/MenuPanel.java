@@ -1,8 +1,8 @@
-package pk.risiko.ui;
+package pk.risiko.ui.screens;
 
-import pk.risiko.pojo.Drawable;
+import pk.risiko.ui.Drawable;
 
-import java.awt.*;
+import java.awt.Graphics;
 
 /**
  * TODO: Placeholder for a Game Menu (not ingame)

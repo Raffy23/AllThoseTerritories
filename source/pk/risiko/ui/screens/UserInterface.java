@@ -1,9 +1,12 @@
-package pk.risiko.ui;
+package pk.risiko.ui.screens;
 
-import pk.risiko.pojo.Drawable;
+import pk.risiko.ui.Drawable;
 import pk.risiko.ui.listener.UserInterfaceMouseListener;
 
-import java.awt.*;
+import java.awt.Color;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.Shape;
 import java.awt.geom.Ellipse2D;
 import java.awt.geom.Rectangle2D;
 
@@ -31,7 +34,7 @@ public class UserInterface implements Drawable {
         this.width = width;
         this.height = height;
 
-        this.next = new Ellipse2D.Double(width-75,height-95,65,65);
+        this.next = new Ellipse2D.Double(width-75,height-100,65,65);
         this.menu = new Rectangle2D.Double(width-75,2,65,20);
     }
 
@@ -43,6 +46,9 @@ public class UserInterface implements Drawable {
         g2d.fillRect(0,0,width,25);
         g2d.fill(next);
         g2d.draw(menu);
+        g.setColor(Color.WHITE);
+        g2d.drawLine(0,26,width,26);
+        g2d.draw(next);
 
         g2d.setColor(textColor);
         g2d.drawString("Player: " + this.master.getCurrentPlayer().getName() +
@@ -50,7 +56,7 @@ public class UserInterface implements Drawable {
 
         g2d.setColor(textColor);
         g2d.drawString("MENU",(int)this.menu.getBounds().getX()+14,(int)this.menu.getBounds().getHeight()-3);
-        g2d.drawString(">>",(int)this.next.getBounds().getCenterX(),(int)this.next.getBounds().getCenterY());
+        g2d.drawString(">>",(int)this.next.getBounds().getCenterX()-15,(int)this.next.getBounds().getCenterY());
     }
 
     public boolean isInMenuButton(int x,int y) {
