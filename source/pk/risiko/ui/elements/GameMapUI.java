@@ -5,6 +5,8 @@ import pk.risiko.pojo.Territory;
 
 import java.awt.Graphics;
 import java.awt.event.MouseEvent;
+import java.util.LinkedHashSet;
+import java.util.Set;
 
 /**
  * Created by:
@@ -15,13 +17,24 @@ import java.awt.event.MouseEvent;
 public class GameMapUI extends UIElement {
 
     private final GameMap gameMap;
+    private final Set<Connection> connections = new LinkedHashSet<>();
 
     public GameMapUI(GameMap map) {
         this.gameMap = map;
+
+        //Generate Connection between Territories for visualization
+        this.gameMap.getTerritories().forEach(territory ->
+            territory.getNeighbours().forEach(neighbour -> {
+                Connection con = new Connection(territory,neighbour);
+                if( !this.connections.contains(con) )
+                    this.connections.add(con);
+            })
+        );
     }
 
     @Override
     public void paint(Graphics g) {
+        this.connections.forEach(connection -> connection.paint(g));
         this.gameMap.getTerritories().forEach(territory -> territory.paint(g));
     }
 

@@ -58,6 +58,10 @@ public class Territory extends UIElement {
         return neighbours;
     }
 
+    public Polygon getLand() {
+        return this.land;
+    }
+
     private Color getDrawingColor() {
         if( this.getMouseState() == MouseState.NORMAL)
             return this.owner!=null?this.owner.getColor():DEFAULT_COLOR;
@@ -90,4 +94,5 @@ public class Territory extends UIElement {
 
     @Override
     public boolean keyEntered(char key) { /** Not needed here **/ return false; }
+
 }
