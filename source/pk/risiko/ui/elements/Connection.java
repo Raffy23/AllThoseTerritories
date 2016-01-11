@@ -7,6 +7,7 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Stroke;
+import java.awt.geom.Line2D;
 
 /**
  * Created by:
@@ -28,6 +29,10 @@ public class Connection extends UIElement {
     private final Territory b;
 
     public Connection(Territory a,Territory b) {
+        super(new Line2D.Double(a.getElementShape().getBounds().getCenterX()
+                               ,a.getElementShape().getBounds().getCenterY()
+                               ,b.getElementShape().getBounds().getCenterX()
+                               ,b.getElementShape().getBounds().getCenterY()));
         this.a = a;
         this.b = b;
     }
@@ -55,26 +60,13 @@ public class Connection extends UIElement {
         g2d.setColor(DEFAULT_COLOR);
         g2d.setStroke(DEFAULT_STROKE);
 
-        g2d.drawLine((int)a.getLand().getBounds().getCenterX()
-                  ,(int)a.getLand().getBounds().getCenterY()
-                  ,(int)b.getLand().getBounds().getCenterX()
-                  ,(int)b.getLand().getBounds().getCenterY());
+        g2d.draw(this.getElementShape());
 
         g2d.setStroke(backupDefaultStroke);
     }
 
     @Override
-    public boolean isMouseIn(int x, int y) {
-        return false;
-    }
-
-    @Override
     public boolean mouseClicked() {
-        return false;
-    }
-
-    @Override
-    public boolean keyEntered(char key) {
         return false;
     }
 }

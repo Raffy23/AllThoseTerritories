@@ -34,4 +34,8 @@ public class Capital implements Drawable {
         g.fillRect(coords.x,coords.y,SIZE,SIZE);
         g.drawString(name,coords.x,coords.y); //Eyecandy: show name on hoofer only
     }
+
+    public Point getCoords() {
+        return coords;
+    }
 }

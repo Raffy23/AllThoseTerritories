@@ -62,10 +62,10 @@ public class Risiko extends GameWindow {
                                  new int[]{120,120,170,170,120,120},5);
         Territory western = new Territory("Western",cp,p1);
 
-        Capital cp1 = new Capital("Estern",295,295);
+        Capital cp1 = new Capital("Eastern",295,295);
         Polygon p2 = new Polygon(new int[]{220,370,370,220,220,220},
                                  new int[]{220,220,370,370,220,220},5);
-        Territory estern = new Territory("Western",cp1,p2);
+        Territory estern = new Territory("Eastern",cp1,p2);
 
         western.getNeighbours().add(estern);
         estern.getNeighbours().add(western);

@@ -5,6 +5,7 @@ import pk.risiko.ui.elements.UIElement;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Polygon;
+import java.awt.geom.Area;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,25 +17,25 @@ import java.util.List;
  */
 public class Territory extends UIElement {
 
+    private static final Color OVAL_COLOR = new Color(248, 248, 248);
     private static final Color DEFAULT_COLOR = new Color(181, 132, 12);
     private static final Color HOVER_COLOR = DEFAULT_COLOR.brighter();
+
+    private static final int OVAL_SIZE = 24;
 
     private String name;
     private Capital capital;
     private List<Territory> neighbours;
-    private Polygon land;
 
     private Player owner;
-    /* TODO: Implement some nice things we might need the later:
-    * private Player holdBy
-    * private int currentArmyCount
-    * */
+    private int currentArmyCount = 0;
 
     //neighbours might not be known at constructing time!
     public Territory(String name,Capital capital,Polygon land) {
+        super(land);
+
         this.name = name;
         this.capital = capital;
-        this.land = land;
         this.neighbours = new ArrayList<>();
     }
 
@@ -58,8 +59,8 @@ public class Territory extends UIElement {
         return neighbours;
     }
 
-    public Polygon getLand() {
-        return this.land;
+    public int getStationedArmies() {
+        return this.currentArmyCount;
     }
 
     private Color getDrawingColor() {
@@ -72,27 +73,19 @@ public class Territory extends UIElement {
     @Override
     public void paint(Graphics g) {
         g.setColor(this.getDrawingColor());
-        g.fillPolygon(this.land);
+        g.fillPolygon((Polygon) this.getElementShape());
 
         g.setColor(this.getMouseState()==MouseState.CLICKED?Color.RED:Color.BLACK);
-        g.drawPolygon(this.land);
+        g.drawPolygon((Polygon) this.getElementShape());
 
-        this.capital.paint(g);
+        g.setColor(OVAL_COLOR);
+        final int xOffset = g.getFontMetrics().stringWidth(String.valueOf(this.currentArmyCount))+1;
+        final int yOffset = g.getFontMetrics().getHeight();
+        g.fillOval(this.capital.getCoords().x-xOffset,this.capital.getCoords().y-yOffset,OVAL_SIZE,OVAL_SIZE);
+
+        g.setColor(Color.BLACK);
+        g.drawString(String.valueOf(this.currentArmyCount),this.capital.getCoords().x,this.capital.getCoords().y);
     }
 
-    @Override
-    public boolean isMouseIn(int x, int y) {
-        return this.land.contains(x,y);
-    }
-
-    @Override
-    public boolean mouseClicked() {
-        //TODO: add units / attack / or something else
-
-        return false;
-    }
-
-    @Override
-    public boolean keyEntered(char key) { /** Not needed here **/ return false; }
 
 }

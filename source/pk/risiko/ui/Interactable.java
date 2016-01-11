@@ -10,6 +10,5 @@ public interface Interactable {
 
     boolean isMouseIn(int x,int y);
     boolean mouseClicked();
-    boolean keyEntered(char key);
 
 }

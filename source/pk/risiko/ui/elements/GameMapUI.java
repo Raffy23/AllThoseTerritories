@@ -3,7 +3,7 @@ package pk.risiko.ui.elements;
 import pk.risiko.pojo.GameMap;
 import pk.risiko.pojo.Territory;
 
-import java.awt.Graphics;
+import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.util.LinkedHashSet;
 import java.util.Set;
@@ -18,8 +18,10 @@ public class GameMapUI extends UIElement {
 
     private final GameMap gameMap;
     private final Set<Connection> connections = new LinkedHashSet<>();
+    private TerritoryHover territoryHover;
 
     public GameMapUI(GameMap map) {
+        super(new Rectangle(1254,504));
         this.gameMap = map;
 
         //Generate Connection between Territories for visualization
@@ -36,6 +38,8 @@ public class GameMapUI extends UIElement {
     public void paint(Graphics g) {
         this.connections.forEach(connection -> connection.paint(g));
         this.gameMap.getTerritories().forEach(territory -> territory.paint(g));
+
+        if( this.territoryHover != null ) this.territoryHover.paint(g);
     }
 
     @Override
@@ -48,6 +52,8 @@ public class GameMapUI extends UIElement {
 
     @Override
     public boolean mouseMoved(MouseEvent e) {
+        this.isMouseIn(e.getX(),e.getY());
+
         for(Territory t:this.gameMap.getTerritories())
             if( t.mouseMoved(e) ) return true;
 
@@ -57,8 +63,16 @@ public class GameMapUI extends UIElement {
     @Override
     public boolean isMouseIn(int x, int y) {
         for(Territory t:this.gameMap.getTerritories())
-            if( t.isMouseIn(x,y) ) return true;
+            if( t.isMouseIn(x,y) ) {
+                if( this.territoryHover == null || !this.territoryHover.getTerritory().equals(t) ) {
+                    this.territoryHover = new TerritoryHover(t,x + 10 ,y + 10);
+                } else if( this.territoryHover != null ) {
+                    this.territoryHover.moveTo(x + 10 ,y + 10);
+                }
+                return true;
+            }
 
+        this.territoryHover = null;
         return false;
     }
 
@@ -69,7 +83,4 @@ public class GameMapUI extends UIElement {
 
         return false;
     }
-
-    @Override
-    public boolean keyEntered(char key) { return false; }
 }
