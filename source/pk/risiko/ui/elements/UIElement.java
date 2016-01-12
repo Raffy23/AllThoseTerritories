@@ -3,11 +3,11 @@ package pk.risiko.ui.elements;
 import pk.risiko.pojo.MouseState;
 import pk.risiko.ui.Drawable;
 import pk.risiko.ui.Interactable;
-import pk.risiko.ui.listener.MouseEventListener;
 
-import java.awt.*;
+import java.awt.Shape;
 import java.awt.event.MouseEvent;
-import java.awt.geom.Area;
+import java.awt.event.MouseListener;
+import java.awt.event.MouseMotionListener;
 
 /**
  * Created by:
@@ -15,7 +15,7 @@ import java.awt.geom.Area;
  * @author Raphael
  * @version 10.01.2016
  */
-public abstract class UIElement implements Drawable, Interactable, MouseEventListener {
+public abstract class UIElement implements Drawable, Interactable, MouseMotionListener, MouseListener {
 
     private MouseState mouseState = MouseState.NORMAL;
     private Shape elementShape;
@@ -39,29 +39,38 @@ public abstract class UIElement implements Drawable, Interactable, MouseEventLis
     }
 
     @Override
-    public boolean mouseMoved(MouseEvent e) {
+    public void mouseDragged(MouseEvent e) {}
+
+    @Override
+    public void mouseMoved(MouseEvent e) {
         final boolean inMe = this.isMouseIn(e.getX(),e.getY());
 
         if( inMe && this.mouseState == MouseState.NORMAL || this.mouseState == MouseState.CLICKED )  {
             this.setMouseState(MouseState.HOVER);
-            return true;
         } else if( !inMe && this.mouseState == MouseState.HOVER ) {
             this.setMouseState(MouseState.NORMAL);
-            return true;
         }
-
-        return false;
     }
 
     @Override
-    public boolean mouseClicked(MouseEvent e) {
+    public void mouseClicked(MouseEvent e) {
         final boolean inMe = this.isMouseIn(e.getX(),e.getY());
 
-        if( inMe ) { this.mouseState = MouseState.CLICKED; return this.mouseClicked(); }
-        else if( this.mouseState == MouseState.CLICKED ) { this.mouseState = MouseState.NORMAL; return true; }
-
-        return false;
+        if( inMe ) { this.mouseState = MouseState.CLICKED; this.mouseClicked(); e.consume(); }
+        else if( this.mouseState == MouseState.CLICKED ) { this.mouseState = MouseState.NORMAL; }
     }
+
+    @Override
+    public void mousePressed(MouseEvent e) {}
+
+    @Override
+    public void mouseReleased(MouseEvent e) {}
+
+    @Override
+    public void mouseEntered(MouseEvent e) {}
+
+    @Override
+    public void mouseExited(MouseEvent e) {}
 
     @Override
     public boolean isMouseIn(int x, int y) {
@@ -69,7 +78,5 @@ public abstract class UIElement implements Drawable, Interactable, MouseEventLis
     }
 
     @Override
-    public boolean mouseClicked() {
-        return true;
-    }
+    public void mouseClicked() { }
 }

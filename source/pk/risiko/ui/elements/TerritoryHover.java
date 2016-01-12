@@ -26,8 +26,7 @@ public class TerritoryHover extends UIElement {
     }
 
     @Override
-    public void paint(Graphics g) {
-        Graphics2D g2d = (Graphics2D)g;
+    public void paint(Graphics2D g2d) {
         g2d.setColor(DEFAULT_BACKGROUND_COLOR);
         g2d.fill(this.getElementShape());
 
@@ -58,7 +57,7 @@ public class TerritoryHover extends UIElement {
 
         g2d.drawString("Stationed Armies: " + String.valueOf(this.territory.getStationedArmies())
                 ,(float)this.getElementShape().getBounds2D().getX() + 5
-                ,currentTextPosition+=fontHeight+5);
+                ,currentTextPosition+fontHeight+5);
     }
 
     public void moveTo(int x,int y) {

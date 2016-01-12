@@ -1,9 +1,9 @@
 package pk.risiko.ui;
 
-import pk.risiko.ui.listener.MouseEventListener;
+import pk.risiko.ui.listener.SwingMouseEventDispatcher;
 import pk.risiko.util.GameScreenManager;
-import pk.risiko.util.MouseEventTranslator;
 
+import javax.imageio.ImageIO;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.WindowConstants;
@@ -12,15 +12,18 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 import java.awt.event.KeyAdapter;
+import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 
 /**
  * GameWindow represents the Game Window of the Game.
  * It is responsible to draw all changes which occur in
  * the models or other UI Elements.
  * <br/>
- * <b>TODO: draw stuff in other class JPanel because we can draw into the Taskbar ... lol </b>
  *
  * @author Raphael Ludwig
  * @version 27.12.2015
@@ -35,14 +38,22 @@ public class GameWindow extends JFrame {
     private final GameArea rootPanel;
     private final GameScreenManager gameScreenManager;
 
-    private MouseEventTranslator mouseEvents;
+    private BufferedImage background;
+
+    private SwingMouseEventDispatcher dispatcher;
 
     private int x;
     private int y;
 
     private class GameArea extends JPanel {
+
+        public GameArea() {
+            this.setBounds(0,0,WINDOW_SIZE_X,WINDOW_SIZE_Y);
+        }
+
         @Override
         public void paint(Graphics g) {
+            if( !(g instanceof  Graphics2D) ) throw new RuntimeException("Graphics Object can't handle 2D Areas!");
             Graphics2D g2d = (Graphics2D) g;
 
             //Enables antialiasing for drawing
@@ -50,13 +61,24 @@ public class GameWindow extends JFrame {
             g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
             g2d.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
 
-            g.setColor(BACKGROUND_COLOR);
-            g.fillRect(0,0,GameWindow.this.getWidth(),GameWindow.this.getHeight());
+            if( GameWindow.this.background == null ) {
+                g.setColor(BACKGROUND_COLOR);
+                g.fillRect(0, 0, GameWindow.this.getWidth(), GameWindow.this.getHeight());
+            } else {
+                g.drawImage(GameWindow.this.background,0,0,GameWindow.this.getWidth(),GameWindow.this.getHeight(),null);
+            }
 
-            GameWindow.this.gameScreenManager.getActiveScreen().paint(g);
+            GameWindow.this.gameScreenManager.getActiveScreen().paint(g2d);
 
-            g.setColor(Color.MAGENTA);
+            g.setColor(Color.BLACK);
             g.drawString("X:" + x + " Y:" + y ,0, GameWindow.this.getHeight()-45);
+        }
+    }
+
+    private class WindowEventUpdater extends MouseAdapter {
+        @Override
+        public void mouseClicked(MouseEvent e) {
+            GameWindow.this.updateGraphics();
         }
     }
 
@@ -74,8 +96,16 @@ public class GameWindow extends JFrame {
         //Setup Manager:
         this.gameScreenManager = new GameScreenManager(this);
 
+
+        try {
+            this.background = ImageIO.read(new File("./assets/background-game.jpg"));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
         //Setup Draw Area:
         this.add(this.rootPanel = new GameArea());
+        this.rootPanel.addMouseListener(new WindowEventUpdater());
 
         this.rootPanel.addMouseMotionListener(new MouseMotionAdapter() {
             @Override
@@ -97,10 +127,10 @@ public class GameWindow extends JFrame {
         this.repaint();
     }
 
-    public void setMouseEventListener(MouseEventListener mouse) {
-        this.mouseEvents = new MouseEventTranslator(this,mouse);
-        this.rootPanel.addMouseListener(mouseEvents);
-        this.rootPanel.addMouseMotionListener(mouseEvents);
+    public void setSwingEventDispatcher(SwingMouseEventDispatcher dispatcher) {
+        this.dispatcher = dispatcher;
+        this.rootPanel.addMouseListener(dispatcher);
+        this.rootPanel.addMouseMotionListener(dispatcher);
     }
 
     public void registerKeyAdapter(KeyAdapter keyAdapter) {
@@ -108,8 +138,8 @@ public class GameWindow extends JFrame {
     }
 
     public void removeMouseEventListener() {
-        this.rootPanel.removeMouseMotionListener(this.mouseEvents);
-        this.rootPanel.removeMouseListener(this.mouseEvents);
+        this.rootPanel.removeMouseMotionListener(this.dispatcher);
+        this.rootPanel.removeMouseListener(this.dispatcher);
     }
 
     public void unregisterKeyAdapter(KeyAdapter keyAdapter) {

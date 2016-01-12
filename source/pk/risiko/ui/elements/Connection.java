@@ -4,7 +4,6 @@ import pk.risiko.pojo.Territory;
 
 import java.awt.BasicStroke;
 import java.awt.Color;
-import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Stroke;
 import java.awt.geom.Line2D;
@@ -30,9 +29,11 @@ public class Connection extends UIElement {
 
     public Connection(Territory a,Territory b) {
         super(new Line2D.Double(a.getElementShape().getBounds().getCenterX()
-                               ,a.getElementShape().getBounds().getCenterY()
-                               ,b.getElementShape().getBounds().getCenterX()
-                               ,b.getElementShape().getBounds().getCenterY()));
+                                        ,a.getElementShape().getBounds().getCenterY()
+                                        ,b.getElementShape().getBounds().getCenterX()
+                                        ,b.getElementShape().getBounds().getCenterY()));
+
+
         this.a = a;
         this.b = b;
     }
@@ -53,20 +54,17 @@ public class Connection extends UIElement {
     }
 
     @Override
-    public void paint(Graphics g) {
-        Graphics2D g2d = (Graphics2D)g;
-        final Stroke backupDefaultStroke = g2d.getStroke();
+    public void paint(Graphics2D g) {
+        final Stroke backupDefaultStroke = g.getStroke();
 
-        g2d.setColor(DEFAULT_COLOR);
-        g2d.setStroke(DEFAULT_STROKE);
+        g.setColor(DEFAULT_COLOR);
+        g.setStroke(DEFAULT_STROKE);
 
-        g2d.draw(this.getElementShape());
+        g.draw(this.getElementShape());
 
-        g2d.setStroke(backupDefaultStroke);
+        g.setStroke(backupDefaultStroke);
     }
 
     @Override
-    public boolean mouseClicked() {
-        return false;
-    }
+    public void mouseClicked() {}
 }

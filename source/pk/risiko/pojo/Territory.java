@@ -3,8 +3,7 @@ package pk.risiko.pojo;
 import pk.risiko.ui.elements.UIElement;
 
 import java.awt.Color;
-import java.awt.Graphics;
-import java.awt.Polygon;
+import java.awt.Graphics2D;
 import java.awt.geom.Area;
 import java.util.ArrayList;
 import java.util.List;
@@ -18,7 +17,7 @@ import java.util.List;
 public class Territory extends UIElement {
 
     private static final Color OVAL_COLOR = new Color(248, 248, 248);
-    private static final Color DEFAULT_COLOR = new Color(181, 132, 12);
+    private static final Color DEFAULT_COLOR = new Color(0.5f, 0.5f, 0.5f, 0.6f);
     private static final Color HOVER_COLOR = DEFAULT_COLOR.brighter();
 
     private static final int OVAL_SIZE = 24;
@@ -31,7 +30,7 @@ public class Territory extends UIElement {
     private int currentArmyCount = 0;
 
     //neighbours might not be known at constructing time!
-    public Territory(String name,Capital capital,Polygon land) {
+    public Territory(String name,Capital capital,Area land) {
         super(land);
 
         this.name = name;
@@ -63,6 +62,27 @@ public class Territory extends UIElement {
         return this.currentArmyCount;
     }
 
+    public void increaseArmy(int delta) {
+        this.currentArmyCount += delta;
+    }
+
+    /**
+     *
+     * @param delta delta value of which the units should be decreased (must be positive)
+     * @return true if the land was take by another player
+     */
+    public boolean decreaseArmy(int delta) {
+        assert delta > 0 : "Delta value must be positive!";
+
+        this.currentArmyCount -= delta;
+        if( this.currentArmyCount <= 0 ) {
+            this.currentArmyCount = 0;
+            return true;
+        }
+
+        return false;
+    }
+
     private Color getDrawingColor() {
         if( this.getMouseState() == MouseState.NORMAL)
             return this.owner!=null?this.owner.getColor():DEFAULT_COLOR;
@@ -71,12 +91,12 @@ public class Territory extends UIElement {
     }
 
     @Override
-    public void paint(Graphics g) {
+    public void paint(Graphics2D g) {
         g.setColor(this.getDrawingColor());
-        g.fillPolygon((Polygon) this.getElementShape());
+        g.fill(this.getElementShape());
 
         g.setColor(this.getMouseState()==MouseState.CLICKED?Color.RED:Color.BLACK);
-        g.drawPolygon((Polygon) this.getElementShape());
+        g.draw(this.getElementShape());
 
         g.setColor(OVAL_COLOR);
         final int xOffset = g.getFontMetrics().stringWidth(String.valueOf(this.currentArmyCount))+1;
@@ -86,6 +106,4 @@ public class Territory extends UIElement {
         g.setColor(Color.BLACK);
         g.drawString(String.valueOf(this.currentArmyCount),this.capital.getCoords().x,this.capital.getCoords().y);
     }
-
-
 }

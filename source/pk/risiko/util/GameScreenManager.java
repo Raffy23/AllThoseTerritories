@@ -37,7 +37,7 @@ public class GameScreenManager {
         }
         this.activeScreen = type;
         this.window.registerKeyAdapter(this.getActiveScreen().getKeyAdapter());
-        this.window.setMouseEventListener(this.getActiveScreen().getMouseAdapter());
+        this.window.setSwingEventDispatcher(this.getActiveScreen().getMouseEventDispatcher());
         this.repaintWindow();
     }
 

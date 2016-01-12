@@ -2,7 +2,10 @@ package pk.risiko.ui.elements;
 
 import pk.risiko.ui.listener.MouseClickedListener;
 
-import java.awt.*;
+import java.awt.Color;
+import java.awt.Font;
+import java.awt.Graphics2D;
+import java.awt.Shape;
 
 /** Created by:
  *
@@ -29,9 +32,7 @@ public class GameButton extends UIElement {
     }
 
     @Override
-    public void paint(Graphics g) {
-        Graphics2D g2d = (Graphics2D)g;
-
+    public void paint(Graphics2D g2d) {
         g2d.setColor(backgroundColor);
         g2d.fill(this.getElementShape());
 
@@ -65,7 +66,8 @@ public class GameButton extends UIElement {
     }
 
     @Override
-    public boolean mouseClicked() {
-        return this.listener!=null && this.listener.mouseclicked(this);
+    public void mouseClicked() {
+        if( this.listener!=null )
+            this.listener.mouseclicked(this);
     }
 }

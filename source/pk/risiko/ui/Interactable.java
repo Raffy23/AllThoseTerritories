@@ -9,6 +9,6 @@ package pk.risiko.ui;
 public interface Interactable {
 
     boolean isMouseIn(int x,int y);
-    boolean mouseClicked();
+    void mouseClicked();
 
 }

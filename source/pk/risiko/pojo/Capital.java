@@ -3,7 +3,7 @@ package pk.risiko.pojo;
 import pk.risiko.ui.Drawable;
 
 import java.awt.Color;
-import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.Point;
 
 /**
@@ -29,7 +29,7 @@ public class Capital implements Drawable {
     }
 
     @Override
-    public void paint(Graphics g) {
+    public void paint(Graphics2D g) {
         g.setColor(Color.BLACK);
         g.fillRect(coords.x,coords.y,SIZE,SIZE);
         g.drawString(name,coords.x,coords.y); //Eyecandy: show name on hoofer only

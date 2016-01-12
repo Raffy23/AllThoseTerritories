@@ -4,12 +4,11 @@ import pk.risiko.pojo.GameMap;
 import pk.risiko.pojo.GameState;
 import pk.risiko.pojo.Player;
 import pk.risiko.ui.elements.GameMapUI;
-import pk.risiko.ui.listener.MouseEventListener;
-import pk.risiko.ui.listener.MouseHandler;
-import pk.risiko.util.CyclicList;
+import pk.risiko.ui.listener.SwingMouseEventDispatcher;
 import pk.risiko.util.GameScreenManager;
+import pk.risiko.util.RoundManager;
 
-import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.event.KeyAdapter;
 import java.util.List;
 
@@ -23,40 +22,42 @@ import java.util.List;
  */
 public class GamePanel implements GameScreen {
 
-    private final GameMapUI gameMap;
+    private final GameMapUI gameMapUI;
     private final UserInterface userInterface;
     private final GameScreenManager gsm;
-    private final MouseHandler mouseHandler = new MouseHandler();
+    private final SwingMouseEventDispatcher mouseHandler = new SwingMouseEventDispatcher();
 
     private GameState currentGameState;
-
-    private final CyclicList<Player> players = new CyclicList<>();
-    private int currentRound;
+    private RoundManager roundManager;
 
     public GamePanel(GameMap gameMap,List<Player> playerList,GameScreenManager gameScreenManager) {
-        this.gameMap = new GameMapUI(gameMap);
-        this.players.addAll(playerList);
+        this.roundManager = new RoundManager(playerList);
+        this.gameMapUI = new GameMapUI(gameMap,roundManager);
+
+        this.currentGameState = GameState.SET_UNIT;
         this.gsm = gameScreenManager;
+
         this.userInterface = new UserInterface(this
                                               ,gameScreenManager.getWindow().getWidth()
                                               ,gameScreenManager.getWindow().getHeight());
 
         //Init mouse handler
-        this.mouseHandler.addMouseEventListener(this.userInterface);
-        this.mouseHandler.addMouseEventListener(this.gameMap);
+        this.mouseHandler.registerListener(this.userInterface);
+        this.mouseHandler.registerListener(this.gameMapUI);
     }
 
     public void changeState(GameState state) {
         System.out.println("Switch to State: " + state);
 
         switch (state) {
-            case NEXT_ROUND:
-                this.players.next();
-                if( this.players.isAtBeginning() ) this.currentRound++;
-                break;
+            case NEXT_ROUND: this.roundManager.nextPlayer(); break;
         }
 
-        this.currentGameState = state;
+        if( state == GameState.SET_UNIT && this.roundManager.isAtTheBeginning() )
+            state = GameState.ENCHANT_UNITS;
+        else if( state == GameState.ENCHANT_UNITS && this.roundManager.isAtTheBeginning() )
+            state = GameState.ATTACK_OR_MOVE_UNIT;
+
         gsm.repaintWindow();
     }
 
@@ -64,22 +65,26 @@ public class GamePanel implements GameScreen {
         return null; //TODO implement ...
     }
 
+    public GameState getCurrentGameState() {
+        return this.currentGameState;
+    }
+
     public int getRounds() {
-        return this.currentRound;
+        return this.roundManager.getCurrentRound();
     }
 
     public Player getCurrentPlayer() {
-        return this.players.peek();
+        return this.roundManager.getCurrentPlayer();
     }
 
     @Override
-    public void paint(Graphics g) {
-        this.gameMap.paint(g);
+    public void paint(Graphics2D g) {
+        this.gameMapUI.paint(g);
         this.userInterface.paint(g);
     }
 
     @Override
-    public MouseEventListener getMouseAdapter() {
+    public SwingMouseEventDispatcher getMouseEventDispatcher() {
         return this.mouseHandler;
     }
 

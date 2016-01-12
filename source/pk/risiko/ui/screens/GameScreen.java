@@ -1,7 +1,7 @@
 package pk.risiko.ui.screens;
 
 import pk.risiko.ui.Drawable;
-import pk.risiko.ui.listener.MouseEventListener;
+import pk.risiko.ui.listener.SwingMouseEventDispatcher;
 
 import java.awt.event.KeyAdapter;
 
@@ -13,7 +13,7 @@ import java.awt.event.KeyAdapter;
  */
 public interface GameScreen extends Drawable {
 
-    MouseEventListener getMouseAdapter();
+    SwingMouseEventDispatcher getMouseEventDispatcher();
     KeyAdapter getKeyAdapter();
 
 }

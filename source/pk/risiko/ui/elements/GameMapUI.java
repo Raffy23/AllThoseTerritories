@@ -2,8 +2,10 @@ package pk.risiko.ui.elements;
 
 import pk.risiko.pojo.GameMap;
 import pk.risiko.pojo.Territory;
+import pk.risiko.util.RoundManager;
 
-import java.awt.*;
+import java.awt.Graphics2D;
+import java.awt.Rectangle;
 import java.awt.event.MouseEvent;
 import java.util.LinkedHashSet;
 import java.util.Set;
@@ -16,13 +18,17 @@ import java.util.Set;
  */
 public class GameMapUI extends UIElement {
 
+    private final RoundManager roundManager;
     private final GameMap gameMap;
     private final Set<Connection> connections = new LinkedHashSet<>();
+
     private TerritoryHover territoryHover;
 
-    public GameMapUI(GameMap map) {
-        super(new Rectangle(1254,504));
+
+    public GameMapUI(GameMap map,RoundManager manager) {
+        super(new Rectangle(0,0,1250,650));
         this.gameMap = map;
+        this.roundManager = manager;
 
         //Generate Connection between Territories for visualization
         this.gameMap.getTerritories().forEach(territory ->
@@ -35,7 +41,7 @@ public class GameMapUI extends UIElement {
     }
 
     @Override
-    public void paint(Graphics g) {
+    public void paint(Graphics2D g) {
         this.connections.forEach(connection -> connection.paint(g));
         this.gameMap.getTerritories().forEach(territory -> territory.paint(g));
 
@@ -43,21 +49,15 @@ public class GameMapUI extends UIElement {
     }
 
     @Override
-    public boolean mouseClicked(MouseEvent e) {
-        for(Territory t:this.gameMap.getTerritories())
-            if( t.mouseClicked(e) ) return true;
-
-        return false;
+    public void mouseClicked(MouseEvent e) {
+        this.gameMap.getTerritories().forEach(t -> t.mouseClicked(e));
+        this.mouseClicked();
     }
 
     @Override
-    public boolean mouseMoved(MouseEvent e) {
+    public void mouseMoved(MouseEvent e) {
         this.isMouseIn(e.getX(),e.getY());
-
-        for(Territory t:this.gameMap.getTerritories())
-            if( t.mouseMoved(e) ) return true;
-
-        return false;
+        this.gameMap.getTerritories().forEach(t -> t.mouseMoved(e));
     }
 
     @Override
@@ -76,11 +76,15 @@ public class GameMapUI extends UIElement {
         return false;
     }
 
+    /**
+     * TODO: Implement Round making logic:
+     */
     @Override
-    public boolean mouseClicked() {
-        for(Territory t:this.gameMap.getTerritories())
-            if( t.mouseClicked() ) return true;
+    public void mouseClicked() {
+        if( this.territoryHover == null ) return; //mouse can't possible be on a territory so not interresting
 
-        return false;
+        Territory target = this.territoryHover.getTerritory();
+        if( target.getOwner() == null ) target.setOwner(this.roundManager.getCurrentPlayer());
+        else if ( target.getOwner().equals(this.roundManager.getCurrentPlayer()) ) target.increaseArmy(1);
     }
 }

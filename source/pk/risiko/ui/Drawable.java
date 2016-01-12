@@ -1,6 +1,6 @@
 package pk.risiko.ui;
 
-import java.awt.Graphics;
+import java.awt.Graphics2D;
 
 /**
  * All Objects / Classes which can be drawn into a Grahpics buffer
@@ -10,5 +10,5 @@ import java.awt.Graphics;
  * @version 27.12.2015
  */
 public interface Drawable {
-    void paint(Graphics g);
+    void paint(Graphics2D g);
 }
