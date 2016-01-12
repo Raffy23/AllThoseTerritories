@@ -54,8 +54,8 @@ public class GamePanel implements GameScreen {
         }
 
         if( state == GameState.SET_UNIT && this.roundManager.isAtTheBeginning() )
-            state = GameState.ENCHANT_UNITS;
-        else if( state == GameState.ENCHANT_UNITS && this.roundManager.isAtTheBeginning() )
+            state = GameState.REINFORCE_UNITS;
+        else if( state == GameState.REINFORCE_UNITS && this.roundManager.isAtTheBeginning() )
             state = GameState.ATTACK_OR_MOVE_UNIT;
 
         gsm.repaintWindow();
