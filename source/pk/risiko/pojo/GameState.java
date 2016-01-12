@@ -8,7 +8,7 @@ package pk.risiko.pojo;
  */
 public enum GameState {
     SET_UNIT,
-    ENCHANT_UNITS,
+    REINFORCE_UNITS,
     ATTACK_OR_MOVE_UNIT,
     NEXT_ROUND,
     SHOW_MENU,
