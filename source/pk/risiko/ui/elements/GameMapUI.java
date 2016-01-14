@@ -7,11 +7,14 @@ import pk.risiko.util.RoundManager;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.awt.event.MouseEvent;
+import java.awt.geom.Area;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
 /**
- * Created by:
+ * GameMapUI is the Graphical representation of the GameMap
+ * and does delegate the events of the input and drawing to
+ * the Territories
  *
  * @author Raphael
  * @version 10.01.2016
@@ -21,6 +24,7 @@ public class GameMapUI extends UIElement {
     private final RoundManager roundManager;
     private final GameMap gameMap;
     private final Set<Connection> connections = new LinkedHashSet<>();
+    private final Area waterArea;
 
     private TerritoryHover territoryHover;
 
@@ -29,20 +33,31 @@ public class GameMapUI extends UIElement {
         super(new Rectangle(0,0,1250,650));
         this.gameMap = map;
         this.roundManager = manager;
+        this.waterArea = new Area(this.getElementShape());
+
+        final Area territoryArea = new Area();
 
         //Generate Connection between Territories for visualization
-        this.gameMap.getTerritories().forEach(territory ->
+        this.gameMap.getTerritories().forEach(territory -> {
+            territoryArea.add((Area) territory.getElementShape());
             territory.getNeighbours().forEach(neighbour -> {
-                Connection con = new Connection(territory,neighbour);
-                if( !this.connections.contains(con) )
+                Connection con = new Connection(territory, neighbour);
+                if (!this.connections.contains(con))
                     this.connections.add(con);
-            })
-        );
+            });
+        });
+
+        this.waterArea.subtract(territoryArea);
     }
 
     @Override
     public void paint(Graphics2D g) {
-        this.connections.forEach(connection -> connection.paint(g));
+
+        Graphics2D g2dCon = (Graphics2D) g.create(); //Clone for clipping
+        g2dCon.clip(this.waterArea); //clip area to water only
+        this.connections.forEach(connection -> connection.paint(g2dCon));
+        g2dCon.dispose(); //get rid of the new graphics object -> not needed anymore
+
         this.gameMap.getTerritories().forEach(territory -> territory.paint(g));
 
         if( this.territoryHover != null ) this.territoryHover.paint(g);
