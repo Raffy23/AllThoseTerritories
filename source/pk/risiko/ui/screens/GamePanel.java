@@ -28,6 +28,7 @@ public class GamePanel implements GameScreen {
     private final SwingMouseEventDispatcher mouseHandler = new SwingMouseEventDispatcher();
 
     private GameState currentGameState;
+    private GameState currentMetaState = GameState.HIDE_MENU;
     private RoundManager roundManager;
 
     public GamePanel(GameMap gameMap,List<Player> playerList,GameScreenManager gameScreenManager) {
@@ -51,6 +52,9 @@ public class GamePanel implements GameScreen {
 
         switch (state) {
             case NEXT_ROUND: this.roundManager.nextPlayer(); break;
+            case SHOW_MENU: this.gameMapUI.setCurrentlyPlaying(false); break;
+            case HIDE_MENU: this.gameMapUI.setCurrentlyPlaying(true); break;
+            default: System.out.println("State is unknown!");
         }
 
         if( state == GameState.SET_UNIT && this.roundManager.isAtTheBeginning() )
@@ -58,8 +62,8 @@ public class GamePanel implements GameScreen {
         else if( state == GameState.REINFORCE_UNITS && this.roundManager.isAtTheBeginning() )
             state = GameState.ATTACK_OR_MOVE_UNIT;
 
-        //not needed due async drawing -> delete later
-        //gsm.repaintWindow();
+        if( state == GameState.HIDE_MENU || state == GameState.SHOW_MENU )
+            this.currentMetaState = state;
     }
 
     public Player getWinningPlayer() {

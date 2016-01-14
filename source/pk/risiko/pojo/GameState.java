@@ -12,4 +12,5 @@ public enum GameState {
     ATTACK_OR_MOVE_UNIT,
     NEXT_ROUND,
     SHOW_MENU,
+    HIDE_MENU
 }

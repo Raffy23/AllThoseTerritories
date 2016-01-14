@@ -21,16 +21,20 @@ import java.util.Set;
  */
 public class GameMapUI extends UIElement {
 
+    private static final int GAME_MAP_WIDTH  = 1250;
+    private static final int GAME_MAP_HEIGHT = 650;
+
     private final RoundManager roundManager;
     private final GameMap gameMap;
     private final Set<Connection> connections = new LinkedHashSet<>();
     private final Area waterArea;
 
     private TerritoryHover territoryHover;
+    private boolean isCurrentlyPlaying = true;
 
 
     public GameMapUI(GameMap map,RoundManager manager) {
-        super(new Rectangle(0,0,1250,650));
+        super(new Rectangle(0,0,GAME_MAP_WIDTH,GAME_MAP_HEIGHT));
         this.gameMap = map;
         this.roundManager = manager;
         this.waterArea = new Area(this.getElementShape());
@@ -52,7 +56,6 @@ public class GameMapUI extends UIElement {
 
     @Override
     public void paint(Graphics2D g) {
-
         Graphics2D g2dCon = (Graphics2D) g.create(); //Clone for clipping
         g2dCon.clip(this.waterArea); //clip area to water only
         this.connections.forEach(connection -> connection.paint(g2dCon));
@@ -65,18 +68,24 @@ public class GameMapUI extends UIElement {
 
     @Override
     public void mouseClicked(MouseEvent e) {
+        if( !this.isCurrentlyPlaying() ) return;
+
         this.gameMap.getTerritories().forEach(t -> t.mouseClicked(e));
         this.mouseClicked();
     }
 
     @Override
     public void mouseMoved(MouseEvent e) {
+        if( !this.isCurrentlyPlaying() ) return;
+
         this.isMouseIn(e.getX(),e.getY());
         this.gameMap.getTerritories().forEach(t -> t.mouseMoved(e));
     }
 
     @Override
     public boolean isMouseIn(int x, int y) {
+        if( !this.isCurrentlyPlaying() ) return false;
+
         for(Territory t:this.gameMap.getTerritories())
             if( t.isMouseIn(x,y) ) {
                 if( this.territoryHover == null || !this.territoryHover.getTerritory().equals(t) ) {
@@ -96,10 +105,19 @@ public class GameMapUI extends UIElement {
      */
     @Override
     public void mouseClicked() {
-        if( this.territoryHover == null ) return; //mouse can't possible be on a territory so not interresting
+        //mouse can't possible be on a territory so not interesting
+        if( this.territoryHover == null || !this.isCurrentlyPlaying()) return;
 
         Territory target = this.territoryHover.getTerritory();
         if( target.getOwner() == null ) target.setOwner(this.roundManager.getCurrentPlayer());
         else if ( target.getOwner().equals(this.roundManager.getCurrentPlayer()) ) target.increaseArmy(1);
+    }
+
+    public boolean isCurrentlyPlaying() {
+        return isCurrentlyPlaying;
+    }
+
+    public void setCurrentlyPlaying(boolean currentlyPlaying) {
+        isCurrentlyPlaying = currentlyPlaying;
     }
 }

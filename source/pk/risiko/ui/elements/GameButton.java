@@ -71,6 +71,6 @@ public class GameButton extends UIElement {
     @Override
     public void mouseClicked() {
         if( this.listener!=null )
-            this.listener.mouseclicked(this);
+            this.listener.mouseClicked(this);
     }
 }
