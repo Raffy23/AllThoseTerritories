@@ -58,7 +58,8 @@ public class GamePanel implements GameScreen {
         else if( state == GameState.REINFORCE_UNITS && this.roundManager.isAtTheBeginning() )
             state = GameState.ATTACK_OR_MOVE_UNIT;
 
-        gsm.repaintWindow();
+        //not needed due async drawing -> delete later
+        //gsm.repaintWindow();
     }
 
     public Player getWinningPlayer() {

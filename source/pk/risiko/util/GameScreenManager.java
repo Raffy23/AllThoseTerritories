@@ -38,7 +38,7 @@ public class GameScreenManager {
         this.activeScreen = type;
         this.window.registerKeyAdapter(this.getActiveScreen().getKeyAdapter());
         this.window.setSwingEventDispatcher(this.getActiveScreen().getMouseEventDispatcher());
-        this.repaintWindow();
+        //this.repaintWindow(); // not needed anymore
     }
 
     public void showMenu() {
@@ -50,6 +50,7 @@ public class GameScreenManager {
         this.showScreen(GameScreenType.GAME_SCREEN);
     }
 
+    @Deprecated
     public void repaintWindow() {
         if( EventQueue.isDispatchThread() ) this.window.updateGraphics();
         else EventQueue.invokeLater(this.window::updateGraphics);
