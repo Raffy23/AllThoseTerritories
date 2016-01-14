@@ -106,4 +106,9 @@ public class Territory extends UIElement {
         g.setColor(Color.BLACK);
         g.drawString(String.valueOf(this.currentArmyCount),this.capital.getCoords().x,this.capital.getCoords().y);
     }
+
+    @Override
+    public void mouseClicked() {
+        /* do nothing */
+    }
 }

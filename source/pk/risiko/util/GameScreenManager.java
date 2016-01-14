@@ -51,11 +51,8 @@ public class GameScreenManager {
     }
 
     public void repaintWindow() {
-        if( EventQueue.isDispatchThread() ) {
-            this.window.updateGraphics();
-        } else {
-            EventQueue.invokeLater(this.window::updateGraphics);
-        }
+        if( EventQueue.isDispatchThread() ) this.window.updateGraphics();
+        else EventQueue.invokeLater(this.window::updateGraphics);
     }
 
     public GameWindow getWindow() {

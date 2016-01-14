@@ -68,12 +68,12 @@ public class Risiko extends GameWindow {
         GameMap map = Risiko.constructGameMap();
 
         //TODO: Start Game / Show Game window:
-        EventQueue.invokeLater(() -> new Risiko(cmdParser,map));
+        EventQueue.invokeLater(() -> new Risiko(cmdParser,settings,map));
     }
 
     //TODO: Map should not be placed here somewhere later
-    public Risiko(CommandParser cmd,GameMap map) {
-        super();
+    public Risiko(CommandParser cmd,Properties settings,GameMap map) {
+        super(Integer.valueOf(settings.getProperty("fps")));
         this.gameMenu = new MenuPanel(this.getWidth(),this.getHeight());
         this.getGameScreenManager().addScreen(GameScreenType.START_MENU_SCREEN,gameMenu);
 

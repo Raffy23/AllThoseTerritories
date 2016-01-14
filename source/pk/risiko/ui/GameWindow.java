@@ -37,6 +37,7 @@ public class GameWindow extends JFrame {
 
     private final GameArea rootPanel;
     private final GameScreenManager gameScreenManager;
+    private final WindowPainter painterTimer;
 
     private BufferedImage background;
 
@@ -87,7 +88,7 @@ public class GameWindow extends JFrame {
      * (Size is fixed by the Game) <br/>
      * #setVisible(true); must be called explicitly to show the window!
      */
-    public GameWindow() {
+    public GameWindow(int fps) {
         super("AllThoseTerritories - Risiko");
         //Setup Window:
         this.setSize(GameWindow.WINDOW_SIZE_X,GameWindow.WINDOW_SIZE_Y);
@@ -112,9 +113,11 @@ public class GameWindow extends JFrame {
             public void mouseMoved(MouseEvent e) {
                 x = e.getX();
                 y = e.getY();
-                updateGraphics();
             }
         });
+
+        //Setup async Tasks:
+        this.painterTimer = new WindowPainter(this,fps);
     }
 
     public GameScreenManager getGameScreenManager() {

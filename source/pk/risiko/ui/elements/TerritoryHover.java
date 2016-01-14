@@ -67,4 +67,9 @@ public class TerritoryHover extends UIElement {
     public Territory getTerritory() {
         return territory;
     }
+
+    @Override
+    public void mouseClicked() {
+        /* do nothing ... btw this element can't be clicked */
+    }
 }

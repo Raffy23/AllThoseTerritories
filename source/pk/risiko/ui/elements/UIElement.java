@@ -5,17 +5,19 @@ import pk.risiko.ui.Drawable;
 import pk.risiko.ui.Interactable;
 
 import java.awt.Shape;
+import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
-import java.awt.event.MouseMotionListener;
 
 /**
- * Created by:
+ * This class represents any Graphical Element which can be drawn to the
+ * game screen. It does handle basic mouse actions and events. The class
+ * which implements UiElement is responsible for drawing and reacting to
+ * events!
  *
  * @author Raphael
  * @version 10.01.2016
  */
-public abstract class UIElement implements Drawable, Interactable, MouseMotionListener, MouseListener {
+public abstract class UIElement extends MouseAdapter implements Drawable, Interactable  {
 
     private MouseState mouseState = MouseState.NORMAL;
     private Shape elementShape;
@@ -61,22 +63,8 @@ public abstract class UIElement implements Drawable, Interactable, MouseMotionLi
     }
 
     @Override
-    public void mousePressed(MouseEvent e) {}
-
-    @Override
-    public void mouseReleased(MouseEvent e) {}
-
-    @Override
-    public void mouseEntered(MouseEvent e) {}
-
-    @Override
-    public void mouseExited(MouseEvent e) {}
-
-    @Override
     public boolean isMouseIn(int x, int y) {
         return this.elementShape.contains(x,y);
     }
 
-    @Override
-    public void mouseClicked() { }
 }
