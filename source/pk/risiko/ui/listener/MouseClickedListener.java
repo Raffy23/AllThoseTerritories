@@ -1,10 +1,10 @@
 package pk.risiko.ui.listener;
 
-import pk.risiko.ui.Interactable;
+import pk.risiko.ui.MouseEventHandler;
 
 /**
  * Created by Raphael on 11.01.2016.
  */
 public interface MouseClickedListener {
-    void mouseclicked(Interactable what);
+    void mouseclicked(MouseEventHandler what);
 }

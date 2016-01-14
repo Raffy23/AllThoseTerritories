@@ -7,7 +7,10 @@ import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.Shape;
 
-/** Created by:
+/**
+ * This Element is simply a Button which can be drawn to the Screen,
+ * it is a simple alternative to the JButton (does not have LayoutManger
+ * the tight swing bindings)
  *
  * @author Raphael
  * @version 11.01.2016

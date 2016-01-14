@@ -2,7 +2,7 @@ package pk.risiko.ui.elements;
 
 import pk.risiko.pojo.MouseState;
 import pk.risiko.ui.Drawable;
-import pk.risiko.ui.Interactable;
+import pk.risiko.ui.MouseEventHandler;
 
 import java.awt.Shape;
 import java.awt.event.MouseAdapter;
@@ -17,7 +17,7 @@ import java.awt.event.MouseEvent;
  * @author Raphael
  * @version 10.01.2016
  */
-public abstract class UIElement extends MouseAdapter implements Drawable, Interactable  {
+public abstract class UIElement extends MouseAdapter implements Drawable, MouseEventHandler {
 
     private MouseState mouseState = MouseState.NORMAL;
     private Shape elementShape;

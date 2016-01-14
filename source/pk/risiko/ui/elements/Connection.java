@@ -9,7 +9,8 @@ import java.awt.Stroke;
 import java.awt.geom.Line2D;
 
 /**
- * Created by:
+ * This class graphically represents the connection line between
+ * two territories
  *
  * @author Raphael
  * @version 10.01.2016
@@ -66,5 +67,5 @@ public class Connection extends UIElement {
     }
 
     @Override
-    public void mouseClicked() {}
+    public void mouseClicked() { /* what do you expect to happen when clicking to this line? */ }
 }

@@ -2,7 +2,7 @@ package pk.risiko.ui.screens;
 
 import pk.risiko.pojo.GameState;
 import pk.risiko.ui.Drawable;
-import pk.risiko.ui.Interactable;
+import pk.risiko.ui.MouseEventHandler;
 import pk.risiko.ui.elements.GameButton;
 import pk.risiko.ui.listener.MouseClickedListener;
 
@@ -59,7 +59,7 @@ public class UserInterface implements Drawable, MouseMotionListener, MouseListen
     }
 
     @Override
-    public void mouseclicked(Interactable what) {
+    public void mouseclicked(MouseEventHandler what) {
         if( what.equals(this.next) ) { this.master.changeState(GameState.NEXT_ROUND); }
         else if( what.equals(this.menu) ) { this.master.changeState(GameState.SHOW_MENU); }
     }

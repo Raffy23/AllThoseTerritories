@@ -35,6 +35,7 @@ public class Risiko extends GameWindow {
     private static final String SETTINGS_FILE = "./settings.properties";
 
     private final MenuPanel gameMenu;
+    private final Properties settings;
 
     public static void main(String[] args) {
         //Todo: remove this skip menu hack when not needed:
@@ -74,17 +75,16 @@ public class Risiko extends GameWindow {
     //TODO: Map should not be placed here somewhere later
     public Risiko(CommandParser cmd,Properties settings,GameMap map) {
         super(Integer.valueOf(settings.getProperty("fps")));
+        this.settings = settings;
         this.gameMenu = new MenuPanel(this.getWidth(),this.getHeight());
         this.getGameScreenManager().addScreen(GameScreenType.START_MENU_SCREEN,gameMenu);
 
-        this.gameMenu.getExitGame().setListener((what) -> this.dispose());
+        this.gameMenu.getExitGame().setListener((what) -> this.exitGame());
         this.gameMenu.getLoadGame().setListener((what) -> System.out.println("No loading implemented!"));
         this.gameMenu.getNewGame().setListener((what) -> this.startNewGame(map));
 
-        if( !cmd.isSkipMenu() )
-            this.getGameScreenManager().showMenu();
-        else
-            startNewGame(map);
+        if( !cmd.isSkipMenu() ) this.getGameScreenManager().showMenu();
+        else startNewGame(map);
 
         this.setVisible(true);
     }
@@ -94,6 +94,12 @@ public class Risiko extends GameWindow {
                 ,Arrays.asList(new Player("Me", Color.BLUE),new Player("You",Color.RED))
                 ,this.getGameScreenManager())
         );
+    }
+
+    private void exitGame() {
+        //Save settings or do some other stuff before disposing the window
+
+        this.dispose();
     }
 
     /** This is DEBUG Code: **/

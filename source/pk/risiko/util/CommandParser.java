@@ -1,7 +1,8 @@
 package pk.risiko.util;
 
 /**
- * Created by
+ * Simply a utility which parses the commandline and does
+ * save the state of it
  *
  * @author Raphael
  * @version 12.01.2016
