@@ -23,15 +23,15 @@ public class Territory extends UIElement {
     private static final int OVAL_SIZE = 24;
 
     private String name;
-    private Capital capital;
+    private Capital capital=new Capital("",0,0);
     private List<Territory> neighbours;
 
     private Player owner;
     private int currentArmyCount = 0;
 
     //neighbours might not be known at constructing time!
-    public Territory(String name) {
-        super(new Area());
+    public Territory(String name, Area a) {
+        super(a);
 
         this.name = name;
         this.neighbours = new ArrayList<>();
@@ -52,6 +52,8 @@ public class Territory extends UIElement {
     public String getCapitalName() {
         return capital.getName();
     }
+
+    public Capital getCapital(){return capital;}
 
     public List<Territory> getNeighbours() {
         return neighbours;

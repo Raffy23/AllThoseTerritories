@@ -111,9 +111,7 @@ public class GameMapUI extends UIElement {
 
         Territory target = this.territoryHover.getTerritory();
 
-        new Territory("name",null,new Area());
 
-        ((Area)target.getElementShape()).add(new Area(new Polygon()));
 
 
         if( target.getOwner() == null ) target.setOwner(this.roundManager.getCurrentPlayer());

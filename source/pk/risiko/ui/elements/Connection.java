@@ -29,12 +29,8 @@ public class Connection extends UIElement {
     private final Territory b;
 
     public Connection(Territory a,Territory b) {
-        super(new Line2D.Double(a.getElementShape().getBounds().getCenterX()
-                                        ,a.getElementShape().getBounds().getCenterY()
-                                        ,b.getElementShape().getBounds().getCenterX()
-                                        ,b.getElementShape().getBounds().getCenterY()));
-
-
+        super(new Line2D.Double(a.getCapital().getCoords().getX(),a.getCapital().getCoords().getY(),
+                b.getCapital().getCoords().getX(), b.getCapital().getCoords().getY()));
         this.a = a;
         this.b = b;
     }

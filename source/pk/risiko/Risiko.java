@@ -1,5 +1,6 @@
 package pk.risiko;
 
+import pk.risiko.dao.MapFileReader;
 import pk.risiko.pojo.Capital;
 import pk.risiko.pojo.GameMap;
 import pk.risiko.pojo.GameScreenType;
@@ -40,7 +41,7 @@ public class Risiko extends GameWindow {
     public static void main(String[] args) {
         //Todo: remove this skip menu hack when not needed:
         List<String> argvs = new ArrayList<>(Arrays.asList(args));
-        argvs.add("--skip-menu");
+        //argvs.add("--skip-menu");
 
         final CommandParser cmdParser = new CommandParser(argvs.toArray(new String[argvs.size()]));
         if( cmdParser.isInvalid() ) {
@@ -64,9 +65,13 @@ public class Risiko extends GameWindow {
             MapFileReader fileReader = new MapFileReader(...)
             etc ...
          */
+        MapFileReader fileReader = new MapFileReader(mapDirectoryPath);
+
 
         //TODO: After Setup populate models:
-        GameMap map = Risiko.constructGameMap();
+        GameMap map = fileReader.readMap();
+        //GameMap map = fileReader.readMap("mapDirectoryPath/");
+        //GameMap map = Risiko.constructGameMap();
 
         //TODO: Start Game / Show Game window:
         EventQueue.invokeLater(() -> new Risiko(cmdParser,settings,map));
@@ -103,7 +108,7 @@ public class Risiko extends GameWindow {
     }
 
     /** This is DEBUG Code: **/
-    private static GameMap constructGameMap() {
+    /*private static GameMap constructGameMap() {
         //The data in this code was taken from squeres.map but multipled with 100 because
         //otherwise it does draw under the Taskbar (at least in Windows 10)
 
@@ -123,6 +128,6 @@ public class Risiko extends GameWindow {
         estern.getNeighbours().add(western);
 
         return new GameMap("squares.map (DEBUG)", new ArrayList<>(Arrays.asList(western,estern)));
-    }
+    }*/
 
 }
