@@ -33,21 +33,6 @@ public class MapFileReader {
         directory=d;
     }
 
-
-
-    public void readMap(String file)
-    {
-        String line="";
-        try {
-            BufferedReader br = new BufferedReader(new FileReader("maps/squares.map"));
-            while ((line=br.readLine()) != null) {
-                System.out.println(line);
-            }
-        }
-        catch (IOException e) {
-            System.err.println("Error: " + e);
-        }
-    }
     private String getName(String[] arr)
     {
         String s="";
@@ -72,7 +57,7 @@ public class MapFileReader {
     {
         Polygon p = new Polygon();
 
-        for (int i = 2; i < arr.length-2;) {
+        for (int i = 2; i < arr.length;) {
             if (!isInteger(arr[i]))
                 i++;
             else {
@@ -83,13 +68,13 @@ public class MapFileReader {
 
         return p;
     }
-    public GameMap readMap()
+    public GameMap readMap(String name)
     {
 
         String line="";
         BufferedReader br=null;
         try {
-            br = new BufferedReader(new FileReader(directory+"world.map"));
+            br = new BufferedReader(new FileReader(directory+name));
             while ((line=br.readLine()) != null) {
                 System.out.println(line);
 
@@ -156,7 +141,7 @@ public class MapFileReader {
                     e.printStackTrace();
                 }
         }
-        return new GameMap("", new ArrayList<>(territories.values()));
+        return new GameMap(name, new ArrayList<>(territories.values()));
     }
 
 }

@@ -46,9 +46,6 @@ public class TerritoryHover extends UIElement {
                 ,(int)(currentTextPosition));
 
         g2d.setColor(DEFAULT_TEXT_COLOR);
-        g2d.drawString("Captial: " + this.territory.getCapitalName()
-                ,(float)this.getElementShape().getBounds2D().getX() + 5
-                ,currentTextPosition+=fontHeight+8);
 
         g2d.drawString("Owend by: " + (this.territory.getOwner()!=null?this.territory.getOwner().getName():"none")
                 ,(float)this.getElementShape().getBounds2D().getX() + 5
