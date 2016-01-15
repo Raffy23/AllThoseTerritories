@@ -2,6 +2,7 @@ package pk.risiko.ui.elements;
 
 import pk.risiko.pojo.GameMap;
 import pk.risiko.pojo.GameState;
+import pk.risiko.pojo.Player;
 import pk.risiko.pojo.Territory;
 import pk.risiko.ui.screens.GamePanel;
 import pk.risiko.util.RoundManager;
@@ -111,6 +112,9 @@ public class GameMapUI extends UIElement {
      */
     @Override
     public void mouseClicked() {
+
+        /* TODO: Players stored in roundManager - let roundManager handle Player action implementation?*/
+
         //mouse can't possible be on a territory so not interesting
         if( this.territoryHover == null || !this.isCurrentlyPlaying()) return;
 
@@ -121,12 +125,30 @@ public class GameMapUI extends UIElement {
             if (target.getOwner() == null) {
                 target.setOwner(this.roundManager.getCurrentPlayer());
                 target.increaseArmy(1);
+
+                roundManager.nextPlayer();
+                if (!gameMap.decreaseFreeTerritories()) {
+                    /* TODO: replace reinforcement count for player*/
+                    roundManager.getCurrentPlayer().setReinforcements(5);
+                    roundManager.nextPlayer();
+                    roundManager.getCurrentPlayer().setReinforcements(5);
+
+
+                    gamePanel.changeState(GameState.REINFORCE_UNITS);
+                    roundManager.nextPlayer(); // set to Player , not Computer
+                }
             }
-            roundManager.nextPlayer();
+
         }
-
-
-        if ( target.getOwner().equals(this.roundManager.getCurrentPlayer()) ) target.increaseArmy(1);
+        System.out.println(gamePanel.getCurrentGameState());
+        if (gamePanel.getCurrentGameState().equals(GameState.REINFORCE_UNITS)) {
+            Player p = this.roundManager.getCurrentPlayer();
+            if (target.getOwner().equals(p))
+                if (p.reinforcementPossible())
+                    target.increaseArmy(1);
+                else
+                    roundManager.nextPlayer();
+        }
     }
 
     public boolean isCurrentlyPlaying() {

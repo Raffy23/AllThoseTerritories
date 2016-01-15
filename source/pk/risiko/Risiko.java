@@ -1,11 +1,7 @@
 package pk.risiko;
 
 import pk.risiko.dao.MapFileReader;
-import pk.risiko.pojo.Capital;
-import pk.risiko.pojo.GameMap;
-import pk.risiko.pojo.GameScreenType;
-import pk.risiko.pojo.Player;
-import pk.risiko.pojo.Territory;
+import pk.risiko.pojo.*;
 import pk.risiko.ui.GameWindow;
 import pk.risiko.ui.screens.GamePanel;
 import pk.risiko.ui.screens.MenuPanel;
@@ -96,7 +92,7 @@ public class Risiko extends GameWindow {
 
     private void startNewGame(GameMap map) {
         this.getGameScreenManager().showGame(new GamePanel(map
-                ,Arrays.asList(new Player("Me", Color.BLUE),new Player("You",Color.RED))
+                ,Arrays.asList(new Player("Me", Color.BLUE),new PlayerAI("Computer",Color.RED))
                 ,this.getGameScreenManager())
         );
     }

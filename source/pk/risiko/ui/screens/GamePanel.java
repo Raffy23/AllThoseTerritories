@@ -57,13 +57,16 @@ public class GamePanel implements GameScreen {
             default: System.out.println("State is unknown!");
         }
 
-        if( state == GameState.SET_UNIT && this.roundManager.isAtTheBeginning() )
+        /*if( state == GameState.SET_UNIT && this.roundManager.isAtTheBeginning() )
             state = GameState.REINFORCE_UNITS;
         else if( state == GameState.REINFORCE_UNITS && this.roundManager.isAtTheBeginning() )
             state = GameState.ATTACK_OR_MOVE_UNIT;
-
+           */
         if( state == GameState.HIDE_MENU || state == GameState.SHOW_MENU )
             this.currentMetaState = state;
+
+
+        this.currentGameState=state;
     }
 
     public Player getWinningPlayer() {
