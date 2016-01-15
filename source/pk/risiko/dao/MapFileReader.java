@@ -1,6 +1,7 @@
 package pk.risiko.dao;
 
 import pk.risiko.pojo.Capital;
+import pk.risiko.pojo.Continent;
 import pk.risiko.pojo.GameMap;
 import pk.risiko.pojo.Territory;
 
@@ -123,12 +124,19 @@ public class MapFileReader {
                             main.getNeighbours().add(neighbor);
                             neighbor.getNeighbours().add(main);
                         }
-
-
-
-
                         break;
                     case "continent":
+                        // tname is now name of the continent
+                        String[] continentinfo=line.split(":");
+                        String[] a =continentinfo[0].split(" ");
+                        int continentvalue= Integer.parseInt(arr[a.length-1]);
+                        String[] continentterritories = continentinfo[1].split("-");
+
+                        Continent continent = new Continent(tname, continentvalue);
+
+                        for (int i = 0; i < continentterritories.length; i++) {
+                            continent.addTerritory(territories.get(continentterritories[i].trim()));
+                        }
 
                         break;
                 }
