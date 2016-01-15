@@ -1,12 +1,14 @@
 package pk.risiko.ui.elements;
 
 import pk.risiko.pojo.Territory;
+import pk.risiko.ui.GameWindow;
 
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Graphics2D;
+import java.awt.Point;
+import java.awt.Polygon;
 import java.awt.Stroke;
-import java.awt.geom.Line2D;
 
 /**
  * This class graphically represents the connection line between
@@ -29,11 +31,43 @@ public class Connection extends UIElement {
     private final Territory b;
 
     public Connection(Territory a,Territory b) {
-        super(new Line2D.Double(a.getCapital().getCoords().getX(),a.getCapital().getCoords().getY(),
-                b.getCapital().getCoords().getX(), b.getCapital().getCoords().getY()));
+        super(Connection.createNewObjectShape(a,b));
+
         this.a = a;
         this.b = b;
     }
+
+    private static Polygon createNewObjectShape(Territory a, Territory b) {
+
+        if( a.getCapital().getCoords().distance(b.getCapital().getCoords()) >= 720 ) {
+            Point left = a.getCapital().getCoords().x < b.getCapital().getCoords().x ?
+                         a.getCapital().getCoords() : b.getCapital().getCoords();
+            Point right = b.getCapital().getCoords().x < a.getCapital().getCoords().x ?
+                          b.getCapital().getCoords() : a.getCapital().getCoords();
+
+            Point leftPartner = new Point(-5,right.y);
+            Point rightPartner = new Point(GameWindow.WINDOW_SIZE_X+5,left.y);
+
+            Polygon line = new Polygon();
+            line.addPoint(left.x,left.y);
+            line.addPoint(leftPartner.x,leftPartner.y);
+            line.addPoint(-5,-5);
+            line.addPoint(GameWindow.WINDOW_SIZE_X+5,-5);
+            line.addPoint(rightPartner.x,rightPartner.y);
+            line.addPoint(right.x,right.y);
+
+            return line;
+
+        } else {
+            return new Polygon(new int[]{a.getCapital().getCoords().x,b.getCapital().getCoords().x}
+                              ,new int[]{a.getCapital().getCoords().y,b.getCapital().getCoords().y}
+                              ,2);
+        }
+
+
+
+    }
+
 
     @Override
     public int hashCode() {
