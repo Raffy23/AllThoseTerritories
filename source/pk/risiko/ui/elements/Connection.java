@@ -42,7 +42,7 @@ public class Connection extends UIElement {
         if( a.getCapital().getCoords().distance(b.getCapital().getCoords()) >= 720 ) {
             Point left = a.getCapital().getCoords().x < b.getCapital().getCoords().x ?
                          a.getCapital().getCoords() : b.getCapital().getCoords();
-            Point right = b.getCapital().getCoords().x < a.getCapital().getCoords().x ?
+            Point right = b.getCapital().getCoords().x > a.getCapital().getCoords().x ?
                           b.getCapital().getCoords() : a.getCapital().getCoords();
 
             Point leftPartner = new Point(-5,right.y);
@@ -55,6 +55,13 @@ public class Connection extends UIElement {
             line.addPoint(GameWindow.WINDOW_SIZE_X+5,-5);
             line.addPoint(rightPartner.x,rightPartner.y);
             line.addPoint(right.x,right.y);
+
+            //Backtracking
+            line.addPoint(rightPartner.x,rightPartner.y);
+            line.addPoint(GameWindow.WINDOW_SIZE_X+5,-5);
+            line.addPoint(-5,-5);
+            line.addPoint(leftPartner.x,leftPartner.y);
+
 
             return line;
 
