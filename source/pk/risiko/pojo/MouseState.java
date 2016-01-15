@@ -1,7 +1,8 @@
 package pk.risiko.pojo;
 
 /**
- * Created by:
+ * Type does specify which mouse states are important
+ * to the game and also get to be handled by it
  *
  * @author Raphael
  * @version 10.01.2016

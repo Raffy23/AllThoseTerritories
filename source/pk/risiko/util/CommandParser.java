@@ -16,8 +16,6 @@ public class CommandParser {
     private boolean skipMenu;
     private boolean invalid;
 
-
-
     public CommandParser(String[] argvs) {
 
         for(int i=0;i<argvs.length;i++) {

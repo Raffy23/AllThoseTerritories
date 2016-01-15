@@ -57,7 +57,7 @@ public abstract class UIElement extends MouseAdapter implements Drawable, MouseE
     @Override
     public void mouseClicked(MouseEvent e) {
         final boolean inMe = this.isMouseIn(e.getX(),e.getY());
-
+        
         if( inMe ) { this.mouseState = MouseState.CLICKED; this.mouseClicked(); e.consume(); }
         else if( this.mouseState == MouseState.CLICKED ) { this.mouseState = MouseState.NORMAL; }
     }

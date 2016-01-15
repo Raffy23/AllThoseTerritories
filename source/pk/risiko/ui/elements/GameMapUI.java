@@ -5,6 +5,7 @@ import pk.risiko.pojo.Territory;
 import pk.risiko.util.RoundManager;
 
 import java.awt.Graphics2D;
+import java.awt.Polygon;
 import java.awt.Rectangle;
 import java.awt.event.MouseEvent;
 import java.awt.geom.Area;
@@ -109,6 +110,12 @@ public class GameMapUI extends UIElement {
         if( this.territoryHover == null || !this.isCurrentlyPlaying()) return;
 
         Territory target = this.territoryHover.getTerritory();
+
+        new Territory("name",null,new Area());
+
+        ((Area)target.getElementShape()).add(new Area(new Polygon()));
+
+
         if( target.getOwner() == null ) target.setOwner(this.roundManager.getCurrentPlayer());
         else if ( target.getOwner().equals(this.roundManager.getCurrentPlayer()) ) target.increaseArmy(1);
     }

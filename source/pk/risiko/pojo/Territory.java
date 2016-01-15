@@ -30,11 +30,10 @@ public class Territory extends UIElement {
     private int currentArmyCount = 0;
 
     //neighbours might not be known at constructing time!
-    public Territory(String name,Capital capital,Area land) {
-        super(land);
+    public Territory(String name) {
+        super(new Area());
 
         this.name = name;
-        this.capital = capital;
         this.neighbours = new ArrayList<>();
     }
 
@@ -110,5 +109,13 @@ public class Territory extends UIElement {
     @Override
     public void mouseClicked() {
         /* do nothing */
+    }
+
+    public Area getArea() {
+        return (Area)this.getElementShape();
+    }
+
+    public void setCapital(Capital capital) {
+        this.capital = capital;
     }
 }
