@@ -12,6 +12,7 @@ import java.util.List;
 public class GameMap {
     private String mapName;
     private List<Territory> territories;
+    private int freeterritories;
 
     public GameMap(String name,List<Territory> territories) {
         this.mapName = name;
@@ -25,4 +26,6 @@ public class GameMap {
     public List<Territory> getTerritories() {
         return this.territories;
     }
+
+
 }

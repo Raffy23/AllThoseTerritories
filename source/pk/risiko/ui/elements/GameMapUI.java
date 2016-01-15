@@ -1,7 +1,9 @@
 package pk.risiko.ui.elements;
 
 import pk.risiko.pojo.GameMap;
+import pk.risiko.pojo.GameState;
 import pk.risiko.pojo.Territory;
+import pk.risiko.ui.screens.GamePanel;
 import pk.risiko.util.RoundManager;
 
 import java.awt.Graphics2D;
@@ -29,16 +31,18 @@ public class GameMapUI extends UIElement {
     private final GameMap gameMap;
     private final Set<Connection> connections = new LinkedHashSet<>();
     private final Area waterArea;
+    private final GamePanel gamePanel;
 
     private TerritoryHover territoryHover;
     private boolean isCurrentlyPlaying = true;
 
 
-    public GameMapUI(GameMap map,RoundManager manager) {
+    public GameMapUI(GameMap map,RoundManager manager, GamePanel panel) {
         super(new Rectangle(0,0,GAME_MAP_WIDTH,GAME_MAP_HEIGHT));
         this.gameMap = map;
         this.roundManager = manager;
         this.waterArea = new Area(this.getElementShape());
+        this.gamePanel=panel;
 
         final Area territoryArea = new Area();
 
@@ -73,6 +77,7 @@ public class GameMapUI extends UIElement {
 
         this.gameMap.getTerritories().forEach(t -> t.mouseClicked(e));
         this.mouseClicked();
+
     }
 
     @Override
@@ -111,11 +116,17 @@ public class GameMapUI extends UIElement {
 
         Territory target = this.territoryHover.getTerritory();
 
+        // SET_UNIT
+        if (gamePanel.getCurrentGameState().equals(GameState.SET_UNIT)) {
+            if (target.getOwner() == null) {
+                target.setOwner(this.roundManager.getCurrentPlayer());
+                target.increaseArmy(1);
+            }
+            roundManager.nextPlayer();
+        }
 
 
-
-        if( target.getOwner() == null ) target.setOwner(this.roundManager.getCurrentPlayer());
-        else if ( target.getOwner().equals(this.roundManager.getCurrentPlayer()) ) target.increaseArmy(1);
+        if ( target.getOwner().equals(this.roundManager.getCurrentPlayer()) ) target.increaseArmy(1);
     }
 
     public boolean isCurrentlyPlaying() {

@@ -69,7 +69,7 @@ public class Risiko extends GameWindow {
 
 
         //TODO: After Setup populate models:
-        GameMap map = fileReader.readMap("three-continents.map");
+        GameMap map = fileReader.readMap("world.map");
         //GameMap map = fileReader.readMap("mapDirectoryPath/");
         //GameMap map = Risiko.constructGameMap();
 

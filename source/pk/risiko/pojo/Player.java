@@ -12,6 +12,7 @@ public class Player {
     private String name;
     private Color color;
     protected boolean human = true;
+    private int reinforcements;
 
     public Player(String name,Color color) {
         this.name = name;
@@ -25,4 +26,23 @@ public class Player {
     public Color getColor() {
         return this.color;
     }
+    public int getReinforcements()
+    {
+        return reinforcements;
+    }
+    public void setReinforcements(int i)
+    {
+        reinforcements=i;
+    }
+    // returns true if possible
+    // false if no reinforcements left
+    public boolean setReinforcements()
+    {
+        if (reinforcements<=0)
+            return false;
+
+        reinforcements--;
+        return true;
+    }
+
 }
