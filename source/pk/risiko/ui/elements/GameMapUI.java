@@ -8,7 +8,6 @@ import pk.risiko.ui.screens.GamePanel;
 import pk.risiko.util.RoundManager;
 
 import java.awt.Graphics2D;
-import java.awt.Polygon;
 import java.awt.Rectangle;
 import java.awt.event.MouseEvent;
 import java.awt.geom.Area;
@@ -25,8 +24,8 @@ import java.util.Set;
  */
 public class GameMapUI extends UIElement {
 
-    private static final int GAME_MAP_WIDTH  = 1250;
-    private static final int GAME_MAP_HEIGHT = 650;
+    public static final int GAME_MAP_WIDTH  = 1250;
+    public static final int GAME_MAP_HEIGHT = 650;
 
     private final RoundManager roundManager;
     private final GameMap gameMap;
@@ -98,7 +97,7 @@ public class GameMapUI extends UIElement {
                 if( this.territoryHover == null || !this.territoryHover.getTerritory().equals(t) ) {
                     this.territoryHover = new TerritoryHover(t,x + 10 ,y + 10);
                 } else if( this.territoryHover != null ) {
-                    this.territoryHover.moveTo(x + 10 ,y + 10);
+                    this.territoryHover.moveTo(x/* + 10*/ ,y/* + 10*/);
                 }
                 return true;
             }

@@ -46,19 +46,19 @@ public class Connection extends UIElement {
                           b.getCapital().getCoords() : a.getCapital().getCoords();
 
             Point leftPartner = new Point(-5,right.y);
-            Point rightPartner = new Point(GameWindow.WINDOW_SIZE_X+5,left.y);
+            Point rightPartner = new Point(GameWindow.WINDOW_SIZE_WIDTH +5,left.y);
 
             Polygon line = new Polygon();
             line.addPoint(left.x,left.y);
             line.addPoint(leftPartner.x,leftPartner.y);
             line.addPoint(-5,-5);
-            line.addPoint(GameWindow.WINDOW_SIZE_X+5,-5);
+            line.addPoint(GameWindow.WINDOW_SIZE_WIDTH +5,-5);
             line.addPoint(rightPartner.x,rightPartner.y);
             line.addPoint(right.x,right.y);
 
             //Backtracking
             line.addPoint(rightPartner.x,rightPartner.y);
-            line.addPoint(GameWindow.WINDOW_SIZE_X+5,-5);
+            line.addPoint(GameWindow.WINDOW_SIZE_WIDTH +5,-5);
             line.addPoint(-5,-5);
             line.addPoint(leftPartner.x,leftPartner.y);
 

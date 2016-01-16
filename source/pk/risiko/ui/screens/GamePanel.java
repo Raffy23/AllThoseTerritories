@@ -8,8 +8,14 @@ import pk.risiko.ui.listener.SwingMouseEventDispatcher;
 import pk.risiko.util.GameScreenManager;
 import pk.risiko.util.RoundManager;
 
+import java.awt.AlphaComposite;
+import java.awt.Color;
+import java.awt.Component;
 import java.awt.Graphics2D;
 import java.awt.event.KeyAdapter;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.image.BufferedImage;
 import java.util.List;
 
 
@@ -23,8 +29,10 @@ import java.util.List;
 public class GamePanel implements GameScreen {
 
     private final GameMapUI gameMapUI;
+    private final BufferedImage gameBoard = new BufferedImage(GameMapUI.GAME_MAP_WIDTH
+                                                             ,GameMapUI.GAME_MAP_HEIGHT
+                                                             ,BufferedImage.TYPE_INT_ARGB);
     private final UserInterface userInterface;
-    private final GameScreenManager gsm;
     private final SwingMouseEventDispatcher mouseHandler = new SwingMouseEventDispatcher();
 
     private GameState currentGameState;
@@ -33,18 +41,34 @@ public class GamePanel implements GameScreen {
 
     public GamePanel(GameMap gameMap,List<Player> playerList,GameScreenManager gameScreenManager) {
         this.roundManager = new RoundManager(playerList);
-        this.gameMapUI = new GameMapUI(gameMap,roundManager, this);
+        this.gameMapUI = new GameMapUI(gameMap,roundManager,this);
 
         this.currentGameState = GameState.SET_UNIT;
-        this.gsm = gameScreenManager;
-
         this.userInterface = new UserInterface(this
                                               ,gameScreenManager.getWindow().getWidth()
                                               ,gameScreenManager.getWindow().getHeight());
 
         //Init mouse handler
         this.mouseHandler.registerListener(this.userInterface);
-        this.mouseHandler.registerListener(this.gameMapUI);
+        this.mouseHandler.registerListener(new MouseAdapter() {
+            private MouseEvent generateProxyEvent(MouseEvent e) {
+                return new MouseEvent((Component) e.getSource()
+                        ,e.getID()
+                        ,e.getWhen()
+                        ,e.getModifiers()
+                        ,e.getX()
+                        ,e.getY()-UserInterface.BAR_HEIGHT
+                        ,e.getClickCount(),false);
+            }
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                gameMapUI.mouseClicked(generateProxyEvent(e));
+            }
+            @Override
+            public void mouseMoved(MouseEvent e) {
+                gameMapUI.mouseMoved(generateProxyEvent(e));
+            }
+        });
     }
 
     public void changeState(GameState state) {
@@ -87,7 +111,14 @@ public class GamePanel implements GameScreen {
 
     @Override
     public void paint(Graphics2D g) {
-        this.gameMapUI.paint(g);
+        /* shift the gamemap down because we have a HUD which can render parts inaccessible */
+        Graphics2D gGBoard = (Graphics2D) this.gameBoard.getGraphics();
+        gGBoard.setComposite(AlphaComposite.Src);
+        gGBoard.setColor(new Color(255,255,255,0));
+        gGBoard.fillRect(0,0,GameMapUI.GAME_MAP_WIDTH,GameMapUI.GAME_MAP_HEIGHT);
+        this.gameMapUI.paint(gGBoard);
+
+        g.drawImage(this.gameBoard,0,UserInterface.BAR_HEIGHT,null);
         this.userInterface.paint(g);
     }
 

@@ -16,7 +16,7 @@ public class TerritoryHover extends UIElement {
     private static final Color DEFAULT_TEXT_COLOR = new Color(255,255,255);
 
     private static final int SIZE_X = 135;
-    private static final int SIZE_Y = 110;
+    private static final int SIZE_Y = 85;
 
     private final Territory territory;
 
@@ -31,7 +31,7 @@ public class TerritoryHover extends UIElement {
         g2d.fill(this.getElementShape());
 
         g2d.setColor(DEFAULT_TEXT_COLOR);
-        final int fontWidth = g2d.getFontMetrics().stringWidth(this.territory.getCapitalName());
+        final int fontWidth = g2d.getFontMetrics().stringWidth(this.territory.getName());
         final int fontHeight = g2d.getFontMetrics().getHeight();
         float currentTextPosition = (float)this.getElementShape().getBounds2D().getY() + fontHeight + 5;
 

@@ -25,7 +25,7 @@ public class UserInterface extends MouseAdapter implements Drawable, MouseClicke
     private static final Color UO_COLOR = new Color(0.15f,0.15f,0.15f,0.65f);
     private static final Color TEXT_COLOR = new Color(255,255,255);
 
-    private static final int BAR_HEIGHT = 26;
+    public static final int BAR_HEIGHT = 26;
 
     private final GamePanel master;
 

@@ -1,6 +1,8 @@
 package pk.risiko.ui;
 
+import pk.risiko.ui.elements.GameMapUI;
 import pk.risiko.ui.listener.SwingMouseEventDispatcher;
+import pk.risiko.ui.screens.UserInterface;
 import pk.risiko.util.GameScreenManager;
 
 import javax.imageio.ImageIO;
@@ -31,8 +33,8 @@ import java.io.IOException;
 public class GameWindow extends JFrame {
 
     //TODO: Should be max of game window + ui
-    public static final int WINDOW_SIZE_X = 1250;
-    public static final int WINDOW_SIZE_Y = 650;
+    public static final int WINDOW_SIZE_WIDTH = GameMapUI.GAME_MAP_WIDTH;
+    public static final int WINDOW_SIZE_HEIGHT = GameMapUI.GAME_MAP_HEIGHT + UserInterface.BAR_HEIGHT;
     private static final Color BACKGROUND_COLOR = new Color(58, 164, 255);
 
     private final GameArea rootPanel;
@@ -49,7 +51,7 @@ public class GameWindow extends JFrame {
     private class GameArea extends JPanel {
 
         public GameArea() {
-            this.setBounds(0,0,WINDOW_SIZE_X,WINDOW_SIZE_Y);
+            this.setBounds(0,0, WINDOW_SIZE_WIDTH, WINDOW_SIZE_HEIGHT);
         }
 
         @Override
@@ -91,7 +93,7 @@ public class GameWindow extends JFrame {
     public GameWindow(int fps) {
         super("AllThoseTerritories - Risiko");
         //Setup Window:
-        this.setSize(GameWindow.WINDOW_SIZE_X,GameWindow.WINDOW_SIZE_Y);
+        this.setSize(GameWindow.WINDOW_SIZE_WIDTH,GameWindow.WINDOW_SIZE_HEIGHT);
         this.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         this.setResizable(false);
         //Setup Manager:
