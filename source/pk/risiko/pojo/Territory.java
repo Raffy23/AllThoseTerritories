@@ -100,12 +100,14 @@ public class Territory extends UIElement {
         g.draw(this.getElementShape());
 
         g.setColor(OVAL_COLOR);
-        final int xOffset = g.getFontMetrics().stringWidth(String.valueOf(this.currentArmyCount))+1;
+        final int xOffset = g.getFontMetrics().stringWidth(String.valueOf(this.currentArmyCount));
         final int yOffset = g.getFontMetrics().getHeight();
-        g.fillOval(this.capital.getCoords().x-xOffset,this.capital.getCoords().y-yOffset,OVAL_SIZE,OVAL_SIZE);
+        g.fillOval(this.capital.getCoords().x,this.capital.getCoords().y,OVAL_SIZE,OVAL_SIZE);
 
         g.setColor(Color.BLACK);
-        g.drawString(String.valueOf(this.currentArmyCount),this.capital.getCoords().x,this.capital.getCoords().y);
+        g.drawString(String.valueOf(this.currentArmyCount)
+                    ,this.capital.getCoords().x+OVAL_SIZE/2-xOffset/2
+                    ,this.capital.getCoords().y+yOffset);
     }
 
     @Override
