@@ -27,6 +27,7 @@ public class MapFileReader {
     * */
     private String directory;
     private Map<String, Territory> territories = new HashMap<String,Territory>();
+    private ArrayList<Continent> continentList = new ArrayList<Continent>();
 
     public MapFileReader(String d)
     {
@@ -122,7 +123,7 @@ public class MapFileReader {
                         for (int i = 0; i < continentterritories.length; i++) {
                             continent.addTerritory(territories.get(continentterritories[i].trim()));
                         }
-
+                        continentList.add(continent);
                         break;
                 }
                 //if(tname.equals("GreatBritain"))
@@ -141,7 +142,8 @@ public class MapFileReader {
                     e.printStackTrace();
                 }
         }
-        return new GameMap(name, new ArrayList<>(territories.values()));
+        
+        return new GameMap(name, new ArrayList<>(territories.values()), continentList);
     }
 
 }

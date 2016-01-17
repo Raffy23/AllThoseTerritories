@@ -17,10 +17,10 @@ import java.util.Set;
 /**
  * GameMapUI is the Graphical representation of the GameMap
  * and does delegate the events of the input and drawing to
- * the Territories
+ * the Territories.
  *
- * @author Raphael
- * @version 10.01.2016
+ * @author Raphael Ludwig, Wilma Weixelbaum
+ * @version 15.01.2016
  */
 public class GameMapUI extends UIElement {
 
@@ -112,7 +112,9 @@ public class GameMapUI extends UIElement {
     @Override
     public void mouseClicked() {
 
-        /* TODO: Players stored in roundManager - let roundManager handle Player action implementation?*/
+        /* TODO: Players stored in roundManager - let roundManager handle Player action implementation?
+        *  --> delegate round-based logic to RoundManager
+        * */
 
         //mouse can't possible be on a territory so not interesting
         if( this.territoryHover == null || !this.isCurrentlyPlaying()) return;
@@ -127,6 +129,7 @@ public class GameMapUI extends UIElement {
 
                 roundManager.nextPlayer();
                 if (!gameMap.decreaseFreeTerritories()) {
+
                     /* TODO: replace reinforcement count for player*/
                     roundManager.getCurrentPlayer().setReinforcements(5);
                     roundManager.nextPlayer();
