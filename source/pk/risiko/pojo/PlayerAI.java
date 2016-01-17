@@ -19,19 +19,18 @@ public class PlayerAI extends Player {
     }
 
     // should choose a territory based on any criteria
-    public Territory chooseTerritory(ArrayList<Territory> territories)
+    public Territory chooseTerritory(ArrayList<Continent> continentList)
     {
         ArrayList<Territory> freeTerritories = new ArrayList<Territory>();
-        int j=0;
-        for (int i = 0; i < territories.size(); i++) {
-            if (territories.get(i).getOwner()==null)
-                freeTerritories.add(j++,territories.get(i));
+        for (int i = 0; i < continentList.size(); i++) {
+            for (int k = 0; k < continentList.get(i).getTerritories().size(); k++) {
+                if (continentList.get(i).getTerritories().get(k).getOwner()==null)
+                    freeTerritories.add(continentList.get(i).getTerritories().get(k));
+            }
         }
 
         Random rand = new Random();
-
         int randomNum = rand.nextInt(freeTerritories.size());
-
         return freeTerritories.get(randomNum);
     }
 

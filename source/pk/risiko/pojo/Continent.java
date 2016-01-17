@@ -25,4 +25,8 @@ public class Continent {
     {
         territories.add(t);
     }
+
+    public List<Territory> getTerritories() {
+        return territories;
+    }
 }

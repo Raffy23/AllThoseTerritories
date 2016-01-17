@@ -35,7 +35,7 @@ public class Player {
         reinforcements=i;
     }
 
-    // returns true if possible
+    // returns true possible
     // false if no reinforcements left
     public boolean reinforcementPossible()
     {

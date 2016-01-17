@@ -13,7 +13,7 @@ import java.util.List;
 public class GameMap {
     private String mapName;
     private List<Territory> territories;
-    private List<Continent> continents;
+    private ArrayList<Continent> continents;
     private int freeTerritories;
 
     public GameMap(String name, List<Territory> territories, ArrayList<Continent> continentList) {
@@ -44,4 +44,7 @@ public class GameMap {
     }
 
 
+    public ArrayList<Continent> getContinents() {
+        return continents;
+    }
 }

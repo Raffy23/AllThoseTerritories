@@ -40,8 +40,8 @@ public class GamePanel implements GameScreen {
     private RoundManager roundManager;
 
     public GamePanel(GameMap gameMap,List<Player> playerList,GameScreenManager gameScreenManager) {
-        this.roundManager = new RoundManager(playerList);
-        this.gameMapUI = new GameMapUI(gameMap,roundManager,this);
+        this.roundManager = new RoundManager(playerList, this, gameMap);
+        this.gameMapUI = new GameMapUI(gameMap,roundManager);
 
         this.currentGameState = GameState.SET_UNIT;
         this.userInterface = new UserInterface(this

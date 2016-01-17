@@ -31,18 +31,16 @@ public class GameMapUI extends UIElement {
     private final GameMap gameMap;
     private final Set<Connection> connections = new LinkedHashSet<>();
     private final Area waterArea;
-    private final GamePanel gamePanel;
 
     private TerritoryHover territoryHover;
     private boolean isCurrentlyPlaying = true;
 
 
-    public GameMapUI(GameMap map,RoundManager manager, GamePanel panel) {
+    public GameMapUI(GameMap map,RoundManager manager) {
         super(new Rectangle(0,0,GAME_MAP_WIDTH,GAME_MAP_HEIGHT));
         this.gameMap = map;
         this.roundManager = manager;
         this.waterArea = new Area(this.getElementShape());
-        this.gamePanel=panel;
 
         final Area territoryArea = new Area();
 
@@ -122,35 +120,7 @@ public class GameMapUI extends UIElement {
         Territory target = this.territoryHover.getTerritory();
 
         // SET_UNIT
-        if (gamePanel.getCurrentGameState().equals(GameState.SET_UNIT)) {
-            if (target.getOwner() == null) {
-                target.setOwner(this.roundManager.getCurrentPlayer());
-                target.increaseArmy(1);
-
-                roundManager.nextPlayer();
-                if (!gameMap.decreaseFreeTerritories()) {
-
-                    /* TODO: replace reinforcement count for player*/
-                    roundManager.getCurrentPlayer().setReinforcements(5);
-                    roundManager.nextPlayer();
-                    roundManager.getCurrentPlayer().setReinforcements(5);
-
-
-                    gamePanel.changeState(GameState.REINFORCE_UNITS);
-                    roundManager.nextPlayer(); // set to Player , not Computer
-                }
-            }
-
-        }
-        System.out.println(gamePanel.getCurrentGameState());
-        if (gamePanel.getCurrentGameState().equals(GameState.REINFORCE_UNITS)) {
-            Player p = this.roundManager.getCurrentPlayer();
-            if (target.getOwner().equals(p))
-                if (p.reinforcementPossible())
-                    target.increaseArmy(1);
-                else
-                    roundManager.nextPlayer();
-        }
+        roundManager.manageActions(target);
     }
 
     public boolean isCurrentlyPlaying() {
