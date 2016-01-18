@@ -4,13 +4,11 @@ import pk.risiko.dao.MapFileReader;
 import pk.risiko.pojo.*;
 import pk.risiko.ui.GameWindow;
 import pk.risiko.ui.screens.GamePanel;
-import pk.risiko.ui.screens.MenuPanel;
+import pk.risiko.ui.screens.MainMenuPanel;
 import pk.risiko.util.CommandParser;
-import pk.risiko.util.GeometryHelper;
 
 import java.awt.Color;
 import java.awt.EventQueue;
-import java.awt.Polygon;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
@@ -31,7 +29,7 @@ public class Risiko extends GameWindow {
 
     private static final String SETTINGS_FILE = "./settings.properties";
 
-    private final MenuPanel gameMenu;
+    private final MainMenuPanel gameMenu;
     private final Properties settings;
 
     public static void main(String[] args) {
@@ -77,7 +75,9 @@ public class Risiko extends GameWindow {
     public Risiko(CommandParser cmd,Properties settings,GameMap map) {
         super(Integer.valueOf(settings.getProperty("fps")));
         this.settings = settings;
-        this.gameMenu = new MenuPanel(this.getWidth(),this.getHeight());
+        this.gameMenu = new MainMenuPanel(settings.getProperty("assets") + settings.getProperty("fonts")
+                                         ,this.getWidth()
+                                         ,this.getHeight());
         this.getGameScreenManager().addScreen(GameScreenType.START_MENU_SCREEN,gameMenu);
 
         this.gameMenu.getExitGame().setListener((what) -> this.exitGame());
