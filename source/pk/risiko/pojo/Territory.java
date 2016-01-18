@@ -98,7 +98,9 @@ public class Territory extends UIElement {
 
         g.setColor(this.getMouseState()==MouseState.CLICKED?Color.RED:Color.BLACK);
         g.draw(this.getElementShape());
+    }
 
+    public void paintTopComponents(Graphics2D g) {
         g.setColor(OVAL_COLOR);
         final int xOffset = g.getFontMetrics().stringWidth(String.valueOf(this.currentArmyCount));
         final int yOffset = g.getFontMetrics().getHeight();
@@ -106,8 +108,8 @@ public class Territory extends UIElement {
 
         g.setColor(Color.BLACK);
         g.drawString(String.valueOf(this.currentArmyCount)
-                    ,this.capital.getCoords().x+OVAL_SIZE/2-xOffset/2
-                    ,this.capital.getCoords().y+yOffset);
+                ,this.capital.getCoords().x+OVAL_SIZE/2-xOffset/2
+                ,this.capital.getCoords().y+yOffset);
     }
 
     @Override

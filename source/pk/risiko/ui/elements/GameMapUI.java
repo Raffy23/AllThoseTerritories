@@ -1,10 +1,7 @@
 package pk.risiko.ui.elements;
 
 import pk.risiko.pojo.GameMap;
-import pk.risiko.pojo.GameState;
-import pk.risiko.pojo.Player;
 import pk.risiko.pojo.Territory;
-import pk.risiko.ui.screens.GamePanel;
 import pk.risiko.util.RoundManager;
 
 import java.awt.Graphics2D;
@@ -65,6 +62,7 @@ public class GameMapUI extends UIElement {
         g2dCon.dispose(); //get rid of the new graphics object -> not needed anymore
 
         this.gameMap.getTerritories().forEach(territory -> territory.paint(g));
+        this.gameMap.getTerritories().forEach(territory -> territory.paintTopComponents(g));
 
         if( this.territoryHover != null ) this.territoryHover.paint(g);
     }
