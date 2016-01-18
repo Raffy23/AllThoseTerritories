@@ -6,6 +6,7 @@ import pk.risiko.ui.GameWindow;
 import pk.risiko.ui.screens.GamePanel;
 import pk.risiko.ui.screens.MainMenuPanel;
 import pk.risiko.util.CommandParser;
+import pk.risiko.util.SettingsProvider;
 
 import java.awt.Color;
 import java.awt.EventQueue;
@@ -30,7 +31,6 @@ public class Risiko extends GameWindow {
     private static final String SETTINGS_FILE = "./settings.properties";
 
     private final MainMenuPanel gameMenu;
-    private final Properties settings;
 
     public static void main(String[] args) {
         //Todo: remove this skip menu hack when not needed:
@@ -52,14 +52,15 @@ public class Risiko extends GameWindow {
             return; //well at least we failed soon enough and mess not up
         }
 
-        final String mapDirectoryPath = settings.getProperty("assets") + settings.getProperty("maps") + "/";
+        /* Globally saves constants as in settings.properties */
+        SettingsProvider.createSettingsProvider(settings,cmdParser);
 
         /* TODO: implement some useful stuff:
             Properties settings = new Properties(...)
             MapFileReader fileReader = new MapFileReader(...)
             etc ...
          */
-        MapFileReader fileReader = new MapFileReader(mapDirectoryPath);
+        MapFileReader fileReader = new MapFileReader(SettingsProvider.getInstance().getMapDirectoryPath());
 
 
         //TODO: After Setup populate models:
@@ -68,23 +69,20 @@ public class Risiko extends GameWindow {
         //GameMap map = Risiko.constructGameMap();
 
         //TODO: Start Game / Show Game window:
-        EventQueue.invokeLater(() -> new Risiko(cmdParser,settings,map));
+        EventQueue.invokeLater(() -> new Risiko(map));
     }
 
     //TODO: Map should not be placed here somewhere later
-    public Risiko(CommandParser cmd,Properties settings,GameMap map) {
-        super(Integer.valueOf(settings.getProperty("fps")));
-        this.settings = settings;
-        this.gameMenu = new MainMenuPanel(settings.getProperty("assets") + settings.getProperty("fonts")
-                                         ,this.getWidth()
-                                         ,this.getHeight());
+    public Risiko(GameMap map) {
+        super(SettingsProvider.getInstance().getFPS());
+        this.gameMenu = new MainMenuPanel(this.getWidth(),this.getHeight());
         this.getGameScreenManager().addScreen(GameScreenType.START_MENU_SCREEN,gameMenu);
 
         this.gameMenu.getExitGame().setListener((what) -> this.exitGame());
         this.gameMenu.getLoadGame().setListener((what) -> System.out.println("No loading implemented!"));
         this.gameMenu.getNewGame().setListener((what) -> this.startNewGame(map));
 
-        if( !cmd.isSkipMenu() ) this.getGameScreenManager().showMenu();
+        if( !SettingsProvider.getInstance().getCommandLine().isSkipMenu() ) this.getGameScreenManager().showMenu();
         else startNewGame(map);
 
         this.setVisible(true);

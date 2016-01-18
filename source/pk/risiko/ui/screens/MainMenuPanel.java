@@ -2,15 +2,13 @@ package pk.risiko.ui.screens;
 
 import pk.risiko.ui.elements.GameButton;
 import pk.risiko.ui.listener.SwingMouseEventDispatcher;
+import pk.risiko.util.FontLoader;
 
 import java.awt.Color;
 import java.awt.Font;
-import java.awt.FontFormatException;
 import java.awt.Graphics2D;
 import java.awt.event.KeyAdapter;
 import java.awt.geom.Rectangle2D;
-import java.io.File;
-import java.io.IOException;
 
 /**
  * TODO: Start Menu
@@ -32,9 +30,9 @@ public class MainMenuPanel implements GameScreen {
     private final GameButton exitGame;
 
     private final int windowWidth, windowHeight;
-    private Font headlineFont;
+    private final Font headlineFont;
 
-    public MainMenuPanel(String fontDirectory,int windowWidth, int windowHeight) {
+    public MainMenuPanel(int windowWidth, int windowHeight) {
         this.newGame = new GameButton(new Rectangle2D.Double(windowWidth/2-75,windowHeight/3,75,20),"New Game");
         this.loadGame = new GameButton(new Rectangle2D.Double(windowWidth/2-75,windowHeight/3+40,75,20),"Load Game");
         this.exitGame = new GameButton(new Rectangle2D.Double(windowWidth/2-75,windowHeight/3+80,75,20),"Exit");
@@ -46,24 +44,13 @@ public class MainMenuPanel implements GameScreen {
         this.dispatcher.registerListener(this.loadGame);
         this.dispatcher.registerListener(this.exitGame);
 
-        try {
-            this.headlineFont = Font.createFont(Font.TRUETYPE_FONT,new File(fontDirectory+HEADLINE_FONT));
-            this.headlineFont = this.headlineFont.deriveFont(HEADLINE_FONT_SIZE);
-        } catch (FontFormatException | IOException e) {
-            this.headlineFont = null;
-            System.err.println("Unable to load Font, falling back to default!");
-            e.printStackTrace();
-        }
+        this.headlineFont = FontLoader.loadFont(HEADLINE_FONT,HEADLINE_FONT_SIZE);
     }
 
     @Override
     public void paint(Graphics2D g) {
         final Font oldFont = g.getFont();
-
-        if( this.headlineFont == null )
-            g.setFont(oldFont.deriveFont(HEADLINE_FONT_SIZE));
-        else
-            g.setFont(this.headlineFont);
+        g.setFont(this.headlineFont);
 
         final int fontHeight = g.getFontMetrics().getHeight();
         final int fontWidth  = g.getFontMetrics().stringWidth(TITLE);
