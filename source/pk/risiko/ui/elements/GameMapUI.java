@@ -1,6 +1,7 @@
 package pk.risiko.ui.elements;
 
 import pk.risiko.pojo.GameMap;
+import pk.risiko.pojo.PlayerAI;
 import pk.risiko.pojo.Territory;
 import pk.risiko.util.RoundManager;
 
@@ -117,8 +118,8 @@ public class GameMapUI extends UIElement {
 
         Territory target = this.territoryHover.getTerritory();
 
-        // SET_UNIT
-        roundManager.manageActions(target);
+        if (!(roundManager.getCurrentPlayer() instanceof PlayerAI))
+            roundManager.manageActions(target);
     }
 
     public boolean isCurrentlyPlaying() {

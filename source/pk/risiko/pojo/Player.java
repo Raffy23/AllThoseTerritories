@@ -13,10 +13,12 @@ public class Player {
     private Color color;
     protected boolean human = true;
     private int reinforcements;
+    protected static GameMap gameMap;
 
-    public Player(String name,Color color) {
+    public Player(String name, Color color, GameMap gm) {
         this.name = name;
         this.color = color;
+        this.gameMap = gm;
     }
 
     public String getName() {
@@ -30,9 +32,10 @@ public class Player {
     {
         return reinforcements;
     }
-    public void setReinforcements(int i)
+    public void setReinforcements()
     {
-        reinforcements=i;
+        //replace with calculated number
+        reinforcements=5;
     }
 
     // returns true possible
@@ -45,5 +48,13 @@ public class Player {
         reinforcements--;
         return true;
     }
+    public void setUnit(Territory t)
+    {
+        t.setOwner(this);
+        t.increaseArmy(1);
+    }
 
+    public static boolean decreaseFreeTerritories() {
+        return gameMap.decreaseFreeTerritories();
+    }
 }

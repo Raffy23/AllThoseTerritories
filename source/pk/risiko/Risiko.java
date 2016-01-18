@@ -90,7 +90,7 @@ public class Risiko extends GameWindow {
 
     private void startNewGame(GameMap map) {
         this.getGameScreenManager().showGame(new GamePanel(map
-                ,Arrays.asList(new Player("Me", Color.BLUE),new PlayerAI("Computer",Color.RED))
+                ,Arrays.asList(new Player("Me", Color.BLUE, map),new PlayerAI("Computer",Color.RED, map))
                 ,this.getGameScreenManager())
         );
     }
