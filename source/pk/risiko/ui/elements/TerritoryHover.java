@@ -21,7 +21,7 @@ public class TerritoryHover extends UIElement {
     private static final String HEADLINE_FONT = "aniron/anirm___.ttf";
     private static final float HEADLINE_FONT_SIZE = 11f;
 
-    private static final int SIZE_X = 135;
+    private static final int SIZE_X = 165;
     private static final int SIZE_Y = 85;
 
     private final Territory territory;

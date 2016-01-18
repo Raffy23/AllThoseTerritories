@@ -1,6 +1,6 @@
 package pk.risiko.pojo;
 
-import java.awt.*;
+import java.awt.Color;
 import java.util.ArrayList;
 import java.util.Random;
 
