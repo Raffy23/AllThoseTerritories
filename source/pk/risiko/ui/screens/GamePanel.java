@@ -20,7 +20,7 @@ import java.util.List;
 
 
 /**
- * This class represents the Game Frame with the User Interface <br/>
+ * This class represents the Game Frame with the User Interface.
  * It does also handle some state changes in the game
  *
  * @author Raphael

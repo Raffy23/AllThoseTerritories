@@ -25,7 +25,6 @@ import java.io.IOException;
  * GameWindow represents the Game Window of the Game.
  * It is responsible to draw all changes which occur in
  * the models or other UI Elements.
- * <br/>
  *
  * @author Raphael Ludwig
  * @version 27.12.2015
@@ -71,10 +70,21 @@ public class GameWindow extends JFrame {
                 g.drawImage(GameWindow.this.background,0,0,GameWindow.this.getWidth(),GameWindow.this.getHeight(),null);
             }
 
-            GameWindow.this.gameScreenManager.getActiveScreen().paint(g2d);
+            if( GameWindow.this.gameScreenManager.getActiveScreen() != null )
+                GameWindow.this.gameScreenManager.getActiveScreen().paint(g2d);
+            else {
+                g.setColor(new Color(75,75,75));
+                g.fillRect(0,0,GameWindow.WINDOW_SIZE_WIDTH,GameWindow.WINDOW_SIZE_HEIGHT);
+                g.setColor(new Color(240,240,240));
+                g.drawString("Still waiting for something useful to display ..."
+                            ,GameWindow.WINDOW_SIZE_WIDTH/2-g.getFontMetrics().stringWidth("Still waiting for something useful to display ...")/2
+                            ,GameWindow.WINDOW_SIZE_HEIGHT/2);
+            }
 
+            /*
             g.setColor(Color.BLACK);
             g.drawString("X:" + x + " Y:" + y ,0, GameWindow.this.getHeight()-45);
+            */
         }
     }
 
@@ -87,8 +97,10 @@ public class GameWindow extends JFrame {
 
     /**
      * Constructs a Window with a certain size.
-     * (Size is fixed by the Game) <br/>
-     * #setVisible(true); must be called explicitly to show the window!
+     * (Size is fixed by the Game)
+     * #setVisible must be called explicitly to show the window!
+     *
+     * @param fps The Frames Per Seconds in which the Window does repaint itself (@see WindowPainter)
      */
     public GameWindow(int fps) {
         super("AllThoseTerritories - Risiko");

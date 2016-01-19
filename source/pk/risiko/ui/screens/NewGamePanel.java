@@ -23,7 +23,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by
+ * This class represents the Menue which is shown after the new game
+ * button in the MainMenu has been clicked
  *
  * @author Raphael
  * @version 19.01.2016
@@ -76,7 +77,7 @@ public class NewGamePanel implements GameScreen {
         this.dispatcher.registerListener(this.player4);
 
         this.nextMap.setListener((next) -> this.loadMap(this.mapFiles.next()));
-        this.nextMap.setListener((prev) -> this.loadMap(this.mapFiles.prev()));
+        this.prevMap.setListener((prev) -> this.loadMap(this.mapFiles.prev()));
 
         /* load default map */
         this.loadMap(SettingsProvider.getInstance().getDefaultMapName());

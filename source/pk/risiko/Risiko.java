@@ -3,6 +3,8 @@ package pk.risiko;
 import pk.risiko.dao.MapFileReader;
 import pk.risiko.pojo.GameMap;
 import pk.risiko.pojo.GameScreenType;
+import pk.risiko.pojo.Player;
+import pk.risiko.pojo.PlayerAI;
 import pk.risiko.ui.GameWindow;
 import pk.risiko.ui.screens.GamePanel;
 import pk.risiko.ui.screens.MainMenuPanel;
@@ -10,6 +12,7 @@ import pk.risiko.ui.screens.NewGamePanel;
 import pk.risiko.util.CommandParser;
 import pk.risiko.util.SettingsProvider;
 
+import java.awt.Color;
 import java.awt.EventQueue;
 import java.io.File;
 import java.io.FileReader;
@@ -82,7 +85,18 @@ public class Risiko extends GameWindow {
         this.newGameMenu.registerNewGameListener((btn) -> this.startNewGame(this.newGameMenu.getSelectedGameMap()));
 
         if( !SettingsProvider.getInstance().getCommandLine().isSkipMenu() ) this.getGameScreenManager().showMenu();
-        else startNewGame(mapFileReader.readMap(SettingsProvider.getInstance().getCommandLine().getMapFile()));
+        else {
+            String mapFilePath = SettingsProvider.getInstance().getCommandLine().getMapFile() != null ?
+                    SettingsProvider.getInstance().getCommandLine().getMapFile() :
+                    SettingsProvider.getInstance().getDefaultMapName();
+
+            GameMap map = mapFileReader.readMap(mapFilePath);
+            List<Player> players = new ArrayList<>(2);
+            players.add(new Player("Player 1",new Color(10,10,200,200),map));
+            players.add(new PlayerAI("Player 2",new Color(10,200,10,200),map));
+
+            startNewGame(map,players);
+        }
 
         this.setVisible(true);
     }
@@ -92,41 +106,19 @@ public class Risiko extends GameWindow {
     }
 
     private void startNewGame(GameMap map) {
-        System.out.println("Start new Game");
-        GamePanel gamePanel = new GamePanel(map
-                                            ,this.newGameMenu.getPlayers()
-                                            ,this.getGameScreenManager());
+        List<Player> players = this.newGameMenu.getPlayers();
+        if( players.size() != 0 ) {
+            this.startNewGame(map,players);
+        } else {
+            System.err.println("A Game without Players is not very useful!");
+        }
+    }
 
-        this.getGameScreenManager().showGame(gamePanel);
+    private void startNewGame(GameMap map,List<Player> players) {
+        this.getGameScreenManager().showGame( new GamePanel(map,players,this.getGameScreenManager()));
     }
 
     private void exitGame() {
-        //Save settings or do some other stuff before disposing the window
-
         this.dispose();
     }
-
-    /** This is DEBUG Code: **/
-    /*private static GameMap constructGameMap() {
-        //The data in this code was taken from squeres.map but multipled with 100 because
-        //otherwise it does draw under the Taskbar (at least in Windows 10)
-
-        Capital cp = new Capital("Western",145,145);
-        Polygon p1 = new Polygon(new int[]{120,170,170,120,120,120},
-                                 new int[]{120,120,170,170,120,120},5);
-        Polygon p2 = new Polygon(new int[]{220,370,370,220,220,220},
-                                 new int[]{220,220,370,370,220,220},5);
-        Territory western = new Territory("Western",cp, GeometryHelper.generateAreaFrom(Arrays.asList(p1,p2)));
-
-        Polygon p3 = new Polygon(new int[]{914,1111,916},
-                                 new int[]{141,159,248},3);
-        Capital cp1 = new Capital("Eastern",914,200);
-        Territory estern = new Territory("Eastern",cp1,GeometryHelper.generateAreaFrom(Arrays.asList(p3)));
-
-        western.getNeighbours().add(estern);
-        estern.getNeighbours().add(western);
-
-        return new GameMap("squares.map (DEBUG)", new ArrayList<>(Arrays.asList(western,estern)));
-    }*/
-
 }

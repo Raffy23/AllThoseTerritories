@@ -11,9 +11,10 @@ import java.awt.event.KeyAdapter;
 import java.awt.geom.Rectangle2D;
 
 /**
- * TODO: Start Menu
+ * This class represents the main screen which is viewed to the user after the game
+ * has started
  *
- * @author Raphael
+ * @author Raphael Ludwig
  * @version 12.01.2016
  */
 public class MainMenuPanel implements GameScreen {

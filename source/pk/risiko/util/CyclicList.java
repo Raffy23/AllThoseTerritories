@@ -10,15 +10,17 @@ public class CyclicList<T> extends ArrayList<T> {
     private int currentCount = 0;
 
     public T next() {
-        return super.get(Math.abs(currentCount++ % super.size()));
+        if( ++currentCount >= size() ) currentCount = 0;
+        return get(currentCount);
     }
     public T prev() {
-        return super.get(Math.abs(currentCount-- % super.size()));
+        if( --currentCount < 0 ) currentCount = size()-1;
+        return get(currentCount);
     }
     public T peek() {
-        return  super.get(Math.abs(currentCount % super.size()));
+        return  super.get(currentCount % super.size());
     }
     public boolean isAtBeginning() {
-        return Math.abs(currentCount % super.size()) == 0;
+        return currentCount == 0;
     }
 }
