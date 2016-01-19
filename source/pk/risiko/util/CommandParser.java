@@ -22,7 +22,7 @@ public class CommandParser {
             switch (argvs[i]) {
                 case MAP_FILE_KEY:
                     if( argvs.length < i+1 ) invalid = true;
-                    else mapFile = argvs[i+1]; break;
+                    else { mapFile = argvs[i+1]; this.skipMenu = true;} break;
                 case SKIP_MENU_FLAG: this.skipMenu = true; break;
                 default: invalid = true;
             }

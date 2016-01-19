@@ -42,6 +42,10 @@ public class SettingsProvider {
         return Integer.valueOf(settings.getProperty("fps"));
     }
 
+    public String getDefaultMapName() {
+        return settings.getProperty("defaultMap");
+    }
+
     public CommandParser getCommandLine() {
         return this.parser;
     }

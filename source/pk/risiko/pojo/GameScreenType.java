@@ -9,5 +9,6 @@ package pk.risiko.pojo;
 public enum GameScreenType {
     GAME_SCREEN,
     START_MENU_SCREEN,
-    LOADING_SCREEN
+    LOADING_SCREEN,
+    NEW_GAME_SCREEN
 }

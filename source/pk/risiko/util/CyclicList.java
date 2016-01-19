@@ -12,6 +12,9 @@ public class CyclicList<T> extends ArrayList<T> {
     public T next() {
         return super.get(Math.abs(currentCount++ % super.size()));
     }
+    public T prev() {
+        return super.get(Math.abs(currentCount-- % super.size()));
+    }
     public T peek() {
         return  super.get(Math.abs(currentCount % super.size()));
     }

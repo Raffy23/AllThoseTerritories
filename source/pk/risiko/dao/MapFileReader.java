@@ -5,11 +5,17 @@ import pk.risiko.pojo.Continent;
 import pk.risiko.pojo.GameMap;
 import pk.risiko.pojo.Territory;
 
-import java.awt.*;
+import java.awt.Polygon;
 import java.awt.geom.Area;
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -71,6 +77,9 @@ public class MapFileReader {
     }
     public GameMap readMap(String name)
     {
+        /*BUG: multiple map loads produce funny maps, clear map: (why save them?) */
+        this.territories.clear();
+        this.continentList.clear();
 
         String line="";
         BufferedReader br=null;
@@ -131,7 +140,10 @@ public class MapFileReader {
             }
         }
         catch (IOException e) {
+            assert false : "IOException while loading ("+name+") mapfile, failing fast in debug mode!";
+
             System.err.println("Error: " + e);
+            e.printStackTrace();
         }
         finally
         {
@@ -144,6 +156,20 @@ public class MapFileReader {
         }
         
         return new GameMap(name, new ArrayList<>(territories.values()), continentList);
+    }
+
+    public List<String> getAvailableMapFiles() {
+        List<String> mapFileNames = new LinkedList<>();
+        try {
+            Files.list(Paths.get(this.directory)).forEach(p -> mapFileNames.add(p.getFileName().toString()));
+        } catch (IOException e) {
+            System.err.println("Unable to list directory content");
+            e.printStackTrace();
+
+            assert false : "Unable to list directory content, abort in debug mode!";
+        }
+
+        return mapFileNames;
     }
 
 }

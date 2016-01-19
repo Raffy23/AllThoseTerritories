@@ -1,14 +1,15 @@
 package pk.risiko;
 
 import pk.risiko.dao.MapFileReader;
-import pk.risiko.pojo.*;
+import pk.risiko.pojo.GameMap;
+import pk.risiko.pojo.GameScreenType;
 import pk.risiko.ui.GameWindow;
 import pk.risiko.ui.screens.GamePanel;
 import pk.risiko.ui.screens.MainMenuPanel;
+import pk.risiko.ui.screens.NewGamePanel;
 import pk.risiko.util.CommandParser;
 import pk.risiko.util.SettingsProvider;
 
-import java.awt.Color;
 import java.awt.EventQueue;
 import java.io.File;
 import java.io.FileReader;
@@ -31,6 +32,7 @@ public class Risiko extends GameWindow {
     private static final String SETTINGS_FILE = "./settings.properties";
 
     private final MainMenuPanel gameMenu;
+    private final NewGamePanel newGameMenu;
 
     public static void main(String[] args) {
         //Todo: remove this skip menu hack when not needed:
@@ -54,45 +56,48 @@ public class Risiko extends GameWindow {
 
         /* Globally saves constants as in settings.properties */
         SettingsProvider.createSettingsProvider(settings,cmdParser);
-
-        /* TODO: implement some useful stuff:
-            Properties settings = new Properties(...)
-            MapFileReader fileReader = new MapFileReader(...)
-            etc ...
-         */
         MapFileReader fileReader = new MapFileReader(SettingsProvider.getInstance().getMapDirectoryPath());
 
-
-        //TODO: After Setup populate models:
-        GameMap map = fileReader.readMap("world.map");
-        //GameMap map = fileReader.readMap("mapDirectoryPath/");
-        //GameMap map = Risiko.constructGameMap();
-
-        //TODO: Start Game / Show Game window:
-        EventQueue.invokeLater(() -> new Risiko(map));
+        EventQueue.invokeLater(() -> new Risiko(fileReader));
     }
 
     //TODO: Map should not be placed here somewhere later
-    public Risiko(GameMap map) {
+    public Risiko(MapFileReader mapFileReader) {
         super(SettingsProvider.getInstance().getFPS());
-        this.gameMenu = new MainMenuPanel(this.getWidth(),this.getHeight());
-        this.getGameScreenManager().addScreen(GameScreenType.START_MENU_SCREEN,gameMenu);
 
+        /* initialize components */
+        this.gameMenu = new MainMenuPanel(this.getWidth(),this.getHeight());
+        this.newGameMenu = new NewGamePanel(mapFileReader);
+
+        /* register components */
+        this.getGameScreenManager().addScreen(GameScreenType.START_MENU_SCREEN,gameMenu);
+        this.getGameScreenManager().addScreen(GameScreenType.NEW_GAME_SCREEN,this.newGameMenu);
+
+        /* setup menu listeners */
         this.gameMenu.getExitGame().setListener((what) -> this.exitGame());
         this.gameMenu.getLoadGame().setListener((what) -> System.out.println("No loading implemented!"));
-        this.gameMenu.getNewGame().setListener((what) -> this.startNewGame(map));
+        this.gameMenu.getNewGame().setListener((what) -> this.showNewGameScreen());
+
+        /* setup new game menu listeners */
+        this.newGameMenu.registerNewGameListener((btn) -> this.startNewGame(this.newGameMenu.getSelectedGameMap()));
 
         if( !SettingsProvider.getInstance().getCommandLine().isSkipMenu() ) this.getGameScreenManager().showMenu();
-        else startNewGame(map);
+        else startNewGame(mapFileReader.readMap(SettingsProvider.getInstance().getCommandLine().getMapFile()));
 
         this.setVisible(true);
     }
 
+    private void showNewGameScreen() {
+        this.getGameScreenManager().showScreen(GameScreenType.NEW_GAME_SCREEN);
+    }
+
     private void startNewGame(GameMap map) {
-        this.getGameScreenManager().showGame(new GamePanel(map
-                ,Arrays.asList(new Player("Me", Color.BLUE, map),new PlayerAI("Computer",Color.RED, map))
-                ,this.getGameScreenManager())
-        );
+        System.out.println("Start new Game");
+        GamePanel gamePanel = new GamePanel(map
+                                            ,this.newGameMenu.getPlayers()
+                                            ,this.getGameScreenManager());
+
+        this.getGameScreenManager().showGame(gamePanel);
     }
 
     private void exitGame() {

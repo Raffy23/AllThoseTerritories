@@ -18,10 +18,10 @@ import java.awt.geom.Rectangle2D;
  */
 public class MainMenuPanel implements GameScreen {
 
-    private static final String TITLE = "All those Territories";
-    private static final String HEADLINE_FONT = "aniron/anicb___.ttf";
-    private static final float HEADLINE_FONT_SIZE = 64.5f;
-    private static final Color HEADLINE_COLOR = new Color(14, 7, 4);
+    public static final String TITLE = "All those Territories";
+    public static final String HEADLINE_FONT = "aniron/anicb___.ttf";
+    public static final float HEADLINE_FONT_SIZE = 64.5f;
+    public static final Color HEADLINE_COLOR = new Color(14, 7, 4);
 
     private final SwingMouseEventDispatcher dispatcher = new SwingMouseEventDispatcher();
 
