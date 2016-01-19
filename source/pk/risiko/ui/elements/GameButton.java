@@ -73,4 +73,20 @@ public class GameButton extends UIElement {
         if( this.listener!=null )
             this.listener.mouseClicked(this);
     }
+
+    public void setBackgroundColor(Color backgroundColor) {
+        this.backgroundColor = backgroundColor;
+    }
+
+    public void setBorderColor(Color borderColor) {
+        this.borderColor = borderColor;
+    }
+
+    public void setTextColor(Color textColor) {
+        this.textColor = textColor;
+    }
+
+    public void setText(String text) {
+        this.text = text;
+    }
 }

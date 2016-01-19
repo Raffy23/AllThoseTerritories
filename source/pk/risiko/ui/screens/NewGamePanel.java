@@ -6,6 +6,7 @@ import pk.risiko.pojo.Player;
 import pk.risiko.pojo.PlayerAI;
 import pk.risiko.ui.GameWindow;
 import pk.risiko.ui.elements.GameButton;
+import pk.risiko.ui.elements.PlayerConfigElement;
 import pk.risiko.ui.listener.MouseClickedListener;
 import pk.risiko.ui.listener.SwingMouseEventDispatcher;
 import pk.risiko.util.CyclicList;
@@ -37,9 +38,8 @@ public class NewGamePanel implements GameScreen {
     private final MapFileReader mapFileReader;
 
     private final GameButton beginGameBtn,nextMap,prevMap;
-    private final GameButton player1,player2,player3,player4;
+    private final PlayerConfigElement player1,player2,player3,player4;
     private final CyclicList<String> mapFiles = new CyclicList<>();
-    private final List<Player> players = new ArrayList<>();
 
     private GameMap currentSelctedMap;
     private BufferedImage gameMapPreview;
@@ -57,10 +57,10 @@ public class NewGamePanel implements GameScreen {
         this.prevMap = new GameButton(new Rectangle2D.Double(GameWindow.WINDOW_SIZE_WIDTH-PREVIEW_MAP_WIDTH-75
                                                             ,225+PREVIEW_MAP_HEIGHT,20,20),"<");
 
-        this.player1 = new GameButton(new Rectangle2D.Double(235,230,90,20)," Human Player ");
-        this.player2 = new GameButton(new Rectangle2D.Double(235,290,90,20)," KI ");
-        this.player3 = new GameButton(new Rectangle2D.Double(235,350,90,20)," Not Playing ");
-        this.player4 = new GameButton(new Rectangle2D.Double(235,410,90,20)," Not Playing ");
+        this.player1 = new PlayerConfigElement(115,230,"Player 1",new Color(10,10,200,200));
+        this.player2 = new PlayerConfigElement(115,290,"Player 2",new Color(10,200,10,200));
+        this.player3 = new PlayerConfigElement(115,350,"Player 3",new Color(200,10,10,200));
+        this.player4 = new PlayerConfigElement(115,410,"Player 4",new Color(75,75,25,200));
 
         /* load font */
         this.headlineFont = FontLoader.loadFont(MainMenuPanel.HEADLINE_FONT,MainMenuPanel.HEADLINE_FONT_SIZE);
@@ -69,6 +69,11 @@ public class NewGamePanel implements GameScreen {
         this.dispatcher.registerListener(beginGameBtn);
         this.dispatcher.registerListener(nextMap);
         this.dispatcher.registerListener(prevMap);
+
+        this.dispatcher.registerListener(this.player1);
+        this.dispatcher.registerListener(this.player2);
+        this.dispatcher.registerListener(this.player3);
+        this.dispatcher.registerListener(this.player4);
 
         this.nextMap.setListener((next) -> this.loadMap(this.mapFiles.next()));
         this.nextMap.setListener((prev) -> this.loadMap(this.mapFiles.prev()));
@@ -137,12 +142,6 @@ public class NewGamePanel implements GameScreen {
                     ,225+PREVIEW_MAP_HEIGHT+g.getFontMetrics().getHeight()/2);
 
 
-
-        g.drawString("Player1",115,250);
-        g.drawString("Player2",115,310);
-        g.drawString("Player3",115,370);
-        g.drawString("Player4",115,430);
-
         g.setFont(oldFont);
         this.player1.paint(g);
         this.player2.paint(g);
@@ -158,14 +157,29 @@ public class NewGamePanel implements GameScreen {
     }
 
     public List<Player> getPlayers() {
-        /* todo: construct players here */
-        this.players.clear();
+        List<Player> players = new ArrayList<>(4);
 
-         /* Todo: color chooser or something like that */
-        players.add(new Player("Spieler",new Color(10,10,200,200),currentSelctedMap));
-        players.add(new PlayerAI("Computer",new Color(200,10,10,200),currentSelctedMap));
+        if( this.player1.getType() == PlayerConfigElement.PlayerType.HUMAN )
+            players.add(new Player(player1.getPlayerName(),player1.getPlayerColor(),currentSelctedMap));
+        else if( this.player1.getType() == PlayerConfigElement.PlayerType.AI )
+            players.add(new PlayerAI(player1.getPlayerName(),player1.getPlayerColor(),currentSelctedMap));
 
-        return this.players;
+        if( this.player2.getType() == PlayerConfigElement.PlayerType.HUMAN )
+            players.add(new Player(player2.getPlayerName(),player2.getPlayerColor(),currentSelctedMap));
+        else if( this.player2.getType() == PlayerConfigElement.PlayerType.AI )
+            players.add(new PlayerAI(player2.getPlayerName(),player2.getPlayerColor(),currentSelctedMap));
+
+        if( this.player3.getType() == PlayerConfigElement.PlayerType.HUMAN )
+            players.add(new Player(player3.getPlayerName(),player3.getPlayerColor(),currentSelctedMap));
+        else if( this.player3.getType() == PlayerConfigElement.PlayerType.AI )
+            players.add(new PlayerAI(player3.getPlayerName(),player3.getPlayerColor(),currentSelctedMap));
+
+        if( this.player4.getType() == PlayerConfigElement.PlayerType.HUMAN )
+            players.add(new Player(player4.getPlayerName(),player4.getPlayerColor(),currentSelctedMap));
+        else if( this.player4.getType() == PlayerConfigElement.PlayerType.AI )
+            players.add(new PlayerAI(player4.getPlayerName(),player4.getPlayerColor(),currentSelctedMap));
+
+        return players;
     }
 
     public void registerNewGameListener(MouseClickedListener l) {
