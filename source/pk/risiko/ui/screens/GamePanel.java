@@ -35,15 +35,13 @@ public class GamePanel implements GameScreen {
     private final UserInterface userInterface;
     private final SwingMouseEventDispatcher mouseHandler = new SwingMouseEventDispatcher();
 
-    private GameState currentGameState;
     private GameState currentMetaState = GameState.HIDE_MENU;
     private RoundManager roundManager;
 
     public GamePanel(GameMap gameMap,List<Player> playerList,GameScreenManager gameScreenManager) {
-        this.roundManager = new RoundManager(playerList, this);
+        this.roundManager = new RoundManager(playerList,gameMap);
         this.gameMapUI = new GameMapUI(gameMap,roundManager);
 
-        this.currentGameState = GameState.SET_UNIT;
         this.userInterface = new UserInterface(this
                                               ,gameScreenManager.getWindow().getWidth()
                                               ,gameScreenManager.getWindow().getHeight());
@@ -71,34 +69,27 @@ public class GamePanel implements GameScreen {
         });
     }
 
+    /**
+     *  This function does recieve all GameState changes which can change the
+     *  Meta state of the Game (thus all which change the UI responses)
+     * @param state new GameState
+     */
     public void changeState(GameState state) {
         System.out.println("Switch to State: " + state);
 
-        switch (state) {
+        switch (state) { //switch Meta Gamestates:
             case NEXT_ROUND: this.roundManager.nextPlayer(); break;
             case SHOW_MENU: this.gameMapUI.setCurrentlyPlaying(false); break;
             case HIDE_MENU: this.gameMapUI.setCurrentlyPlaying(true); break;
             default: System.out.println("State is unknown!");
         }
 
-        /*if( state == GameState.SET_UNIT && this.roundManager.isAtTheBeginning() )
-            state = GameState.REINFORCE_UNITS;
-        else if( state == GameState.REINFORCE_UNITS && this.roundManager.isAtTheBeginning() )
-            state = GameState.ATTACK_OR_MOVE_UNIT;
-           */
         if( state == GameState.HIDE_MENU || state == GameState.SHOW_MENU )
             this.currentMetaState = state;
-
-
-        this.currentGameState=state;
     }
 
     public Player getWinningPlayer() {
         return null; //TODO implement ...
-    }
-
-    public GameState getCurrentGameState() {
-        return this.currentGameState;
     }
 
     public int getRounds() {

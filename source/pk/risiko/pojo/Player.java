@@ -13,7 +13,7 @@ public class Player {
     private Color color;
     protected boolean human = true;
     private int reinforcements;
-    protected static GameMap gameMap;
+    protected /*static*/ GameMap gameMap; //should not be static! seems strage
 
     public Player(String name, Color color, GameMap gm) {
         this.name = name;
@@ -54,7 +54,8 @@ public class Player {
         t.increaseArmy(1);
     }
 
-    public static boolean decreaseFreeTerritories() {
+    //why does player have a static method to a local in game map?
+    /*public static boolean decreaseFreeTerritories() {
         return gameMap.decreaseFreeTerritories();
-    }
+    }*/
 }

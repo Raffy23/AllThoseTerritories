@@ -94,7 +94,7 @@ public class GameMapUI extends UIElement {
                 if( this.territoryHover == null || !this.territoryHover.getTerritory().equals(t) ) {
                     this.territoryHover = new TerritoryHover(t,x + 10 ,y + 10);
                 } else if( this.territoryHover != null ) {
-                    this.territoryHover.moveTo(x/* + 10*/ ,y/* + 10*/);
+                    this.territoryHover.moveTo(x + 10 ,y + 10);
                 }
                 return true;
             }
