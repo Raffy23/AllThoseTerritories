@@ -40,4 +40,11 @@ public class Continent {
     public List<Territory> getTerritories() {
         return territories;
     }
+
+    public boolean isOpenedByPlayer(Player p) {
+        for(Territory t:this.territories)
+            if(t.getOwner() != p) return false;
+
+        return true;
+    }
 }

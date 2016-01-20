@@ -96,6 +96,10 @@ public class GamePanel implements GameScreen {
         return this.roundManager.getCurrentRound();
     }
 
+    public GameState getGameState() {
+        return this.roundManager.getCurrentGameState();
+    }
+
     public Player getCurrentPlayer() {
         return this.roundManager.getCurrentPlayer();
     }

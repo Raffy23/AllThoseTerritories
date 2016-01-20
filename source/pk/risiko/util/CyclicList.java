@@ -23,4 +23,12 @@ public class CyclicList<T> extends ArrayList<T> {
     public boolean isAtBeginning() {
         return currentCount == 0;
     }
+    public void reset() {
+        currentCount = 0;
+    }
+
+    public boolean isAtEnd() {
+        return currentCount == size()-1;
+    }
+
 }

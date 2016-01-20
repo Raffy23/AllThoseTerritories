@@ -48,6 +48,10 @@ public class GameMap {
         return freeTerritories==0? false : true;
     }
 
+    public boolean hasFreeTerrotories() {
+        return freeTerritories != 0;
+    }
+
 
     public ArrayList<Continent> getContinents() {
         return continents;

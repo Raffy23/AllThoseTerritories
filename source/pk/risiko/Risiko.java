@@ -4,7 +4,7 @@ import pk.risiko.dao.MapFileReader;
 import pk.risiko.pojo.GameMap;
 import pk.risiko.pojo.GameScreenType;
 import pk.risiko.pojo.Player;
-import pk.risiko.pojo.PlayerAI;
+import pk.risiko.pojo.RandomAI;
 import pk.risiko.ui.GameWindow;
 import pk.risiko.ui.screens.GamePanel;
 import pk.risiko.ui.screens.MainMenuPanel;
@@ -93,7 +93,7 @@ public class Risiko extends GameWindow {
             GameMap map = mapFileReader.readMap(mapFilePath);
             List<Player> players = new ArrayList<>(2);
             players.add(new Player("Player 1",new Color(10,10,200,200),map));
-            players.add(new PlayerAI("Player 2",new Color(10,200,10,200),map));
+            players.add(new RandomAI("Player 2",new Color(10,200,10,200),map));
 
             startNewGame(map,players);
         }

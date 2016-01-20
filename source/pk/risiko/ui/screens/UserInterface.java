@@ -60,7 +60,9 @@ public class UserInterface extends MouseAdapter implements Drawable, MouseClicke
 
         g2d.setColor(TEXT_COLOR);
         g2d.drawString("Player: " + this.master.getCurrentPlayer().getName() +
-                       "  Round: " + this.master.getRounds() + "     Available Reinforcements: " + this.master.getCurrentPlayer().getReinforcements(),5,17);
+                       "  Round: " + this.master.getRounds() +
+                       "     Available Reinforcements: " + this.master.getCurrentPlayer().getReinforcements() +
+                       " Current GameState: " + this.master.getGameState().name(),5,17);
 
         if( this.menu.isActive() )
             this.menu.paint(g2d);

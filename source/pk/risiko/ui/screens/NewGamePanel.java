@@ -1,9 +1,10 @@
 package pk.risiko.ui.screens;
 
 import pk.risiko.dao.MapFileReader;
+import pk.risiko.pojo.ContinentBasedAI;
 import pk.risiko.pojo.GameMap;
 import pk.risiko.pojo.Player;
-import pk.risiko.pojo.PlayerAI;
+import pk.risiko.pojo.RandomAI;
 import pk.risiko.ui.GameWindow;
 import pk.risiko.ui.elements.GameButton;
 import pk.risiko.ui.elements.PlayerConfigElement;
@@ -163,22 +164,22 @@ public class NewGamePanel implements GameScreen {
         if( this.player1.getType() == PlayerConfigElement.PlayerType.HUMAN )
             players.add(new Player(player1.getPlayerName(),player1.getPlayerColor(),currentSelctedMap));
         else if( this.player1.getType() == PlayerConfigElement.PlayerType.AI )
-            players.add(new PlayerAI(player1.getPlayerName(),player1.getPlayerColor(),currentSelctedMap));
+            players.add(new RandomAI(player1.getPlayerName(),player1.getPlayerColor(),currentSelctedMap));
 
         if( this.player2.getType() == PlayerConfigElement.PlayerType.HUMAN )
             players.add(new Player(player2.getPlayerName(),player2.getPlayerColor(),currentSelctedMap));
         else if( this.player2.getType() == PlayerConfigElement.PlayerType.AI )
-            players.add(new PlayerAI(player2.getPlayerName(),player2.getPlayerColor(),currentSelctedMap));
+            players.add(new ContinentBasedAI(player2.getPlayerName(),player2.getPlayerColor(),currentSelctedMap));
 
         if( this.player3.getType() == PlayerConfigElement.PlayerType.HUMAN )
             players.add(new Player(player3.getPlayerName(),player3.getPlayerColor(),currentSelctedMap));
         else if( this.player3.getType() == PlayerConfigElement.PlayerType.AI )
-            players.add(new PlayerAI(player3.getPlayerName(),player3.getPlayerColor(),currentSelctedMap));
+            players.add(new ContinentBasedAI(player3.getPlayerName(),player3.getPlayerColor(),currentSelctedMap));
 
         if( this.player4.getType() == PlayerConfigElement.PlayerType.HUMAN )
             players.add(new Player(player4.getPlayerName(),player4.getPlayerColor(),currentSelctedMap));
         else if( this.player4.getType() == PlayerConfigElement.PlayerType.AI )
-            players.add(new PlayerAI(player4.getPlayerName(),player4.getPlayerColor(),currentSelctedMap));
+            players.add(new RandomAI(player4.getPlayerName(),player4.getPlayerColor(),currentSelctedMap));
 
         return players;
     }

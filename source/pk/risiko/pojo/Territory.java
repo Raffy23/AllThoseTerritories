@@ -7,6 +7,7 @@ import java.awt.Graphics2D;
 import java.awt.geom.Area;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 /**
  * This class represents a Territory in game
@@ -123,5 +124,31 @@ public class Territory extends UIElement {
 
     public void setCapital(Capital capital) {
         this.capital = capital;
+    }
+
+    /**
+     * Defending against a hostile force is done in this method, the territory must
+     * be taken by any Player otherwise this method my produce faults!
+     *
+     * @param attacker the attacker territory
+     * @return true if successfully defended against the troups otherwise false
+     */
+    public boolean defendAgainst(Territory attacker) {
+        assert owner != attacker.owner : "Why should i attack my own territories? ("+owner.getName()+")";
+
+        Random dice = new Random();
+        int maxTroups = currentArmyCount > attacker.currentArmyCount ? currentArmyCount : attacker.currentArmyCount;
+        if( maxTroups > 3 ) maxTroups = 3;
+
+        for(int i=0;i<maxTroups;i++) {
+            int attDice = dice.nextInt(6);
+            int defDice  = dice.nextInt(6);
+
+            if( attDice > defDice )
+                if( --currentArmyCount == 0 ) return false;
+            else if( --attacker.currentArmyCount == 1 ) return false;
+        }
+
+        return true;
     }
 }

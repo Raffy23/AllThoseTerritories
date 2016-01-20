@@ -1,5 +1,6 @@
 package pk.risiko.util;
 
+import pk.risiko.pojo.AI;
 import pk.risiko.pojo.GameMap;
 import pk.risiko.pojo.GameState;
 import pk.risiko.pojo.Player;
@@ -39,12 +40,22 @@ public class RoundManager {
     public Player nextPlayer() {
         Player p = players.next();
 
-        if (this.getCurrentPlayer() instanceof PlayerAI)
-            manageActions();
-
         if( this.players.isAtBeginning() )
-            if (this.currentGameState != GameState.SET_UNIT)
+            if (this.currentGameState == GameState.REINFORCE_UNITS) {
                 this.currentRound++;
+            } else if(this.currentGameState == GameState.ATTACK_OR_MOVE_UNIT) {
+                calculateReinforcements();
+                currentGameState = GameState.REINFORCE_UNITS;
+            }
+
+        if( currentGameState != GameState.SET_UNIT )
+            if( players.stream().filter(p1 -> p1.getReinforcements()>0).count() == 0) {
+                currentGameState = GameState.ATTACK_OR_MOVE_UNIT;
+            }
+
+
+        if (this.getCurrentPlayer() instanceof PlayerAI)
+            manageAIActions();
 
         return p;
     }
@@ -61,8 +72,14 @@ public class RoundManager {
         return false;
     }
 
+    private void calculateReinforcements() {
+        for (int i = 0; i < players.size(); i++) {
+            players.get(i).calculateReinforcements();
+        }
+    }
+
     // (rename if better name was found)
-    private void switchStates(Territory targetTerritory)
+    private void doActionOn(Territory targetTerritory)
     {
         switch (this.currentGameState)
         {
@@ -70,12 +87,14 @@ public class RoundManager {
                 if (targetTerritory.getOwner() == null)
                 {
                     //if(!(this.getCurrentPlayer() instanceof PlayerAI))
-                    this.getCurrentPlayer().setUnit(targetTerritory);
-                    if (!this.gameMap.decreaseFreeTerritories()) {
-                        for (int i = 0; i < players.size(); i++) {
-                            players.get(i).setReinforcements();
-                        }
+                    this.getCurrentPlayer().conquerTerritory(targetTerritory);
+                    if (!this.gameMap.hasFreeTerrotories()) { //lowering is done above
+                        this.calculateReinforcements();
                         this.currentGameState = GameState.REINFORCE_UNITS;
+
+                        //should not jup to the start of the player list?
+                        this.players.reset();
+                        this.players.prev();
                     }
                     this.nextPlayer();
 
@@ -90,33 +109,35 @@ public class RoundManager {
                     this.nextPlayer();
                 break;
             case ATTACK_OR_MOVE_UNIT:
+                System.out.println("Not Implemented!");
                 break;
             case NEXT_ROUND:
                 break;
         }
     }
 
-    private void manageActions()
+    private void manageAIActions()
     {
         if (!(this.getCurrentPlayer() instanceof PlayerAI))
             return;
-        PlayerAI playerAI = (PlayerAI) this.getCurrentPlayer();
-
+        AI playerAI = (AI) this.getCurrentPlayer();
 
         switch(this.currentGameState) {
-            case SET_UNIT:
-                switchStates(playerAI.chooseFreeTerritory());
-            break;
+            case SET_UNIT: doActionOn(playerAI.setUnitAction()); break;
             case REINFORCE_UNITS:
-                for (int i = 0; i < playerAI.getReinforcements();) {
-                    switchStates(playerAI.chooseOwnedTerriory());
-                }
-
-            break;
+                playerAI.reinforceUnitsAction().forEach(this::doActionOn);
+                break;
+            case ATTACK_OR_MOVE_UNIT:
+                System.out.println("Attack or moving is not implemented!");
         }
+
     }
     public void manageActions(Territory targetTerritory)
     {
-        switchStates(targetTerritory);
+        doActionOn(targetTerritory);
+    }
+
+    public GameState getCurrentGameState() {
+        return this.currentGameState;
     }
 }
