@@ -12,8 +12,9 @@ public class Tripel<T,K,J> {
     public K y;
     public J z;
 
-    public Tripel(T x, K y) {
+    public Tripel(T x, K y,J z) {
         this.x = x;
         this.y = y;
+        this.z = z;
     }
 }

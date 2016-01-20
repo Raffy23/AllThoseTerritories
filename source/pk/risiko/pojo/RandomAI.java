@@ -29,18 +29,23 @@ public class RandomAI extends PlayerAI {
         List<Territory> empties = this.getAllEmptyTerritories();
         assert empties.size() != 0 : "Error: setUnitsToGameMap should not be called, there are no free territories!";
 
-        return empties.get(throwDice(empties.size()-1));
+        return empties.get(throwDice(empties.size()));
     }
 
     @Override
     public List<Territory> reinforceUnitsAction() {
         List<Territory> my = this.getMyTerritories();
+        List<Territory> border = this.getAllBorderTerritories();
         assert  my.size() != 0 : "Error: i'm already defeated so what should i do, crawl back from the dead?";
 
         List<Territory> targets = new ArrayList<>(this.getReinforcements());
-        for(int i=0;i<getReinforcements();i++)
-            targets.add(my.get(throwDice(my.size()-1)));
+        for(int i=0;i<getReinforcements()/2;i++)
+            targets.add(my.get(throwDice(my.size())));
+        for(int i=0;i<getReinforcements()-getReinforcements()/2;i++)
+            targets.add(border.get(throwDice(my.size())));
 
+        System.out.println(this.getName() + " refCount= " + getReinforcements());
+        assert getReinforcements() == targets.size() : "I must set more reinforcements! ("+targets.size()+"/"+getReinforcements()+")";
         return targets;
     }
 
@@ -49,11 +54,13 @@ public class RandomAI extends PlayerAI {
         List<Territory> my = this.getAllBorderTerritories();
         assert  my.size() != 0 : "Error: i'm already defeated so what should i do, crawl back from the dead?";
 
-        Territory mine   = my.get(throwDice(my.size()-1));
-        Territory target = mine.getNeighbours().get(throwDice(mine.getNeighbours().size()-1));
+        List<Tripel<AiTroupState,Territory,Territory>> movements = new ArrayList<>();
+        my.stream().filter(c -> c.getStationedArmies()>1)
+                   .forEach(c -> movements.add(new Tripel<>(AiTroupState.ATTACK
+                                                           ,c
+                                                           ,c.getNeighbours().get(throwDice(c.getNeighbours().size()))))
+                   );
 
-        target.defendAgainst(mine);
-
-        return null;
+        return movements;
     }
 }

@@ -34,7 +34,7 @@ public abstract class PlayerAI extends Player implements AI {
         List<Territory> territories = new ArrayList<>();
 
         this.gameMap.getTerritories().forEach(t -> {
-            if(t.getOwner() == this) territories.add(t);
+            if(t.getOwner().equals(this)) territories.add(t);
         });
 
         return territories;
@@ -44,9 +44,9 @@ public abstract class PlayerAI extends Player implements AI {
         List<Territory> territories = new ArrayList<>();
 
         this.gameMap.getTerritories().forEach(t -> {
-            if(t.getOwner() != this)
+            if(t.getOwner().equals(this))
                 for(Territory n:t.getNeighbours())
-                    if(n.getOwner() != this) {
+                    if(!n.getOwner().equals(this)) {
                         territories.add(t);
                         break;
                     }

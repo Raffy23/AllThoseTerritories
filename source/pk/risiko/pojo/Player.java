@@ -58,6 +58,7 @@ public class Player {
     // false if no reinforcements left
     public boolean reinforcementPossible()
     {
+        if( !this.human ) System.out.println(reinforcements<=0);
         if (reinforcements<=0) //should not < 0 be a error?
             return false;
 

@@ -81,6 +81,8 @@ public class RoundManager {
     // (rename if better name was found)
     private void doActionOn(Territory targetTerritory)
     {
+        Player p = this.getCurrentPlayer();
+
         switch (this.currentGameState)
         {
             case SET_UNIT:
@@ -101,15 +103,36 @@ public class RoundManager {
                 }
                 break;
             case REINFORCE_UNITS:
-                Player p = this.getCurrentPlayer();
+                System.out.println(p.getName() + " reinforces territory " + targetTerritory.getName() + "(owern="+targetTerritory.getOwner().getName()+",posssible="+p.isReinforcementPossible()+",left="+p.getReinforcements()+")");
+
                 if (targetTerritory.getOwner().equals(p))
                     if (p.reinforcementPossible())
                         targetTerritory.increaseArmy(1);
-                if (p.getReinforcements()==0)
+                if (p.getReinforcements()==0) {
+                    System.out.println("NEXT_PLAYER");
                     this.nextPlayer();
+                }
                 break;
             case ATTACK_OR_MOVE_UNIT:
-                System.out.println("Not Implemented!");
+                if( p.getCurrentActiveTerritory() != null ) {
+
+                    if( !targetTerritory.getOwner().equals(p.getCurrentActiveTerritory().getOwner())) {
+                        if (!targetTerritory.defendAgainst(p.getCurrentActiveTerritory()))
+                            p.conquerTerritory(targetTerritory);
+                    } else {
+                        if( p.getCurrentActiveTerritory().decreaseArmy(1) )
+                            targetTerritory.increaseArmy(1);
+                    }
+
+                    p.setCurrentActiveTerritory(null);
+                } else {
+                    if( targetTerritory.getOwner().equals(p) ) {
+                        p.setCurrentActiveTerritory(targetTerritory);
+                        System.out.println("Info: Target Territory selected!");
+                    }
+                }
+
+                if( p instanceof  AI ) nextPlayer();
                 break;
             case NEXT_ROUND:
                 break;
@@ -128,7 +151,11 @@ public class RoundManager {
                 playerAI.reinforceUnitsAction().forEach(this::doActionOn);
                 break;
             case ATTACK_OR_MOVE_UNIT:
-                System.out.println("Attack or moving is not implemented!");
+                playerAI.moveOrAttackAction().forEach(action -> {
+                    getCurrentPlayer().setCurrentActiveTerritory(action.y);
+                    doActionOn(action.z);
+                });
+                break;
         }
 
     }
