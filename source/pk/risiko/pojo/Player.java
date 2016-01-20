@@ -52,6 +52,8 @@ public class Player {
 
         System.out.println(name + " holds " + heldTerritories + " territories");
         this.reinforcements += heldTerritories/3;
+
+        System.out.println(this.getName() + " has " + this.reinforcements + " units available");
     }
 
     // returns true possible

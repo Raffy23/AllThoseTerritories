@@ -29,7 +29,7 @@ public class RandomAI extends PlayerAI {
         List<Territory> empties = this.getAllEmptyTerritories();
         assert empties.size() != 0 : "Error: setUnitsToGameMap should not be called, there are no free territories!";
 
-        return empties.get(throwDice(empties.size()));
+        return empties.get(throwDice(empties.size()-1));
     }
 
     @Override
@@ -40,9 +40,9 @@ public class RandomAI extends PlayerAI {
 
         List<Territory> targets = new ArrayList<>(this.getReinforcements());
         for(int i=0;i<getReinforcements()/2;i++)
-            targets.add(my.get(throwDice(my.size())));
+            targets.add(my.get(throwDice(my.size()-1)));
         for(int i=0;i<getReinforcements()-getReinforcements()/2;i++)
-            targets.add(border.get(throwDice(my.size())));
+            targets.add(border.get(throwDice(border.size()-1)));
 
         System.out.println(this.getName() + " refCount= " + getReinforcements());
         assert getReinforcements() == targets.size() : "I must set more reinforcements! ("+targets.size()+"/"+getReinforcements()+")";

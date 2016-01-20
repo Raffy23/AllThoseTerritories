@@ -62,8 +62,8 @@ public class ContinentBasedAI extends PlayerAI {
     public List<Territory> reinforceUnitsAction() {
         List<Territory> targets = new ArrayList<>(this.getReinforcements());
 
-        for (int i = 0; i < this.getReinforcements();) {
-            if (this.reinforcementPossible())
+        for (int i = 0; i < this.getReinforcements();i++) {
+            if (this.isReinforcementPossible())
                 targets.add(this.chooseOwnedTerriory());
         }
 
