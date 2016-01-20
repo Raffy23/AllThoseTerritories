@@ -71,13 +71,14 @@ public class RoundManager {
                 {
                     //if(!(this.getCurrentPlayer() instanceof PlayerAI))
                     this.getCurrentPlayer().setUnit(targetTerritory);
-                    this.nextPlayer();
                     if (!this.gameMap.decreaseFreeTerritories()) {
                         for (int i = 0; i < players.size(); i++) {
                             players.get(i).setReinforcements();
                         }
                         this.currentGameState = GameState.REINFORCE_UNITS;
                     }
+                    this.nextPlayer();
+
                 }
                 break;
             case REINFORCE_UNITS:

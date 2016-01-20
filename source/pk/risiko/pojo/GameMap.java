@@ -14,6 +14,11 @@ public class GameMap {
     private String mapName;
     private List<Territory> territories;
     private ArrayList<Continent> continents;
+
+    public int getFreeTerritories() {
+        return freeTerritories;
+    }
+
     private int freeTerritories;
 
     public GameMap(String name, List<Territory> territories, ArrayList<Continent> continentList) {
