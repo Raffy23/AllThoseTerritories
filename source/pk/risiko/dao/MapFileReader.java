@@ -154,7 +154,14 @@ public class MapFileReader {
                     e.printStackTrace();
                 }
         }
-        
+        if (continentList.size()==0)
+        {
+            Continent c = new Continent("continent", 0);
+            for (int i = 0; i < territories.size(); i++) {
+                c.addTerritory(territories.values());
+            }
+            continentList.add(c);
+        }
         return new GameMap(name, new ArrayList<>(territories.values()), continentList);
     }
 

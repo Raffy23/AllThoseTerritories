@@ -1,6 +1,10 @@
 package pk.risiko.pojo;
 
+import jdk.nashorn.internal.runtime.Context;
+
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -24,6 +28,13 @@ public class Continent {
     public void addTerritory(Territory t)
     {
         territories.add(t);
+    }
+    public void addTerritory(Collection<Territory> t)
+    {
+        for (Iterator iterator = t.iterator(); iterator.hasNext();) {
+            Territory territory = (Territory) iterator.next();
+            territories.add(territory);
+        }
     }
 
     public List<Territory> getTerritories() {
