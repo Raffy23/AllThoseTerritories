@@ -32,16 +32,26 @@ public class MainMenuPanel implements GameScreen {
     private final int windowWidth, windowHeight;
     private final Font headlineFont;
 
-    private int buttonWidth=75*2;
-    private int buttonHeight=20*2;
-    private int buttonGap=20;
+    private static final int BUTTON_WIDTH=75*2;
+    private static final int BUTTON_HEIGHT=20*2;
+    private static final int BUTTON_GAP=20;
 
 
     public MainMenuPanel(int windowWidth, int windowHeight) {
         int offset=0;
-        this.newGame = new GameButton(new Rectangle2D.Double(windowWidth/2-buttonWidth/2,windowHeight/3+ (buttonHeight+buttonGap)*offset++,buttonWidth,buttonHeight),"New Game");
-        this.loadGame = new GameButton(new Rectangle2D.Double(windowWidth/2-buttonWidth/2,windowHeight/3+(buttonHeight+buttonGap)*offset++,buttonWidth,buttonHeight),"Load Game");
-        this.exitGame = new GameButton(new Rectangle2D.Double(windowWidth/2-buttonWidth/2,windowHeight/3+(buttonHeight+buttonGap)*offset++,buttonWidth,buttonHeight),"Exit");
+        this.newGame = new GameButton(new Rectangle2D.Double(windowWidth/2- BUTTON_WIDTH /2
+                                                            ,windowHeight/3+ (BUTTON_HEIGHT + BUTTON_GAP)*offset++
+                                                            , BUTTON_WIDTH, BUTTON_HEIGHT),"New Game");
+        this.loadGame = new GameButton(new Rectangle2D.Double(windowWidth/2- BUTTON_WIDTH /2
+                                                             ,windowHeight/3+(BUTTON_HEIGHT + BUTTON_GAP)*offset++
+                                                             , BUTTON_WIDTH, BUTTON_HEIGHT),"Load Game");
+        this.exitGame = new GameButton(new Rectangle2D.Double(windowWidth/2- BUTTON_WIDTH /2
+                                                              ,windowHeight/3+(BUTTON_HEIGHT + BUTTON_GAP)*offset++
+                                                              , BUTTON_WIDTH, BUTTON_HEIGHT),"Exit");
+
+        this.newGame.setFontSize(BUTTON_HEIGHT /2);
+        this.loadGame.setFontSize(BUTTON_HEIGHT /2);
+        this.exitGame.setFontSize(BUTTON_HEIGHT /2);
 
         this.windowHeight = windowHeight;
         this.windowWidth = windowWidth;
