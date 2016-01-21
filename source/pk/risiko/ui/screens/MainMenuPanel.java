@@ -13,7 +13,7 @@ import java.awt.geom.Rectangle2D;
 /**
  * This class represents the main screen which is viewed to the user when the .exe is launched
  *
- * @author Raphael Ludwig
+ * @author Raphael Ludwig, Wilma Weixelbaum
  * @version 12.01.2016
  */
 public class MainMenuPanel implements GameScreen {

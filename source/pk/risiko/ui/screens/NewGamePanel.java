@@ -47,6 +47,13 @@ public class NewGamePanel implements GameScreen {
     private BufferedImage gameMapPreview;
     private final Font headlineFont;
 
+    private final int START_BUTTON_W=75*2;
+    private final int START_BUTTON_H=20*2;
+    private final int MAP_BUTTONS_WH= 20*2;
+    private final int SEGMENT_LEFT= 115;
+    private final int SEGMENT_MIDDLE= GameWindow.WINDOW_SIZE_WIDTH-PREVIEW_MAP_WIDTH-75;
+    private final int SEGMENT_RIGHT=GameWindow.WINDOW_SIZE_WIDTH-95+20;
+
     public NewGamePanel(MapFileReader mapFileReader) {
         this.mapFileReader = mapFileReader;
         this.mapFiles.addAll(mapFileReader.getAvailableMapFiles());
@@ -54,13 +61,18 @@ public class NewGamePanel implements GameScreen {
         this.mapFiles.add(0,SettingsProvider.getInstance().getDefaultMapName());
 
         /* setup ui: */
-        this.beginGameBtn = new GameButton(new Rectangle2D.Double(GameWindow.WINDOW_SIZE_WIDTH-95
-                                                                  ,GameWindow.WINDOW_SIZE_HEIGHT-75,75,20),"Start Game");
+        this.beginGameBtn = new GameButton(new Rectangle2D.Double(SEGMENT_RIGHT-START_BUTTON_W  //GameWindow.WINDOW_SIZE_WIDTH-95+20-75
+                                                            ,225+PREVIEW_MAP_HEIGHT+75,START_BUTTON_W,START_BUTTON_H),"Start Game");
 
-        this.nextMap = new GameButton(new Rectangle2D.Double(GameWindow.WINDOW_SIZE_WIDTH-95
-                                                            ,225+PREVIEW_MAP_HEIGHT,20,20),">");
-        this.prevMap = new GameButton(new Rectangle2D.Double(GameWindow.WINDOW_SIZE_WIDTH-PREVIEW_MAP_WIDTH-75
-                                                            ,225+PREVIEW_MAP_HEIGHT,20,20),"<");
+
+        this.nextMap = new GameButton(new Rectangle2D.Double(SEGMENT_RIGHT-MAP_BUTTONS_WH  //GameWindow.WINDOW_SIZE_WIDTH-95
+                                                            ,225+PREVIEW_MAP_HEIGHT,MAP_BUTTONS_WH,MAP_BUTTONS_WH),">");
+        this.prevMap = new GameButton(new Rectangle2D.Double(SEGMENT_MIDDLE //GameWindow.WINDOW_SIZE_WIDTH-PREVIEW_MAP_WIDTH-75
+
+                                                            ,225+PREVIEW_MAP_HEIGHT,MAP_BUTTONS_WH,MAP_BUTTONS_WH),"<");
+        this.beginGameBtn.setFontSize(START_BUTTON_H/2);
+        this.nextMap.setFontSize(MAP_BUTTONS_WH/2);
+        this.prevMap.setFontSize(MAP_BUTTONS_WH/2);
 
         this.player1 = new PlayerConfigElement(115,230,"Player 1",new Color(10,10,200,200));
         this.player2 = new PlayerConfigElement(115,290,"Player 2",new Color(10,200,10,200));
