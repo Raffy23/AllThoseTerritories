@@ -9,10 +9,7 @@ import javax.imageio.ImageIO;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.WindowConstants;
-import java.awt.Color;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.RenderingHints;
+import java.awt.*;
 import java.awt.event.KeyAdapter;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -36,7 +33,7 @@ public class GameWindow extends JFrame {
     public static final int WINDOW_SIZE_HEIGHT = GameMapUI.GAME_MAP_HEIGHT + UserInterface.BAR_HEIGHT;
     private static final Color BACKGROUND_COLOR = new Color(58, 164, 255);
 
-    private final GameArea rootPanel;
+    private final PanelArea rootPanel;
     private final GameScreenManager gameScreenManager;
     private final WindowPainter painterTimer;
 
@@ -47,10 +44,15 @@ public class GameWindow extends JFrame {
     private int x;
     private int y;
 
-    private class GameArea extends JPanel {
+    // PanelArea describes the area of the window, where the different panels (GamePanel, NewGamePanel, MainMenuPanel) are placed
+    private class PanelArea extends JPanel {
 
-        public GameArea() {
+        public PanelArea() {
+
+
+
             this.setBounds(0,0, WINDOW_SIZE_WIDTH, WINDOW_SIZE_HEIGHT);
+
         }
 
         @Override
@@ -108,6 +110,14 @@ public class GameWindow extends JFrame {
         this.setSize(GameWindow.WINDOW_SIZE_WIDTH,GameWindow.WINDOW_SIZE_HEIGHT);
         this.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         this.setResizable(false);
+        Dimension windowSize = Toolkit.getDefaultToolkit().getScreenSize();
+        x =(int)((windowSize.getWidth() - WINDOW_SIZE_WIDTH)/2);
+        y =(int)((windowSize.getHeight() - WINDOW_SIZE_HEIGHT)/2);
+        System.out.println(x);
+        System.out.println(y);
+        this.setBounds(x,y,WINDOW_SIZE_WIDTH,WINDOW_SIZE_HEIGHT);
+
+
         //Setup Manager:
         this.gameScreenManager = new GameScreenManager(this);
 
@@ -119,7 +129,7 @@ public class GameWindow extends JFrame {
         }
 
         //Setup Draw Area:
-        this.add(this.rootPanel = new GameArea());
+        this.add(this.rootPanel = new PanelArea());
         this.rootPanel.addMouseListener(new WindowEventUpdater());
 
         this.rootPanel.addMouseMotionListener(new MouseMotionAdapter() {
