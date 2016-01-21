@@ -50,6 +50,9 @@ public class NewGamePanel implements GameScreen {
     public NewGamePanel(MapFileReader mapFileReader) {
         this.mapFileReader = mapFileReader;
         this.mapFiles.addAll(mapFileReader.getAvailableMapFiles());
+        this.mapFiles.remove(SettingsProvider.getInstance().getDefaultMapName());
+        this.mapFiles.add(0,SettingsProvider.getInstance().getDefaultMapName());
+
         /* setup ui: */
         this.beginGameBtn = new GameButton(new Rectangle2D.Double(GameWindow.WINDOW_SIZE_WIDTH-95
                                                                   ,GameWindow.WINDOW_SIZE_HEIGHT-75,75,20),"Start Game");
@@ -81,7 +84,7 @@ public class NewGamePanel implements GameScreen {
         this.prevMap.setListener((prev) -> this.loadMap(this.mapFiles.prev()));
 
         /* load default map */
-        this.loadMap(SettingsProvider.getInstance().getDefaultMapName());
+        this.loadMap(this.mapFiles.get(0));
     }
 
     private void loadMap(String name) {
