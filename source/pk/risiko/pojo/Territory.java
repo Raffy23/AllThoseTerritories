@@ -2,8 +2,10 @@ package pk.risiko.pojo;
 
 import pk.risiko.ui.elements.UIElement;
 
+import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Graphics2D;
+import java.awt.Stroke;
 import java.awt.geom.Area;
 import java.util.ArrayList;
 import java.util.List;
@@ -20,15 +22,25 @@ public class Territory extends UIElement {
     private static final Color OVAL_COLOR = new Color(248, 248, 248);
     private static final Color DEFAULT_COLOR = new Color(0.5f, 0.5f, 0.5f, 0.6f);
     private static final Color HOVER_COLOR = DEFAULT_COLOR.brighter();
-
+    private final static Stroke ACTIVE_STROKE = new BasicStroke(4.0f
+                                                                ,BasicStroke.CAP_SQUARE
+                                                                ,BasicStroke.JOIN_MITER
+                                                                ,2.0f
+                                                                ,new float[] {2.0f}
+                                                                ,0.0f);
     private static final int OVAL_SIZE = 24;
 
     private String name;
-    private Capital capital=new Capital("",0,0);
+    private Capital capital=new Capital(0,0);
     private List<Territory> neighbours;
 
     private Player owner;
     private int currentArmyCount = 0;
+
+    public enum ActiveState {
+        OWN,HOSTILE,NONE
+    }
+    private ActiveState active = ActiveState.NONE;
 
     //neighbours might not be known at constructing time!
     public Territory(String name, Area a) {
@@ -48,10 +60,6 @@ public class Territory extends UIElement {
 
     public String getName() {
         return name;
-    }
-
-    public String getCapitalName() {
-        return capital.getName();
     }
 
     public Capital getCapital(){return capital;}
@@ -97,8 +105,12 @@ public class Territory extends UIElement {
         g.setColor(this.getDrawingColor());
         g.fill(this.getElementShape());
 
-        g.setColor(this.getMouseState()==MouseState.CLICKED?Color.RED:Color.BLACK);
+        g.setColor(Color.BLACK);
+        final Stroke oldStroke = g.getStroke();
+        if( this.active == ActiveState.OWN ) g.setStroke(ACTIVE_STROKE);
         g.draw(this.getElementShape());
+
+        g.setStroke(oldStroke);
     }
 
     public void paintTopComponents(Graphics2D g) {
@@ -106,6 +118,16 @@ public class Territory extends UIElement {
         final int xOffset = g.getFontMetrics().stringWidth(String.valueOf(this.currentArmyCount));
         final int yOffset = g.getFontMetrics().getHeight();
         g.fillOval(this.capital.getCoords().x,this.capital.getCoords().y,OVAL_SIZE,OVAL_SIZE);
+
+        if( this.active == ActiveState.HOSTILE ) {
+            g.setColor(Color.RED);
+            final Stroke oldStroke = g.getStroke();
+
+            g.setStroke(ACTIVE_STROKE);
+            g.drawOval(this.capital.getCoords().x,this.capital.getCoords().y,OVAL_SIZE,OVAL_SIZE);
+
+            g.setStroke(oldStroke);
+        }
 
         g.setColor(Color.BLACK);
         g.drawString(String.valueOf(this.currentArmyCount)
@@ -150,5 +172,13 @@ public class Territory extends UIElement {
         }
 
         return true;
+    }
+
+    public ActiveState getActiveState() {
+        return active;
+    }
+
+    public void setActive(ActiveState active) {
+        this.active = active;
     }
 }

@@ -84,13 +84,22 @@ public class Player {
     }
 
     public void setCurrentActiveTerritory(Territory currentActiveTerritory) {
+        if( this.currentActiveTerritory != null ) {
+            this.currentActiveTerritory.setActive(Territory.ActiveState.NONE);
+            this.currentActiveTerritory.getNeighbours().forEach(n -> {
+                if(n.getActiveState() == Territory.ActiveState.HOSTILE)
+                    n.setActive(Territory.ActiveState.NONE);
+            });
+        }
+
         this.currentActiveTerritory = currentActiveTerritory;
+
+        if( this.currentActiveTerritory != null ) {
+            this.currentActiveTerritory.setActive(Territory.ActiveState.OWN);
+            this.currentActiveTerritory.getNeighbours().forEach(n -> {
+                if(n.getActiveState() == Territory.ActiveState.NONE)
+                    n.setActive(Territory.ActiveState.HOSTILE);
+            });
+        }
     }
-
-
-    //why does player have a static method to a local in game map?
-    /*public static boolean decreaseFreeTerritories() {
-        return gameMap.decreaseFreeTerritories();
-    }*/
-
 }

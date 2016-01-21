@@ -38,7 +38,6 @@ public class Connection extends UIElement {
     }
 
     private static Polygon createNewObjectShape(Territory a, Territory b) {
-
         if( a.getCapital().getCoords().distance(b.getCapital().getCoords()) >= 720 ) {
             Point left = a.getCapital().getCoords().x < b.getCapital().getCoords().x ?
                          a.getCapital().getCoords() : b.getCapital().getCoords();
@@ -70,11 +69,7 @@ public class Connection extends UIElement {
                               ,new int[]{a.getCapital().getCoords().y,b.getCapital().getCoords().y}
                               ,2);
         }
-
-
-
     }
-
 
     @Override
     public int hashCode() {

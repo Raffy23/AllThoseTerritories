@@ -105,7 +105,7 @@ public class MapFileReader {
                         break;
                     case "capital-of":
                         Territory t = territories.get(tname);
-                        t.setCapital(new Capital("",Integer.parseInt(arr[arr.length-2]),Integer.parseInt(arr[arr.length-1])));
+                        t.setCapital(new Capital(Integer.parseInt(arr[arr.length-2]),Integer.parseInt(arr[arr.length-1])));
                         break;
                     case "neighbors-of":
                         String[] neighborsinfo = tname.split(":");

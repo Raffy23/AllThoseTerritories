@@ -1,19 +1,9 @@
 package pk.risiko;
 
-import pk.risiko.dao.MapFileReader;
-import pk.risiko.pojo.GameMap;
-import pk.risiko.pojo.GameScreenType;
-import pk.risiko.pojo.Player;
-import pk.risiko.pojo.RandomAI;
-import pk.risiko.ui.GameWindow;
 import pk.risiko.ui.MainWindow;
-import pk.risiko.ui.screens.GamePanel;
-import pk.risiko.ui.screens.MainMenuPanel;
-import pk.risiko.ui.screens.NewGamePanel;
 import pk.risiko.util.CommandParser;
 import pk.risiko.util.SettingsProvider;
 
-import java.awt.Color;
 import java.awt.EventQueue;
 import java.io.File;
 import java.io.FileReader;
@@ -59,8 +49,8 @@ public class Risiko {
         /* Globally saves constants as in settings.properties */
         SettingsProvider.createSettingsProvider(settings,cmdParser);
 
-
-        EventQueue.invokeLater(() -> new Risiko());
+        /* start the game & display window */
+        EventQueue.invokeLater(Risiko::new);
     }
 
 
