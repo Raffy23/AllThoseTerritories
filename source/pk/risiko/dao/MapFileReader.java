@@ -86,7 +86,7 @@ public class MapFileReader {
         try {
             br = new BufferedReader(new FileReader(directory+name));
             while ((line=br.readLine()) != null) {
-                System.out.println(line);
+                //System.out.println(line);
 
                 String[] arr=line.split(" ");
                 String tname=getName(arr);
@@ -169,12 +169,15 @@ public class MapFileReader {
         List<String> mapFileNames = new LinkedList<>();
         try {
             Files.list(Paths.get(this.directory)).forEach(p -> mapFileNames.add(p.getFileName().toString()));
+
         } catch (IOException e) {
             System.err.println("Unable to list directory content");
             e.printStackTrace();
 
             assert false : "Unable to list directory content, abort in debug mode!";
         }
+
+
 
         return mapFileNames;
     }

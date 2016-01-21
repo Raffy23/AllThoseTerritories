@@ -18,6 +18,7 @@ import java.util.Map;
  */
 public class GameScreenManager {
 
+    // GameScreenManager holds GameWindow and vice-versa!
     private GameWindow window;
     private GameScreenType activeScreen;
     private Map<GameScreenType,GameScreen> screens = new HashMap<>();

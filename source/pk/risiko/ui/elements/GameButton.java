@@ -18,7 +18,7 @@ import java.awt.Shape;
 public class GameButton extends UIElement {
     private static final Color DEFAULT_BACKGROUND_COLOR   = new Color(0.15f,0.15f,0.15f,0.65f);
     private static final Color DEFAULT_BORDER_COLOR = new Color(1f,1f,1f,0.65f);
-    private static final Color DEFAULT_TEXT_COLOR = new Color(255,255,255);
+    private static final Color DEFAULT_TEXT_COLOR = new Color(255, 255, 255);
 
     private Color backgroundColor = DEFAULT_BACKGROUND_COLOR;
     private Color borderColor = DEFAULT_BORDER_COLOR;

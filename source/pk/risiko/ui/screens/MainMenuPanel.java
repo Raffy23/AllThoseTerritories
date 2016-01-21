@@ -70,7 +70,7 @@ public class MainMenuPanel implements GameScreen {
         return dispatcher;
     }
 
-    @Override
+    //@Override
     public KeyAdapter getKeyAdapter() {
         return null;
     }
