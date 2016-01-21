@@ -11,8 +11,7 @@ import java.awt.event.KeyAdapter;
 import java.awt.geom.Rectangle2D;
 
 /**
- * This class represents the main screen which is viewed to the user after the game
- * has started
+ * This class represents the main screen which is viewed to the user when the .exe is launched
  *
  * @author Raphael Ludwig
  * @version 12.01.2016
@@ -33,10 +32,16 @@ public class MainMenuPanel implements GameScreen {
     private final int windowWidth, windowHeight;
     private final Font headlineFont;
 
+    private int buttonWidth=75*2;
+    private int buttonHeight=20*2;
+    private int buttonGap=20;
+
+
     public MainMenuPanel(int windowWidth, int windowHeight) {
-        this.newGame = new GameButton(new Rectangle2D.Double(windowWidth/2-75,windowHeight/3,75,20),"New Game");
-        this.loadGame = new GameButton(new Rectangle2D.Double(windowWidth/2-75,windowHeight/3+40,75,20),"Load Game");
-        this.exitGame = new GameButton(new Rectangle2D.Double(windowWidth/2-75,windowHeight/3+80,75,20),"Exit");
+        int offset=0;
+        this.newGame = new GameButton(new Rectangle2D.Double(windowWidth/2-buttonWidth/2,windowHeight/3+ (buttonHeight+buttonGap)*offset++,buttonWidth,buttonHeight),"New Game");
+        this.loadGame = new GameButton(new Rectangle2D.Double(windowWidth/2-buttonWidth/2,windowHeight/3+(buttonHeight+buttonGap)*offset++,buttonWidth,buttonHeight),"Load Game");
+        this.exitGame = new GameButton(new Rectangle2D.Double(windowWidth/2-buttonWidth/2,windowHeight/3+(buttonHeight+buttonGap)*offset++,buttonWidth,buttonHeight),"Exit");
 
         this.windowHeight = windowHeight;
         this.windowWidth = windowWidth;

@@ -48,11 +48,7 @@ public class GameWindow extends JFrame {
     private class PanelArea extends JPanel {
 
         public PanelArea() {
-
-
-
             this.setBounds(0,0, WINDOW_SIZE_WIDTH, WINDOW_SIZE_HEIGHT);
-
         }
 
         @Override
