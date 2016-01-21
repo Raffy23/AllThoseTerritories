@@ -38,6 +38,7 @@ public class GameWindow extends JFrame {
     private final WindowPainter painterTimer;
 
     private BufferedImage background;
+    private BufferedImage icon;
 
     private SwingMouseEventDispatcher dispatcher;
 
@@ -120,9 +121,13 @@ public class GameWindow extends JFrame {
 
         try {
             this.background = ImageIO.read(new File("./assets/background-game.jpg"));
+            this.icon = ImageIO.read(new File("./assets/risiko.png"));
+
+            this.setIconImage(icon);
         } catch (IOException e) {
             e.printStackTrace();
         }
+
 
         //Setup Draw Area:
         this.add(this.rootPanel = new PanelArea());
