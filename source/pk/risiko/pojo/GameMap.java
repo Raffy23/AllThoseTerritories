@@ -64,7 +64,7 @@ public class GameMap {
     }
 
     /**
-     * returns true if decrease was successful & another decrease is still possible
+     * returns true if decrease was successful and another decrease is still possible
      * false if there are no freeTerritories left at the end oft the method
      *
      * @return true if the GameMap has any free Territories
