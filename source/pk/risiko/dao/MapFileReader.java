@@ -176,10 +176,6 @@ public class MapFileReader {
 
             assert false : "Unable to list directory content, abort in debug mode!";
         }
-
-
-
         return mapFileNames;
     }
-
 }

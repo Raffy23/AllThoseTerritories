@@ -5,6 +5,7 @@ import pk.risiko.pojo.PlayerAI;
 import pk.risiko.pojo.Territory;
 import pk.risiko.util.RoundManager;
 
+import javax.swing.*;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.awt.event.MouseEvent;
@@ -71,6 +72,8 @@ public class GameMapUI extends UIElement {
     @Override
     public void mouseClicked(MouseEvent e) {
         if( !this.isCurrentlyPlaying() ) return;
+
+
 
         this.gameMap.getTerritories().forEach(t -> t.mouseClicked(e));
         this.mouseClicked();

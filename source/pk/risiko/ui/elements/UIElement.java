@@ -4,6 +4,7 @@ import pk.risiko.pojo.MouseState;
 import pk.risiko.ui.Drawable;
 import pk.risiko.ui.MouseEventHandler;
 
+import javax.swing.*;
 import java.awt.Shape;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -14,8 +15,8 @@ import java.awt.event.MouseEvent;
  * which implements UiElement is responsible for drawing and reacting to
  * events!
  *
- * @author Raphael
- * @version 10.01.2016
+ * @author Raphael, Wilma
+ * @version 22.01.2016
  */
 public abstract class UIElement extends MouseAdapter implements Drawable, MouseEventHandler {
 
@@ -47,7 +48,7 @@ public abstract class UIElement extends MouseAdapter implements Drawable, MouseE
     public void mouseMoved(MouseEvent e) {
         final boolean inMe = this.isMouseIn(e.getX(),e.getY());
 
-        if( inMe && this.mouseState == MouseState.NORMAL || this.mouseState == MouseState.CLICKED )  {
+        if( inMe && this.mouseState == MouseState.NORMAL || this.mouseState == MouseState.L_CLICKED || this.mouseState == MouseState.R_CLICKED)  {
             this.setMouseState(MouseState.HOVER);
         } else if( !inMe && this.mouseState == MouseState.HOVER ) {
             this.setMouseState(MouseState.NORMAL);
@@ -57,9 +58,21 @@ public abstract class UIElement extends MouseAdapter implements Drawable, MouseE
     @Override
     public void mouseClicked(MouseEvent e) {
         final boolean inMe = this.isMouseIn(e.getX(),e.getY());
-        
-        if( inMe ) { this.mouseState = MouseState.CLICKED; this.mouseClicked(); e.consume(); }
-        else if( this.mouseState == MouseState.CLICKED ) { this.mouseState = MouseState.NORMAL; }
+
+        if( inMe )
+        {
+            if (SwingUtilities.isLeftMouseButton(e)) {
+                this.mouseState = MouseState.L_CLICKED;
+                this.mouseClicked();
+            }
+            else if (SwingUtilities.isRightMouseButton(e)) {
+                this.mouseState = MouseState.R_CLICKED;
+                this.mouseClicked();
+            }
+            e.consume();
+        }
+        else if( this.mouseState == MouseState.L_CLICKED||this.mouseState==MouseState.R_CLICKED)
+        { this.mouseState = MouseState.NORMAL; }
     }
 
     @Override

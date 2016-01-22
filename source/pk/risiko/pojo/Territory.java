@@ -7,9 +7,7 @@ import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Stroke;
 import java.awt.geom.Area;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 
 /**
  * This class represents a Territory in Game.
@@ -231,23 +229,50 @@ public class Territory extends UIElement {
      * @param attacker the attacker territory
      * @return true if successfully defended against the troups otherwise false
      */
-    public boolean defendAgainst(Territory attacker) {
+    public int defendAgainst(Territory attacker) {
         assert owner != attacker.owner : "Why should i attack my own territories? ("+owner.getName()+")";
 
         Random dice = new Random();
-        int maxTroups = currentArmyCount > attacker.currentArmyCount ? currentArmyCount : attacker.currentArmyCount;
-        if( maxTroups > 3 ) maxTroups = 3;
 
-        for(int i=0;i<maxTroups;i++) {
-            int attDice = dice.nextInt(6);
-            int defDice  = dice.nextInt(6);
-
-            if( attDice > defDice )
-                if( --currentArmyCount == 0 ) return false;
-            else if( --attacker.currentArmyCount == 1 ) return false;
+        int defendingTroups = currentArmyCount >= 2? 2 : 1; // 1 is minimum
+        int attackingTroups = 0;
+        for (; attackingTroups < attacker.currentArmyCount-1; attackingTroups++) { // -1 because 1 army MUST be left behind
+            if (attackingTroups ==3)
+                break;
         }
+        System.out.println("Battle!\nAttacking Troups: " +attackingTroups +"\nDefending Troups: "+defendingTroups);
+        ArrayList<Integer> attackRolls = randomIntList(dice, attackingTroups);
+        ArrayList<Integer> defendRolls = randomIntList(dice, defendingTroups);
 
-        return true;
+        // iterate through attacks
+        for (int i = 0; i < attackingTroups;i++) {
+            if (attackRolls.get(i)> (defendRolls.size()>=i ? defendRolls.get(i):0)) {
+                // attack successful
+                System.out.println("attack "+ (i+1) + " successful!");
+                --currentArmyCount;
+                --attackingTroups;
+
+                if (currentArmyCount == 0)
+                    return attackingTroups; // Territory conquered
+            }
+            else
+            {
+                // defense successful
+                System.out.println("attack "+ (i+1) + "failed!");
+                attacker.currentArmyCount--;
+                defendRolls.add(dice.nextInt(6));
+            }
+        }
+        return -1;
+    }
+    private ArrayList<Integer> randomIntList(Random dice, int count)
+    {
+        ArrayList<Integer> randoms = new ArrayList<Integer>();
+        for (int i = 0; i < count; i++) {
+            randoms.add(dice.nextInt(6));
+        }
+        Collections.sort(randoms);
+        return randoms;
     }
 
     public ActiveState getActiveState() {

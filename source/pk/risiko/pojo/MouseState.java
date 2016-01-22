@@ -8,5 +8,5 @@ package pk.risiko.pojo;
  * @version 10.01.2016
  */
 public enum MouseState {
-    CLICKED,HOVER,NORMAL
+    L_CLICKED, R_CLICKED,HOVER,NORMAL
 }

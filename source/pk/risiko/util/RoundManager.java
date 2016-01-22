@@ -1,12 +1,8 @@
 package pk.risiko.util;
 
-import pk.risiko.pojo.AI;
-import pk.risiko.pojo.GameMap;
-import pk.risiko.pojo.GameState;
-import pk.risiko.pojo.Player;
-import pk.risiko.pojo.PlayerAI;
-import pk.risiko.pojo.Territory;
+import pk.risiko.pojo.*;
 
+import javax.swing.*;
 import java.util.List;
 
 /**
@@ -14,7 +10,7 @@ import java.util.List;
  * handles the all Events (next player, set unit, reinforce unit)
  *
  * @author Raphael Ludwig, Wilma Weixelbaum
- * @version 17.01.2016
+ * @version 22.01.2016
  */
 public class RoundManager {
 
@@ -77,11 +73,23 @@ public class RoundManager {
             players.get(i).calculateReinforcements();
         }
     }
+    private void setNewRoundDefaults()
+    {
+        for (int i = 0; i < players.size(); i++) {
+            players.get(i).setNewRoundDefaults();
+        }
+    }
 
     // (rename if better name was found)
     private void doActionOn(Territory targetTerritory)
     {
         Player p = this.getCurrentPlayer();
+
+        /*if (targetTerritory.getMouseState().equals(MouseState.L_CLICKED))
+            System.out.println("left button");
+        else if (targetTerritory.getMouseState().equals(MouseState.R_CLICKED))
+            System.out.println("right button");
+        */
 
         switch (this.currentGameState)
         {
@@ -89,7 +97,7 @@ public class RoundManager {
                 if (targetTerritory.getOwner() == null)
                 {
                     //if(!(this.getCurrentPlayer() instanceof PlayerAI))
-                    this.getCurrentPlayer().conquerTerritory(targetTerritory);
+                    this.getCurrentPlayer().conquerTerritory(targetTerritory,1);
                     if (!this.gameMap.hasFreeTerrotories()) { //lowering is done above
                         this.calculateReinforcements();
                         this.currentGameState = GameState.REINFORCE_UNITS;
@@ -114,16 +122,11 @@ public class RoundManager {
                 }
                 break;
             case ATTACK_OR_MOVE_UNIT:
-                if( p.getCurrentActiveTerritory() != null ) {
-
-                    if( !targetTerritory.getOwner().equals(p.getCurrentActiveTerritory().getOwner())) {
-                        if (!targetTerritory.defendAgainst(p.getCurrentActiveTerritory()))
-                            p.conquerTerritory(targetTerritory);
-                    } else {
-                        if( p.getCurrentActiveTerritory().decreaseArmy(1) )
-                            targetTerritory.increaseArmy(1);
+                if( p.getCurrentActiveTerritory() != null) {
+                    if (p.getCurrentActiveTerritory().getNeighbours().contains(targetTerritory)) {
+                        //System.out.println("target is neighbor");
+                        p.attackOrMove(targetTerritory);
                     }
-
                     p.setCurrentActiveTerritory(null);
                 } else {
                     if( targetTerritory.getOwner().equals(p) ) {
@@ -135,6 +138,11 @@ public class RoundManager {
                 if( p instanceof  AI ) nextPlayer();
                 break;
             case NEXT_ROUND:
+                // TODO: did someone win already?
+
+                setNewRoundDefaults();
+                this.currentGameState=GameState.REINFORCE_UNITS;
+
                 break;
         }
     }

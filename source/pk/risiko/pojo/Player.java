@@ -38,6 +38,12 @@ public class Player {
      */
     private Territory currentActiveTerritory;
 
+    private boolean attackAvailable=true;
+    private Territory receivingTerritory=null;
+    private Territory sendingTerritory=null;
+    private Territory fightingTerritory=null;
+    private Territory conqueredTerritory=null;
+    private int moveCount=0;
 
     /**
      *
@@ -122,11 +128,15 @@ public class Player {
      * This method does set the owner of the given territory and increases the army count to 1
      * @param t any free or held territory with 0 stationed units
      */
-    public void conquerTerritory(Territory t)
+    public void conquerTerritory(Territory t, int survivors)
     {
         this.gameMap.decreaseFreeTerritories();
+        if (this.getCurrentActiveTerritory()!=null) {
+            this.getCurrentActiveTerritory().decreaseArmy(survivors);
+            conqueredTerritory=t;
+        }
         t.setOwner(this);
-        t.increaseArmy(1);
+        t.increaseArmy(survivors);
     }
 
     /**
@@ -162,5 +172,71 @@ public class Player {
                     n.setActive(Territory.ActiveState.HOSTILE);
             });
         }
+    }
+
+    public void attackOrMove(Territory targetTerritory) {
+        if (targetTerritory.getMouseState() == MouseState.R_CLICKED) {
+            // attack
+            if (!targetTerritory.getOwner().equals(this.getCurrentActiveTerritory().getOwner())) {
+                if (attackAvailable) {
+                    System.out.println("attack!");
+                    attackAvailable = false;
+                    this.fightingTerritory = this.getCurrentActiveTerritory();
+                    int survivors=targetTerritory.defendAgainst(this.getCurrentActiveTerritory());
+                    if (survivors>0)
+                        this.conquerTerritory(targetTerritory, survivors);
+                }
+            } else {
+                System.out.println("move");
+                if (this.getCurrentActiveTerritory().getStationedArmies()>1)
+                {
+                    if (receivingTerritory==null&&sendingTerritory==null)
+                    {
+                        receivingTerritory=targetTerritory;
+                        sendingTerritory=this.getCurrentActiveTerritory();
+                        moveCount++;
+                    }
+                    else if(receivingTerritory==targetTerritory && sendingTerritory==this.getCurrentActiveTerritory())
+                    {
+                        moveCount++;
+                    }
+                    else if (receivingTerritory==this.getCurrentActiveTerritory() && sendingTerritory==targetTerritory)
+                    {
+                        if (moveCount==1)
+                        {
+                            receivingTerritory=null;
+                            sendingTerritory=null;
+                            moveCount=0;
+                        }
+                        else if (moveCount>1)
+                            moveCount--;
+                    }
+                    else
+                    {
+                        return;
+                    }
+                    this.getCurrentActiveTerritory().decreaseArmy(1);
+                    targetTerritory.increaseArmy(1);
+                }
+            }
+        }
+        // trail per left-click!
+        else if (targetTerritory.getMouseState() == MouseState.L_CLICKED&&targetTerritory==conqueredTerritory&&this.currentActiveTerritory==fightingTerritory)
+        {
+            System.out.println("trail");
+            if (this.getCurrentActiveTerritory().getStationedArmies()>1) {
+                this.getCurrentActiveTerritory().decreaseArmy(1);
+                targetTerritory.increaseArmy(1);
+            }
+        }
+    }
+
+    public void setNewRoundDefaults()
+    {
+        this.attackAvailable=true;
+        receivingTerritory=null;
+        sendingTerritory=null;
+        fightingTerritory=null;
+        conqueredTerritory=null;
     }
 }
