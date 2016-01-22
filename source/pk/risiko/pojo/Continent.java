@@ -1,7 +1,5 @@
 package pk.risiko.pojo;
 
-import jdk.nashorn.internal.runtime.Context;
-
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;

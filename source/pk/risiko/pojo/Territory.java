@@ -12,72 +12,119 @@ import java.util.List;
 import java.util.Random;
 
 /**
- * This class represents a Territory in game
+ * This class represents a Territory in Game.
+ * Besides holding all the Data it does extend the UIElement and is therefore
+ * also responsible to draw the Territory to the Screen.
  *
+ * @see UIElement
  * @author Raphael Ludwig
  * @version 27.12.2015
  */
 public class Territory extends UIElement {
 
+    /** The default color of the Oval which is drawn on the capital point **/
     private static final Color OVAL_COLOR = new Color(248, 248, 248);
+    /** The default color which des Territory has if there is no Owner set **/
     private static final Color DEFAULT_COLOR = new Color(0.5f, 0.5f, 0.5f, 0.6f);
+    /** The default color which des Territory has if there is no Owner set and
+     *  Territory is hovered with the mouse **/
     private static final Color HOVER_COLOR = DEFAULT_COLOR.brighter();
+    /** The Stroke in which the Territory outline is drawn if it is set to active (OWN) **/
     private final static Stroke ACTIVE_STROKE = new BasicStroke(4.0f
                                                                 ,BasicStroke.CAP_SQUARE
                                                                 ,BasicStroke.JOIN_MITER
                                                                 ,2.0f
                                                                 ,new float[] {2.0f}
                                                                 ,0.0f);
+    /** The size of the oval which is drawn at the point of the capital **/
     private static final int OVAL_SIZE = 24;
 
-    private String name;
+    /** The name of the Territory **/
+    private final String name;
+    /** A List of all Neighbours of this Territory **/
+    private final List<Territory> neighbours = new ArrayList<>();
+    /** The Capital of the Territory, which is lazy initialized du the MapFormat **/
     private Capital capital=new Capital(0,0);
-    private List<Territory> neighbours;
 
+    /** The current owner of this Territory **/
     private Player owner;
+    /** A counter which does represent how many armies are stationed **/
     private int currentArmyCount = 0;
 
+    /**
+     * This Enumeration does represent the current Active-State of the
+     * Territory.
+     */
     public enum ActiveState {
-        OWN,HOSTILE,NONE
+        /** The Territory was selected by a friendly entity **/ OWN,
+        /** The Territory was selected by a hostile entity **/ HOSTILE,
+        /** Territory was not selected by anything **/ NONE
     }
+
+    /** the active state does change the way the territory is drawn **/
     private ActiveState active = ActiveState.NONE;
 
-    //neighbours might not be known at constructing time!
+    /**
+     * A Territory is more or less completely lazy initialized due the clustered MapFile Format
+     * @param name The Name of the Territory
+     * @param a a Area Object which does represent the Territory (must not be the complete Territory)
+     */
     public Territory(String name, Area a) {
         super(a);
-
         this.name = name;
-        this.neighbours = new ArrayList<>();
     }
 
+    /**
+     * @param player Sets the new Owner to the Territory
+     */
     public void setOwner(Player player) {
         this.owner = player;
     }
 
+    /**
+     * @return the current owner of the territory
+     */
     public Player getOwner() {
         return this.owner;
     }
 
+    /**
+     * @return the name of the Territory
+     */
     public String getName() {
         return name;
     }
 
+    /**
+     * @return The Capital of the Territory
+     * @see Capital
+     */
     public Capital getCapital(){return capital;}
 
+    /**
+     * @return a list of all currently known Neighbours of this Territory
+     */
     public List<Territory> getNeighbours() {
         return neighbours;
     }
 
+    /**
+     * @return the number of how many armies are currently in the territory
+     */
     public int getStationedArmies() {
         return this.currentArmyCount;
     }
 
+    /**
+     * Increases the army count in this Territory by the given delta
+     * @param delta any positive number
+     */
     public void increaseArmy(int delta) {
+        assert delta > 0 : "Delta must be positive";
         this.currentArmyCount += delta;
     }
 
     /**
-     *
      * @param delta delta value of which the units should be decreased (must be positive)
      * @return true if the land was take by another player
      */
@@ -93,6 +140,9 @@ public class Territory extends UIElement {
         return false;
     }
 
+    /**
+     * @return the current color of the solid parts of the Territory
+     */
     private Color getDrawingColor() {
         if( this.getMouseState() == MouseState.NORMAL)
             return this.owner!=null?this.owner.getColor():DEFAULT_COLOR;
@@ -100,19 +150,35 @@ public class Territory extends UIElement {
             return this.owner!=null?this.owner.getColor().brighter():HOVER_COLOR;
     }
 
+    /**
+     * The paint method does only draw the bottom part of the territory, not the
+     * Oval Element which can be overdrawn by another Territory. This is draw in the
+     * #{paintTopComponents} Method
+     *
+     * @see UIElement
+     */
     @Override
     public void paint(Graphics2D g) {
+        final Stroke oldStroke = g.getStroke();
+
+        //draw solid stuff
         g.setColor(this.getDrawingColor());
         g.fill(this.getElementShape());
 
+        //draw the outlines:
         g.setColor(Color.BLACK);
-        final Stroke oldStroke = g.getStroke();
         if( this.active == ActiveState.OWN ) g.setStroke(ACTIVE_STROKE);
         g.draw(this.getElementShape());
 
         g.setStroke(oldStroke);
     }
 
+    /**
+     * This Method draws the TOP Parts of the Terrory which should be drawn in another
+     * layer to protect them from overdrawing
+     *
+     * @param g Graphics2D Element of the source
+     */
     public void paintTopComponents(Graphics2D g) {
         g.setColor(OVAL_COLOR);
         final int xOffset = g.getFontMetrics().stringWidth(String.valueOf(this.currentArmyCount));
@@ -135,15 +201,25 @@ public class Territory extends UIElement {
                 ,this.capital.getCoords().y+yOffset);
     }
 
+    /**
+     * This Method does nothing, all clicks should be handled by any Clicklisterner outside of this Class
+     * @see UIElement
+     */
     @Override
     public void mouseClicked() {
         /* do nothing */
     }
 
+    /**
+     * @return the area object which does represent the current Area of this Territory. It can be changed.
+     */
     public Area getArea() {
         return (Area)this.getElementShape();
     }
 
+    /**
+     * @param capital a Captial object to set the capital of this Territory
+     */
     public void setCapital(Capital capital) {
         this.capital = capital;
     }
