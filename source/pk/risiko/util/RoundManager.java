@@ -40,6 +40,9 @@ public class RoundManager {
             if (this.currentGameState == GameState.REINFORCE_UNITS) {
                 this.currentRound++;
             } else if(this.currentGameState == GameState.ATTACK_OR_MOVE_UNIT) {
+
+                //TODO: switch to GameState new round? + win/lose
+                setNewRoundDefaults();
                 calculateReinforcements();
                 currentGameState = GameState.REINFORCE_UNITS;
             }
@@ -140,6 +143,7 @@ public class RoundManager {
             case NEXT_ROUND:
                 // TODO: did someone win already?
 
+                System.out.println("button new round pressed");
                 setNewRoundDefaults();
                 this.currentGameState=GameState.REINFORCE_UNITS;
 

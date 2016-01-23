@@ -238,5 +238,6 @@ public class Player {
         sendingTerritory=null;
         fightingTerritory=null;
         conqueredTerritory=null;
+        moveCount=0;
     }
 }

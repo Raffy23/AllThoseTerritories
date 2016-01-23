@@ -250,7 +250,6 @@ public class Territory extends UIElement {
                 // attack successful
                 System.out.println("attack "+ (i+1) + " successful!");
                 --currentArmyCount;
-                --attackingTroups;
 
                 if (currentArmyCount == 0)
                     return attackingTroups; // Territory conquered
@@ -258,6 +257,7 @@ public class Territory extends UIElement {
             else
             {
                 // defense successful
+                --attackingTroups;
                 System.out.println("attack "+ (i+1) + "failed!");
                 attacker.currentArmyCount--;
                 defendRolls.add(dice.nextInt(6));
