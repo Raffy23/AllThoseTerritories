@@ -235,32 +235,49 @@ public class Territory extends UIElement {
         Random dice = new Random();
 
         int defendingTroups = currentArmyCount >= 2? 2 : 1; // 1 is minimum
-        int attackingTroups = 0;
-        for (; attackingTroups < attacker.currentArmyCount-1; attackingTroups++) { // -1 because 1 army MUST be left behind
-            if (attackingTroups ==3)
+        int numberOfAttacks = 0;
+        for (; numberOfAttacks < attacker.currentArmyCount-1; numberOfAttacks++) { // -1 because 1 army MUST be left behind
+            if (numberOfAttacks ==3)
                 break;
         }
-        System.out.println("Battle!\nAttacking Troups: " +attackingTroups +"\nDefending Troups: "+defendingTroups);
-        ArrayList<Integer> attackRolls = randomIntList(dice, attackingTroups);
+        ArrayList<Integer> attackRolls = randomIntList(dice, numberOfAttacks);
         ArrayList<Integer> defendRolls = randomIntList(dice, defendingTroups);
 
+        // TODO: remove eventually
+        System.out.print("Battle!\nAttacking Troups: " +numberOfAttacks+ " [");
+        for (int i:attackRolls) {
+            System.out.print(i+";");
+        }
+        System.out.print("]\nDefending Troups: "+defendingTroups+ " [");
+        for (int i:defendRolls) {
+            System.out.print(i+";");
+        }
+        System.out.println("]");
+
+
         // iterate through attacks
-        for (int i = 0; i < attackingTroups;i++) {
+        for (int i = 0; i < attackRolls.size();i++) {
             if (attackRolls.get(i)> (defendRolls.size()>=i ? defendRolls.get(i):0)) {
                 // attack successful
                 System.out.println("attack "+ (i+1) + " successful!");
-                --currentArmyCount;
-
+                --defendingTroups;
+                --this.currentArmyCount;
                 if (currentArmyCount == 0)
-                    return attackingTroups; // Territory conquered
+                    return numberOfAttacks; // Territory conquered
+                if (defendingTroups==0)
+                    return -1;
             }
             else
             {
                 // defense successful
-                --attackingTroups;
-                System.out.println("attack "+ (i+1) + "failed!");
-                attacker.currentArmyCount--;
+                --numberOfAttacks;
+                --attacker.currentArmyCount;
+                System.out.println("attack "+ (i+1) + " failed!");
+
                 defendRolls.add(dice.nextInt(6));
+
+                // TODO: remove eventually
+                System.out.println("new defens roll: "+defendRolls.get(defendRolls.size()-1));
             }
         }
         return -1;
@@ -272,6 +289,7 @@ public class Territory extends UIElement {
             randoms.add(dice.nextInt(6));
         }
         Collections.sort(randoms);
+        Collections.reverse(randoms);
         return randoms;
     }
 
