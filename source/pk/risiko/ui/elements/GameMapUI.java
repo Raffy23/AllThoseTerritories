@@ -147,7 +147,7 @@ public class GameMapUI extends UIElement {
 
     /**
      * This function does trigger the function #{handleClickEvent} if any
-     * territory is hovered & clicked and the game is currently not paused
+     * territory is hovered and clicked and the game is currently not paused
      *
      * @see UIElement
      */
@@ -164,7 +164,7 @@ public class GameMapUI extends UIElement {
      * Here all the Stuff is deligated to the RoundManager which should
      * know what should happen ...
      *
-     * @seet RoundManager
+     * @see RoundManager
      */
     private void handleClickEvent() {
         if (!(roundManager.getCurrentPlayer() instanceof PlayerAI))
