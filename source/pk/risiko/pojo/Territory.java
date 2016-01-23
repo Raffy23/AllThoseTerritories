@@ -7,7 +7,10 @@ import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Stroke;
 import java.awt.geom.Area;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Random;
 
 /**
  * This class represents a Territory in Game.
@@ -185,11 +188,12 @@ public class Territory extends UIElement {
 
         if( this.active == ActiveState.HOSTILE ) {
             g.setColor(Color.RED);
-            final Stroke oldStroke = g.getStroke();
+            final Stroke oldStroke = g.getStroke(); //save stroke for restoring
 
             g.setStroke(ACTIVE_STROKE);
             g.drawOval(this.capital.getCoords().x,this.capital.getCoords().y,OVAL_SIZE,OVAL_SIZE);
 
+            //restore stroke
             g.setStroke(oldStroke);
         }
 
@@ -240,8 +244,8 @@ public class Territory extends UIElement {
             if (numberOfAttacks ==3)
                 break;
         }
-        ArrayList<Integer> attackRolls = randomIntList(dice, numberOfAttacks);
-        ArrayList<Integer> defendRolls = randomIntList(dice, defendingTroups);
+        List<Integer> attackRolls = randomIntList(dice, numberOfAttacks);
+        List<Integer> defendRolls = randomIntList(dice, defendingTroups);
 
         // TODO: remove eventually
         System.out.print("Battle!\nAttacking Troups: " +numberOfAttacks+ " [");
@@ -282,7 +286,16 @@ public class Territory extends UIElement {
         }
         return -1;
     }
-    private ArrayList<Integer> randomIntList(Random dice, int count)
+
+    /**
+     * This function does return a sorted List of random generated numbers
+     * which is used by the battle calculations
+     *
+     * @param dice a Randomgenerator which is used to fill the array
+     * @param count how many elements the array should hold
+     * @return a sorted array of randomly generated numbers
+     */
+    private List<Integer> randomIntList(Random dice, int count)
     {
         ArrayList<Integer> randoms = new ArrayList<Integer>();
         for (int i = 0; i < count; i++) {
@@ -293,10 +306,17 @@ public class Territory extends UIElement {
         return randoms;
     }
 
+    /**
+     * @return the current active state of the Territory
+     */
     public ActiveState getActiveState() {
         return active;
     }
 
+    /**
+     * @see ActiveState
+     * @param active sets the current active state of the Territory
+     */
     public void setActive(ActiveState active) {
         this.active = active;
     }

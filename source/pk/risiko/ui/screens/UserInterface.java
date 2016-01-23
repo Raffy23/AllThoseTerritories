@@ -2,6 +2,7 @@ package pk.risiko.ui.screens;
 
 import pk.risiko.pojo.GameState;
 import pk.risiko.ui.Drawable;
+import pk.risiko.ui.GameWindow;
 import pk.risiko.ui.MouseEventHandler;
 import pk.risiko.ui.elements.GameButton;
 import pk.risiko.ui.elements.InGameMenu;
@@ -29,31 +30,28 @@ public class UserInterface extends MouseAdapter implements Drawable, MouseClicke
 
     private final GamePanel master;
 
-    private int width,height;
     private final GameButton nextButton, menuButton;
     private final InGameMenu menu;
 
-    public UserInterface(GamePanel masterPanel,int width,int height) {
+    public UserInterface(GamePanel masterPanel) {
         this.master = masterPanel;
-        this.width = width;
-        this.height = height;
 
-        this.nextButton = new GameButton(new Ellipse2D.Double(width-75,height-100,65,65),">>");
+        this.nextButton = new GameButton(new Ellipse2D.Double(GameWindow.WINDOW_SIZE_WIDTH-75,GameWindow.WINDOW_SIZE_HEIGHT-100,65,65),">>");
         this.nextButton.setFontSize(24);
-        this.menuButton = new GameButton(new Rectangle2D.Double(width-75,2,65,20),"MENU");
+        this.menuButton = new GameButton(new Rectangle2D.Double(GameWindow.WINDOW_SIZE_WIDTH-75,2,65,20),"MENU");
 
         this.nextButton.setListener(this);
         this.menuButton.setListener(this);
 
-        this.menu = new InGameMenu(width,BAR_HEIGHT);
+        this.menu = new InGameMenu();
     }
 
     @Override
     public void paint(Graphics2D g2d) {
         g2d.setColor(UO_COLOR);
-        g2d.fillRect(0,0,width,BAR_HEIGHT);
+        g2d.fillRect(0,0, GameWindow.WINDOW_SIZE_WIDTH,BAR_HEIGHT);
         g2d.setColor(Color.WHITE);
-        g2d.drawLine(0,BAR_HEIGHT,width,BAR_HEIGHT);
+        g2d.drawLine(0,BAR_HEIGHT,GameWindow.WINDOW_SIZE_WIDTH,BAR_HEIGHT);
 
         this.menuButton.paint(g2d);
         this.nextButton.paint(g2d);

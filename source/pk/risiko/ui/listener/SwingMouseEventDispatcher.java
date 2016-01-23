@@ -8,18 +8,26 @@ import java.util.LinkedList;
 import java.util.List;
 
 /**
- * Created by:
+ * This class translates all the different Swing Events to the MouseListener and
+ * MouseMotionListener events and does call them in all the registered components.
  *
- * @author Raphael
+ * @author Raphael Ludwig
  * @version 10.01.2016
+ * @see MouseListener
+ * @see MouseMotionListener
  */
 public class SwingMouseEventDispatcher implements MouseMotionListener, MouseListener {
 
     private List<MouseMotionListener> motionListeners = new LinkedList<>();
     private List<MouseListener> mouseListeners = new LinkedList<>();
 
-
+    /**
+     * Register any MouseMotionListener or MouseListener
+     * @param el must be a instance of MouseMotionListener or MouseListener
+     */
     public void registerListener(EventListener el) {
+        assert (el instanceof MouseMotionListener || el instanceof MouseListener) : "Unable to register Listener!";
+
         if( el instanceof MouseMotionListener ) this.motionListeners.add((MouseMotionListener) el);
         if( el instanceof MouseListener ) this.mouseListeners.add((MouseListener) el);
     }

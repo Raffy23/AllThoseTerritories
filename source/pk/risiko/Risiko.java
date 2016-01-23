@@ -32,7 +32,7 @@ public class Risiko {
 
         final CommandParser cmdParser = new CommandParser(argvs.toArray(new String[argvs.size()]));
         if( cmdParser.isInvalid() ) {
-            System.out.println("Usage: Risik.java [--map <path-of-mapfile>] [--skip-menu]");
+            System.out.println("Usage: Risik.java [--map <name-of-mapfile>] [--skip-menu]");
             return; //huston we have a problem, garbage on our command line!
         }
 

@@ -4,7 +4,7 @@ package pk.risiko.ui;
  * This Interface specifies a way to tell any
  * component that a mouse event happened
  *
- * @author Raphael
+ * @author Raphael Ludwig
  * @version 10.01.2016
  */
 public interface MouseEventHandler {

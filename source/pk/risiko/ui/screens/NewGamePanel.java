@@ -27,7 +27,7 @@ import java.util.List;
  * This class represents the Menue which is shown after the new game
  * button in the MainMenu has been clicked
  *
- * @author Raphael
+ * @author Raphael Ludwig
  * @version 19.01.2016
  */
 public class NewGamePanel implements GameScreen {
@@ -47,12 +47,12 @@ public class NewGamePanel implements GameScreen {
     private BufferedImage gameMapPreview;
     private final Font headlineFont;
 
-    private final int START_BUTTON_W=75*2;
-    private final int START_BUTTON_H=20*2;
-    private final int MAP_BUTTONS_WH= 20*2;
-    private final int SEGMENT_LEFT= 115;
-    private final int SEGMENT_MIDDLE= GameWindow.WINDOW_SIZE_WIDTH-PREVIEW_MAP_WIDTH-75;
-    private final int SEGMENT_RIGHT=GameWindow.WINDOW_SIZE_WIDTH-95+20;
+    private static final int START_BUTTON_W=75*2;
+    private static final int START_BUTTON_H=20*2;
+    private static final int MAP_BUTTONS_WH= 20*2;
+    private static final int SEGMENT_LEFT= 115;
+    private static final int SEGMENT_MIDDLE= GameWindow.WINDOW_SIZE_WIDTH-PREVIEW_MAP_WIDTH-75;
+    private static final int SEGMENT_RIGHT=GameWindow.WINDOW_SIZE_WIDTH-95+20;
 
     public NewGamePanel(MapFileReader mapFileReader) {
         this.mapFileReader = mapFileReader;

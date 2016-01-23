@@ -42,9 +42,7 @@ public class GamePanel implements GameScreen {
         this.roundManager = new RoundManager(playerList,gameMap);
         this.gameMapUI = new GameMapUI(gameMap,roundManager);
 
-        this.userInterface = new UserInterface(this
-                                              ,gameScreenManager.getWindow().getWidth()
-                                              ,gameScreenManager.getWindow().getHeight());
+        this.userInterface = new UserInterface(this);
 
         //Init mouse handler
         this.mouseHandler.registerListener(this.userInterface);

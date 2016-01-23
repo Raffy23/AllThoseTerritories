@@ -8,7 +8,7 @@ import java.awt.event.KeyAdapter;
 /**
  * Created by:
  *
- * @author Raphael
+ * @author Raphael Ludwig
  * @version 10.01.2016
  */
 public interface GameScreen extends Drawable {
