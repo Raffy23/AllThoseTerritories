@@ -46,7 +46,7 @@ public class SettingsProvider {
      * @see CommandParser
      */
     public static void createSettingsProvider(Properties settings,CommandParser parser) {
-        assert provider != null : "SettingsProvider should not be initialized multiple times!";
+        assert provider == null : "SettingsProvider should not be initialized multiple times!";
 
         provider = new SettingsProvider(settings,parser);
     }
