@@ -13,7 +13,6 @@ import pk.risiko.util.SettingsProvider;
 import java.awt.Color;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 /**
  * This is the MainWindow, which is able to load all the different screens into
@@ -90,11 +89,12 @@ public class MainWindow extends GameWindow {
         players.add(new RandomAI("Player 2",new Color(10,200,10,200),map));
 
         //TODO remove this:
-        Random rand = new Random();
+        /*Random rand = new Random();
         map.getTerritories().forEach(t -> {
             t.setOwner(players.get(rand.nextInt(players.size())));
             t.increaseArmy(1);
         });
+        */
 
         this.startNewGame(map,players);
     }

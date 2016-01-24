@@ -25,7 +25,7 @@ public class RoundManager {
     public RoundManager(List<Player> players,GameMap map) {
         this.players.addAll(players);
         this.gameMap = map;
-        this.currentGameState = GameState.ATTACK_OR_MOVE_UNIT;//GameState.SET_UNIT;
+        this.currentGameState = GameState.SET_UNIT;
     }
 
     public int getCurrentRound() {
