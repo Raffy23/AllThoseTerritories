@@ -28,7 +28,7 @@ public class Risiko {
     public static void main(String[] args) {
         //Todo: remove this skip menu hack when not needed:
         List<String> argvs = new ArrayList<>(Arrays.asList(args));
-        //argvs.add("--skip-menu");
+        argvs.add("--skip-menu");
 
         final CommandParser cmdParser = new CommandParser(argvs.toArray(new String[argvs.size()]));
         if( cmdParser.isInvalid() ) {

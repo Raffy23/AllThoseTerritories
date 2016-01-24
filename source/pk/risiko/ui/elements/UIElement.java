@@ -51,7 +51,7 @@ public abstract class UIElement extends MouseAdapter implements Drawable, MouseE
     /**
      * @param state a new MouseState which the component should have
      */
-    protected void setMouseState(MouseState state) {
+    public void setMouseState(MouseState state) {
         this.mouseState = state;
     }
 

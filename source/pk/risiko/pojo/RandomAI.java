@@ -41,7 +41,7 @@ public class RandomAI extends PlayerAI {
     @Override
     public Territory setUnitAction() {
         List<Territory> empties = this.getAllEmptyTerritories();
-        assert empties.size() != 0 : "Error: setUnitsToGameMap should not be called, there are no free territories!";
+        assert !empties.isEmpty(): "Error: setUnitsToGameMap should not be called, there are no free territories!";
 
         return empties.get(throwDice(empties.size()-1));
     }
@@ -53,7 +53,7 @@ public class RandomAI extends PlayerAI {
     public List<Territory> reinforceUnitsAction() {
         List<Territory> my = this.getMyTerritories();
         List<Territory> border = this.getAllBorderTerritories();
-        assert  my.size() != 0 : "Error: i'm already defeated so what should i do, crawl back from the dead?";
+        assert  !my.isEmpty() : "Error: i'm already defeated so what should i do, crawl back from the dead?";
 
         List<Territory> targets = new ArrayList<>(this.getReinforcements());
         //set halve of the troups into some random territory
@@ -71,7 +71,7 @@ public class RandomAI extends PlayerAI {
     @Override
     public List<Tripel<AiTroupState,Territory,Territory>> moveOrAttackAction() {
         List<Territory> my = this.getAllBorderTerritories();
-        assert  my.size() != 0 : "Error: i'm already defeated so what should i do, crawl back from the dead?";
+        assert  !my.isEmpty() : "Error: i'm already defeated so what should i do, crawl back from the dead?";
 
         List<Tripel<AiTroupState,Territory,Territory>> movements = new ArrayList<>();
         my.stream().filter(c -> c.getStationedArmies()>1)
@@ -81,5 +81,15 @@ public class RandomAI extends PlayerAI {
                    );
 
         return movements;
+    }
+
+    @Override
+    public void attackOrMove(Territory targetTerritory) {
+        targetTerritory.setMouseState(MouseState.R_CLICKED);
+
+        System.out.println("Process RandomAI attackOrMove()");
+        super.attackOrMove(targetTerritory);
+
+        targetTerritory.setMouseState(MouseState.NORMAL);
     }
 }

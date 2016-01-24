@@ -179,7 +179,7 @@ public class Player {
             // attack
             if (!targetTerritory.getOwner().equals(this.getCurrentActiveTerritory().getOwner())) {
                 if (attackAvailable) {
-                    System.out.println("attack!");
+                    System.out.println(this.getName() + " attacks " + targetTerritory.getName());
                     // TODO: uncomment this line
                     //attackAvailable = false;
                     this.fightingTerritory = this.getCurrentActiveTerritory();
@@ -202,7 +202,7 @@ public class Player {
     }
     private void tryMove(Territory targetTerritory)
     {
-        System.out.println("move");
+        System.out.println(this.getName() + " moves 1 army to " + targetTerritory.getName());
         if (this.getCurrentActiveTerritory().getStationedArmies()>1) {
             if (receivingTerritory == null && sendingTerritory == null) {
                 receivingTerritory = targetTerritory;

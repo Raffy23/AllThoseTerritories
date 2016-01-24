@@ -1,8 +1,11 @@
 package pk.risiko.util;
 
-import pk.risiko.pojo.*;
+import pk.risiko.pojo.GameMap;
+import pk.risiko.pojo.GameState;
+import pk.risiko.pojo.Player;
+import pk.risiko.pojo.PlayerAI;
+import pk.risiko.pojo.Territory;
 
-import javax.swing.*;
 import java.util.List;
 
 /**
@@ -22,7 +25,7 @@ public class RoundManager {
     public RoundManager(List<Player> players,GameMap map) {
         this.players.addAll(players);
         this.gameMap = map;
-        this.currentGameState = GameState.SET_UNIT;
+        this.currentGameState = GameState.ATTACK_OR_MOVE_UNIT;//GameState.SET_UNIT;
     }
 
     public int getCurrentRound() {
@@ -52,11 +55,8 @@ public class RoundManager {
                 currentGameState = GameState.ATTACK_OR_MOVE_UNIT;
             }
 
-
-        if (this.getCurrentPlayer() instanceof PlayerAI)
-            manageAIActions();
-
-        return p;
+        if (p instanceof PlayerAI) manageAIActions();
+        return this.getCurrentPlayer();
     }
 
     public boolean isAtTheBeginning() {
@@ -138,7 +138,6 @@ public class RoundManager {
                     }
                 }
 
-                if( p instanceof  AI ) nextPlayer();
                 break;
             case NEXT_ROUND:
                 // TODO: did someone win already?
@@ -155,7 +154,7 @@ public class RoundManager {
     {
         if (!(this.getCurrentPlayer() instanceof PlayerAI))
             return;
-        AI playerAI = (AI) this.getCurrentPlayer();
+        PlayerAI playerAI = (PlayerAI) this.getCurrentPlayer();
 
         switch(this.currentGameState) {
             case SET_UNIT: doActionOn(playerAI.setUnitAction()); break;
@@ -164,9 +163,10 @@ public class RoundManager {
                 break;
             case ATTACK_OR_MOVE_UNIT:
                 playerAI.moveOrAttackAction().forEach(action -> {
-                    getCurrentPlayer().setCurrentActiveTerritory(action.y);
+                    playerAI.setCurrentActiveTerritory(action.y);
                     doActionOn(action.z);
                 });
+                this.nextPlayer();
                 break;
         }
 
