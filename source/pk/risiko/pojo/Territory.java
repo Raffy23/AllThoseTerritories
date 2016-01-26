@@ -51,6 +51,8 @@ public class Territory extends UIElement {
     private Player owner;
     /** A counter which does represent how many armies are stationed **/
     private int currentArmyCount = 0;
+    /** store current continent for lookup purposes **/
+    private Continent continent; //lazy initialized
 
     /**
      * This Enumeration does represent the current Active-State of the
@@ -319,5 +321,13 @@ public class Territory extends UIElement {
      */
     public void setActive(ActiveState active) {
         this.active = active;
+    }
+
+    public Continent getContinent() {
+        return continent;
+    }
+
+    public void setContinent(Continent continent) {
+        this.continent = continent;
     }
 }

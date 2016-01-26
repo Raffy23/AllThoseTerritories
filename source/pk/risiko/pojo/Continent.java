@@ -26,12 +26,14 @@ public class Continent {
     public void addTerritory(Territory t)
     {
         territories.add(t);
+        t.setContinent(this);
     }
     public void addTerritory(Collection<Territory> t)
     {
         for (Iterator iterator = t.iterator(); iterator.hasNext();) {
             Territory territory = (Territory) iterator.next();
             territories.add(territory);
+            territory.setContinent(this);
         }
     }
 
@@ -44,5 +46,9 @@ public class Continent {
             if(t.getOwner() != p) return false;
 
         return true;
+    }
+
+    public String getName() {
+        return this.name;
     }
 }
