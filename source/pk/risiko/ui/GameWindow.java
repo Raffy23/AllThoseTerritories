@@ -125,7 +125,7 @@ public class GameWindow extends JFrame {
 
 
         try {
-            this.background = ImageIO.read(new File("./assets/background-game.jpg"));
+            this.background = ImageIO.read(new File("./assets/background-game-small.jpg"));
             this.icon = ImageIO.read(new File("./assets/risiko.icon.png"));
 
             this.setIconImage(icon);
