@@ -41,5 +41,16 @@ public enum GameState {
      * after a Human Player closes the Menu. The game should be
      * un-paused at this moment.
      */
-    HIDE_MENU
+    HIDE_MENU,
+    /**
+     * This GameState is a Meta state and does get triggered
+     * after a Player won the Game.
+     */
+    SHOW_WINLOSE,
+    /**
+     * This GameState is a Meta state and does get triggered
+     * after a Human Player exits the running game, after
+     * it was won by one of the players.
+     */
+    HIDE_WINLOSE
 }

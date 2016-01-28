@@ -22,11 +22,11 @@ import java.awt.geom.Rectangle2D;
 public class InGameMenu extends UIElement {
 
     /** The default background color of the Menu **/
-    private static final Color DEFAULT_BACKGROUND_COLOR   = new Color(0.05f,0.05f,0.05f,0.25f);
+    private static final Color DEFAULT_BACKGROUND_COLOR   = DefaultDesigns.DEFAULT_BACKGROUND_COLOR;
     /** The default border color of the Menu **/
-    private static final Color DEFAULT_PANE_COLOR = new Color(0.05f,0.05f,0.05f,0.85f);
+    private static final Color DEFAULT_PANE_COLOR = DefaultDesigns.DEFAULT_PANE_COLOR;
     /** The default text color of the Menu **/
-    private static final Color DEFAULT_TEXT_COLOR = new Color(255,255,255);
+    private static final Color DEFAULT_TEXT_COLOR = DefaultDesigns.DEFAULT_TEXT_COLOR;
 
     /** The width of the menu in pixel **/
     private static final int MENU_WIDTH  = 200;
@@ -36,9 +36,9 @@ public class InGameMenu extends UIElement {
     private static final int BUTTON_WIDTH = MENU_WIDTH-18;
     private static final int BUTTON_HEIGHT = 20;
 
-    private static final String HEADLINE_FONT = "aniron/anirm___.ttf";
+    private static final String HEADLINE_FONT = DefaultDesigns.HEADLINE_FONT;
     /** The default font size of the headline **/
-    private static final float HEADLINE_FONT_SIZE = 23f;
+    private static final float HEADLINE_FONT_SIZE = DefaultDesigns.HEADLINE_FONT_SIZE;
 
     /** a status indicator which is true every time the menu is opend **/
     private boolean active = false;

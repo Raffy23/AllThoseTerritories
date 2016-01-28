@@ -235,4 +235,19 @@ public class Player {
         conqueredTerritory=null;
         moveCount=0;
     }
+
+    // returns true if current Player still ownes at least 3 territoroies with at least 1 army
+    // or less than 3 territories with more armies than territories
+    public boolean isAlive() {
+        int count = 0;
+        int armycount=0;
+        for(Territory t:gameMap.getTerritories()) {
+            if (this.equals(t.getOwner())) {
+                count++;
+                armycount+=t.getStationedArmies();
+            }
+        }
+
+        return (count>=3||armycount>count);
+    }
 }

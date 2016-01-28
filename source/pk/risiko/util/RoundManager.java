@@ -81,14 +81,6 @@ public class RoundManager {
         return this.players.isAtBeginning();
     }
 
-    // returns true if current Player still ownes at least 1 territory
-    public boolean isPlayerAlive() {
-        for(Territory t:this.gameMap.getTerritories())
-            if( t.getOwner().equals(getCurrentPlayer()) ) return true;
-
-        return false;
-    }
-
     private void calculateReinforcements() {
         for (int i = 0; i < players.size(); i++) {
             players.get(i).calculateReinforcements();
@@ -101,7 +93,6 @@ public class RoundManager {
         }
     }
 
-    // (rename if better name was found)
     private void doActionOn(Territory targetTerritory)
     {
         Player p = this.getCurrentPlayer();
@@ -121,6 +112,10 @@ public class RoundManager {
                     //if(!(this.getCurrentPlayer() instanceof PlayerAI))
                     this.getCurrentPlayer().conquerTerritory(targetTerritory,1);
                     if (!this.gameMap.hasFreeTerrotories()) { //lowering is done above
+                        //winlose?
+                        //checkWinLose();
+
+
                         this.calculateReinforcements();
                         this.currentGameState = GameState.REINFORCE_UNITS;
 
@@ -143,6 +138,8 @@ public class RoundManager {
                 if (p.getReinforcements()==0) {
                     if( !(p instanceof AI) ) this.nextPlayer();
                 }
+
+                //checkWinLose();
                 break;
             case ATTACK_OR_MOVE_UNIT:
                 if( p.getCurrentActiveTerritory() != null) {
@@ -162,7 +159,7 @@ public class RoundManager {
                         System.out.println("Info: Target Territory selected!");
                     }
                 }
-
+                //checkWinLose();
                 break;
             case NEXT_ROUND:
                 // TODO: did someone win already?
@@ -173,6 +170,25 @@ public class RoundManager {
 
                 break;
         }
+    }
+
+    public Player checkWinLose() {
+        if (players==null||(currentGameState!=GameState.ATTACK_OR_MOVE_UNIT&&currentGameState!=GameState.REINFORCE_UNITS))
+            return null;
+
+        for (int i = 0; i < players.size(); i++) {
+            if (!players.get(i).isAlive()) {
+                System.out.println("Player "+ players.get(i).getName()+" is defeated.");
+                players.remove(i); // remove player - since he has already lost
+            }
+        }
+        if (players.size()==1) {
+            System.out.println("Player "+players.get(0).getName()+" wins!");
+
+            return players.get(0);
+        }
+
+        return null;
     }
 
     private void manageAIActions()

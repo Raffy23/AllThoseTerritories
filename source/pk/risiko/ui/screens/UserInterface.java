@@ -6,6 +6,7 @@ import pk.risiko.ui.GameWindow;
 import pk.risiko.ui.MouseEventHandler;
 import pk.risiko.ui.elements.GameButton;
 import pk.risiko.ui.elements.InGameMenu;
+import pk.risiko.ui.elements.WinLoseDialog;
 import pk.risiko.ui.listener.MouseClickedListener;
 
 import java.awt.Color;
@@ -32,6 +33,7 @@ public class UserInterface extends MouseAdapter implements Drawable, MouseClicke
 
     private final GameButton nextButton, menuButton;
     private final InGameMenu menu;
+    private final WinLoseDialog winLoseDialog;
 
     public UserInterface(GamePanel masterPanel) {
         this.master = masterPanel;
@@ -44,6 +46,7 @@ public class UserInterface extends MouseAdapter implements Drawable, MouseClicke
         this.menuButton.setListener(this);
 
         this.menu = new InGameMenu();
+        this.winLoseDialog=new WinLoseDialog();
     }
 
     @Override
@@ -84,6 +87,8 @@ public class UserInterface extends MouseAdapter implements Drawable, MouseClicke
 
         if( this.menu.isActive() )
             this.menu.paint(g2d);
+        if (this.winLoseDialog.isActive())
+            this.winLoseDialog.paint(g2d);
     }
 
     private String getGameStateString() {
@@ -110,6 +115,7 @@ public class UserInterface extends MouseAdapter implements Drawable, MouseClicke
         this.menuButton.mouseMoved(e);
         this.nextButton.mouseMoved(e);
         this.menu.mouseMoved(e);
+        this.winLoseDialog.mouseMoved(e);
     }
 
     @Override
@@ -117,9 +123,15 @@ public class UserInterface extends MouseAdapter implements Drawable, MouseClicke
         this.menuButton.mouseClicked(e);
         this.nextButton.mouseClicked(e);
         this.menu.mouseClicked(e);
+        this.menu.mouseClicked(e);
+        this.winLoseDialog.mouseClicked(e);
     }
 
     public InGameMenu getMenu() {
         return this.menu;
+    }
+
+    public WinLoseDialog getWinLoseDialog() {
+        return winLoseDialog;
     }
 }

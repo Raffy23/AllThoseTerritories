@@ -10,6 +10,7 @@ import pk.risiko.util.AsyncRoundListener;
 import pk.risiko.util.GameScreenManager;
 import pk.risiko.util.RoundManager;
 
+import javax.swing.*;
 import java.awt.AlphaComposite;
 import java.awt.Color;
 import java.awt.Component;
@@ -81,6 +82,8 @@ public class GamePanel implements GameScreen {
         this.userInterface.getMenu().setExitGameListener((btn) -> this.endGame());
         this.userInterface.getMenu().setSaveGameListener((btn) -> System.out.println("Not Implemented! (in GamePanel)"));
 
+        this.userInterface.getWinLoseDialog().setExitToMenuListener((btn) -> this.endGame());
+
         //Start Game (round 0 - AI events)
         this.roundManager.startGame();
     }
@@ -97,10 +100,12 @@ public class GamePanel implements GameScreen {
             case NEXT_ROUND: this.roundManager.nextPlayer(); break;
             case SHOW_MENU: this.gameMapUI.setCurrentlyPlaying(false); break;
             case HIDE_MENU: this.gameMapUI.setCurrentlyPlaying(true); break;
+            case SHOW_WINLOSE: this.gameMapUI.setCurrentlyPlaying(false); break;
+            case HIDE_WINLOSE: this.gameMapUI.setCurrentlyPlaying(true); break;
             default: System.out.println("State is unknown!");
         }
 
-        if( state == GameState.HIDE_MENU || state == GameState.SHOW_MENU )
+        if( state == GameState.HIDE_MENU || state == GameState.SHOW_MENU||state==GameState.SHOW_WINLOSE||state==GameState.HIDE_WINLOSE)
             this.currentMetaState = state;
     }
 
@@ -122,6 +127,7 @@ public class GamePanel implements GameScreen {
 
     @Override
     public void paint(Graphics2D g) {
+
         /* shift the gamemap down because we have a HUD which can render parts inaccessible */
         Graphics2D gGBoard = (Graphics2D) this.gameBoard.getGraphics();
         gGBoard.setComposite(AlphaComposite.Src);
@@ -131,6 +137,17 @@ public class GamePanel implements GameScreen {
 
         g.drawImage(this.gameBoard,0,UserInterface.BAR_HEIGHT,null);
         this.userInterface.paint(g);
+
+        Player p;
+        if ((p=this.roundManager.checkWinLose())!=null){//&&!this.userInterface.getWinLoseDialog().isActive()) {
+            System.out.println("winlose");
+
+            //if( !this.userInterface.getWinLoseDialog().isActive() )
+            {
+                this.changeState(GameState.SHOW_WINLOSE);
+                this.userInterface.getWinLoseDialog().show(p);
+            }
+        }
     }
 
     @Override
