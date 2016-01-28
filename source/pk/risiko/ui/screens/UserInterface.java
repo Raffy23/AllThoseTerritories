@@ -79,11 +79,17 @@ public class UserInterface extends MouseAdapter implements Drawable, MouseClicke
     public void mouseMoved(MouseEvent e) {
         this.menuButton.mouseMoved(e);
         this.nextButton.mouseMoved(e);
+        this.menu.mouseMoved(e);
     }
 
     @Override
     public void mouseClicked(MouseEvent e) {
         this.menuButton.mouseClicked(e);
         this.nextButton.mouseClicked(e);
+        this.menu.mouseClicked(e);
+    }
+
+    public InGameMenu getMenu() {
+        return this.menu;
     }
 }

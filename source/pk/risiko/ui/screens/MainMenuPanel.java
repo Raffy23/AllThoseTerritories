@@ -7,7 +7,6 @@ import pk.risiko.util.FontLoader;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics2D;
-import java.awt.event.KeyAdapter;
 import java.awt.geom.Rectangle2D;
 
 /**
@@ -85,10 +84,8 @@ public class MainMenuPanel implements GameScreen {
         return dispatcher;
     }
 
-    //@Override
-    public KeyAdapter getKeyAdapter() {
-        return null;
-    }
+    @Override
+    public void shown() {}
 
     public GameButton getNewGame() {
         return newGame;

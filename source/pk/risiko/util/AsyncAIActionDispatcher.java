@@ -34,7 +34,7 @@ public class AsyncAIActionDispatcher {
             while( true ) {
                 final int max = actions.size();
 
-                if( max > 0 ) if( !executeTasks(max) ) break;
+                if( max > 0 ) { if( !executeTasks(max) ) break; }
                 else {
                     new Thread(finListener::taskFinished).start();
 
@@ -46,6 +46,8 @@ public class AsyncAIActionDispatcher {
                     }
 
                 }
+
+                if( Thread.interrupted() ) break;
             }
 
             System.err.println("Dispatcher ends here ...");
@@ -120,27 +122,10 @@ public class AsyncAIActionDispatcher {
 
     public synchronized void abortDispatching() {
         if( this.worker != null && this.worker.isAlive() )
-            this.worker.interrupt();
+            this.worker.stop();
     }
 
     public synchronized void queueActions(List<Tripel<AI.AiTroupState,Territory,Territory>> actions) {
         this.actions.addAll(actions);
     }
-
-    public boolean isFinishedDispatching() {
-        return actions.isEmpty();
-    }
-
-    public boolean isStarted() {
-        return workerStarted;
-    }
-
-    public boolean isRunning() {
-        return this.worker.isAlive();
-    }
-
-    public int getActionsToDispatch() {
-        return this.actions.size();
-    }
-
 }

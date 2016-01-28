@@ -16,7 +16,6 @@ import pk.risiko.util.SettingsProvider;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics2D;
-import java.awt.event.KeyAdapter;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
@@ -120,11 +119,6 @@ public class NewGamePanel implements GameScreen {
     }
 
     @Override
-    public KeyAdapter getKeyAdapter() {
-        return null;
-    }
-
-    @Override
     public void paint(Graphics2D g) {
 
         final Font oldFont = g.getFont();
@@ -200,5 +194,10 @@ public class NewGamePanel implements GameScreen {
 
     public void registerNewGameListener(MouseClickedListener l) {
         this.beginGameBtn.setListener(l);
+    }
+
+    @Override
+    public void shown() {
+        this.loadMap(this.currentSelctedMap.getMapName());
     }
 }

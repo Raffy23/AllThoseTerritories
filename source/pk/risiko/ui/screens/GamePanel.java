@@ -14,7 +14,6 @@ import java.awt.AlphaComposite;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Graphics2D;
-import java.awt.event.KeyAdapter;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
@@ -42,8 +41,10 @@ public class GamePanel implements GameScreen {
 
     private GameState currentMetaState = GameState.HIDE_MENU;
     private RoundManager roundManager;
+    private GameScreenManager gsm;
 
     public GamePanel(GameMap gameMap,List<Player> playerList,GameScreenManager gameScreenManager) {
+        this.gsm = gameScreenManager;
         this.aiActionDispatcher = new AsyncAIActionDispatcher(this.roundListener);
         this.roundManager = new RoundManager(playerList,gameMap,aiActionDispatcher);
         this.gameMapUI = new GameMapUI(gameMap,roundManager);
@@ -75,6 +76,10 @@ public class GamePanel implements GameScreen {
                 gameMapUI.mouseMoved(generateProxyEvent(e));
             }
         });
+
+        //Init Button Listener in Menu:
+        this.userInterface.getMenu().setExitGameListener((btn) -> this.endGame());
+        this.userInterface.getMenu().setSaveGameListener((btn) -> System.out.println("Not Implemented! (in GamePanel)"));
     }
 
     /**
@@ -131,8 +136,12 @@ public class GamePanel implements GameScreen {
     }
 
     @Override
-    public KeyAdapter getKeyAdapter() {
-        return null;
+    public void shown() { }
+
+
+    private void endGame() {
+        this.aiActionDispatcher.abortDispatching();
+        gsm.showMenu();
     }
 
 }

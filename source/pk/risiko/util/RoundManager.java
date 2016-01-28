@@ -1,5 +1,6 @@
 package pk.risiko.util;
 
+import pk.risiko.pojo.AI;
 import pk.risiko.pojo.GameMap;
 import pk.risiko.pojo.GameState;
 import pk.risiko.pojo.Player;
@@ -58,8 +59,10 @@ public class RoundManager {
                 currentGameState = GameState.ATTACK_OR_MOVE_UNIT;
             }
 
-        if( p instanceof PlayerAI ) manageAIActions();
-        this.aiDispatcher.startDispatching();
+        if( p instanceof PlayerAI ) {
+            manageAIActions();
+            this.aiDispatcher.startDispatching();
+        }
 
         return this.getCurrentPlayer();
     }
@@ -114,8 +117,8 @@ public class RoundManager {
                         this.players.reset();
                         this.players.prev();
                     }
-                    this.nextPlayer();
 
+                    if( !(p instanceof AI) ) this.nextPlayer();
                 }
                 break;
             case REINFORCE_UNITS:
@@ -126,8 +129,7 @@ public class RoundManager {
                         targetTerritory.increaseArmy(1);
 
                 if (p.getReinforcements()==0) {
-                    System.out.println("NEXT_PLAYER");
-                    this.nextPlayer();
+                    if( !(p instanceof AI) ) this.nextPlayer();
                 }
                 break;
             case ATTACK_OR_MOVE_UNIT:

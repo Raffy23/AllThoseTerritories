@@ -13,7 +13,7 @@ import java.util.Map;
  * Ugly first implementation of a Simple Screen State Machine
  * It can show Menu und Game screen only (also update the window in a SWING compatible way)
  *
- * @author Raphael
+ * @author Raphael Ludwig
  * @version 08.01.2016
  */
 public class GameScreenManager {
@@ -33,13 +33,13 @@ public class GameScreenManager {
 
     public void showScreen(GameScreenType type) {
         if( this.activeScreen != null ) { //On start there is no screen available!
-            this.window.unregisterKeyAdapter(this.getActiveScreen().getKeyAdapter());
+            //this.window.unregisterKeyAdapter(this.getActiveScreen().getKeyAdapter());
             this.window.removeMouseEventListener();
         }
         this.activeScreen = type;
-        this.window.registerKeyAdapter(this.getActiveScreen().getKeyAdapter());
+        this.getActiveScreen().shown();
+        //this.window.registerKeyAdapter(this.getActiveScreen().getKeyAdapter());
         this.window.setSwingEventDispatcher(this.getActiveScreen().getMouseEventDispatcher());
-        //this.repaintWindow(); // not needed anymore
     }
 
     public void showMenu() {

@@ -11,6 +11,7 @@ import pk.risiko.ui.screens.NewGamePanel;
 import pk.risiko.util.SettingsProvider;
 
 import java.awt.Color;
+import java.awt.EventQueue;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -73,7 +74,7 @@ public class MainWindow extends GameWindow {
     }
 
     private void exitGame() {
-        this.dispose();
+        EventQueue.invokeLater(this::dispose);
     }
 
     public void loadMenuPanel() {
@@ -87,14 +88,6 @@ public class MainWindow extends GameWindow {
         List<Player> players = new ArrayList<>(2);
         players.add(new Player("Player 1",new Color(10,10,200,200),map));
         players.add(new RandomAI("Player 2",new Color(10,200,10,200),map));
-
-        //TODO remove this:
-        /*Random rand = new Random();
-        map.getTerritories().forEach(t -> {
-            t.setOwner(players.get(rand.nextInt(players.size())));
-            t.increaseArmy(1);
-        });
-        */
 
         this.startNewGame(map,players);
     }

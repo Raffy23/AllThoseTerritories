@@ -179,4 +179,10 @@ public class GameWindow extends JFrame {
         this.removeKeyListener(keyAdapter);
     }
 
+    @Override
+    public void dispose() {
+        this.painterTimer.cancel();
+        super.dispose();
+    }
+
 }
