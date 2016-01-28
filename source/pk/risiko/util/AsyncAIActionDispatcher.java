@@ -17,24 +17,22 @@ import java.util.Vector;
  */
 public class AsyncAIActionDispatcher {
 
-    private final static int ACTION_TIMEOUT = 2; //in ms
-    private final static int CLICK_TIMEOUT = 8; //in ms
+    private final static int ACTION_TIMEOUT = 200; //in ms
+    private final static int CLICK_TIMEOUT = 800; //in ms
     private final static int MOUSE_PRESSED_TIMEOUT = 2; //in ms
 
     private Thread worker;
-    private volatile boolean workerStarted = false;
 
     private final TaskFinishedListener finListener;
     private final Vector<Tripel<AI.AiTroupState,Territory,Territory>> actions = new Vector<>();
+    private final Vector<String> verboseActions = new Vector<>();
     private final Runnable dispatcher = new Runnable() {
         @Override
         public void run() {
-            workerStarted = true;
-
             while( true ) {
                 final int max = actions.size();
 
-                if( max > 0 ) { if( !executeTasks(max) ) break; }
+                if( max > 0 ) { if( !executeTasks(max) ) return; }
                 else {
                     new Thread(finListener::taskFinished).start();
 
@@ -47,11 +45,8 @@ public class AsyncAIActionDispatcher {
 
                 }
 
-                if( Thread.interrupted() ) break;
+                if( Thread.interrupted() ) return;
             }
-
-            System.err.println("Dispatcher ends here ...");
-            new Thread(finListener::taskFinished).start();
         }
 
         private boolean executeTasks(int max) {
@@ -59,6 +54,8 @@ public class AsyncAIActionDispatcher {
             for(;i<max;i++) {
                 //Pump Action:
                 Tripel<AI.AiTroupState,Territory,Territory> act = actions.get(0);
+                if( !act.y.getOwner().equals(act.z.getOwner()) ) verboseActions.add(act.y.getOwner().getName() + " attacks " + act.z.getName());
+                else verboseActions.add(act.y.getOwner().getName() + " moves units to " + act.z.getName());
 
                 //do left click action
                 act.y.getOwner().setCurrentActiveTerritory(act.y);
@@ -96,6 +93,7 @@ public class AsyncAIActionDispatcher {
 
     public AsyncAIActionDispatcher(TaskFinishedListener listener) {
         this.finListener = listener;
+        this.verboseActions.add("AI is thinking ...");
     }
 
     private void notifyRunningTask() {
@@ -122,10 +120,15 @@ public class AsyncAIActionDispatcher {
 
     public synchronized void abortDispatching() {
         if( this.worker != null && this.worker.isAlive() )
-            this.worker.stop();
+            this.worker.interrupt();
     }
 
     public synchronized void queueActions(List<Tripel<AI.AiTroupState,Territory,Territory>> actions) {
         this.actions.addAll(actions);
+    }
+
+    public String getNextAction() {
+        if( verboseActions.size() == 1 ) return verboseActions.get(0);
+        return verboseActions.remove(0);
     }
 }

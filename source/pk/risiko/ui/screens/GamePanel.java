@@ -80,6 +80,9 @@ public class GamePanel implements GameScreen {
         //Init Button Listener in Menu:
         this.userInterface.getMenu().setExitGameListener((btn) -> this.endGame());
         this.userInterface.getMenu().setSaveGameListener((btn) -> System.out.println("Not Implemented! (in GamePanel)"));
+
+        //Start Game (round 0 - AI events)
+        this.roundManager.startGame();
     }
 
     /**
@@ -138,6 +141,9 @@ public class GamePanel implements GameScreen {
     @Override
     public void shown() { }
 
+    public String getLastAction() {
+        return this.roundManager.getLastAction();
+    }
 
     private void endGame() {
         this.aiActionDispatcher.abortDispatching();

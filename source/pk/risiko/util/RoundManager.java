@@ -22,6 +22,7 @@ public class RoundManager {
     private final GameMap gameMap;
     private int currentRound;
     private GameState currentGameState;
+    private String lastAction;
 
     private final AsyncAIActionDispatcher aiDispatcher;
 
@@ -30,6 +31,15 @@ public class RoundManager {
         this.gameMap = map;
         this.currentGameState = GameState.SET_UNIT;
         this.aiDispatcher = aiDispatcher;
+        lastAction = "Game hast started ... ";
+    }
+
+    public void startGame() {
+        //fixes round 0 problem
+        if( players.get(0) instanceof AI ) {
+            manageAIActions();
+            this.aiDispatcher.startDispatching();
+        }
     }
 
     public int getCurrentRound() {
@@ -107,6 +117,7 @@ public class RoundManager {
             case SET_UNIT:
                 if (targetTerritory.getOwner() == null)
                 {
+                    this.lastAction = p.getName() + " conquered " + targetTerritory.getName();
                     //if(!(this.getCurrentPlayer() instanceof PlayerAI))
                     this.getCurrentPlayer().conquerTerritory(targetTerritory,1);
                     if (!this.gameMap.hasFreeTerrotories()) { //lowering is done above
@@ -122,7 +133,8 @@ public class RoundManager {
                 }
                 break;
             case REINFORCE_UNITS:
-                System.out.println(p.getName() + " reinforces territory " + targetTerritory.getName() + "(owern="+targetTerritory.getOwner().getName()+",posssible="+p.isReinforcementPossible()+",left="+p.getReinforcements()+")");
+                this.lastAction = p.getName() + " reinforces " + targetTerritory.getName();
+                //System.out.println(p.getName() + " reinforces territory " + targetTerritory.getName() + "(owern="+targetTerritory.getOwner().getName()+",posssible="+p.isReinforcementPossible()+",left="+p.getReinforcements()+")");
 
                 if (targetTerritory.getOwner().equals(p))
                     if (p.reinforcementPossible())
@@ -135,7 +147,12 @@ public class RoundManager {
             case ATTACK_OR_MOVE_UNIT:
                 if( p.getCurrentActiveTerritory() != null) {
                     if (p.getCurrentActiveTerritory().getNeighbours().contains(targetTerritory)) {
-                        //System.out.println("target is neighbor");
+
+                        if( p.getCurrentActiveTerritory().getOwner().equals(targetTerritory.getOwner()) )
+                            lastAction = p.getName() + " moves units to " + targetTerritory.getName();
+                        else
+                            lastAction = p.getName() + " attacks " + targetTerritory.getName();
+
                         p.attackOrMove(targetTerritory);
                     }
                     p.setCurrentActiveTerritory(null);
@@ -188,4 +205,7 @@ public class RoundManager {
         return this.currentGameState;
     }
 
+    public String getLastAction() {
+        return (getCurrentPlayer() instanceof  AI)?this.aiDispatcher.getNextAction():this.lastAction;
+    }
 }
