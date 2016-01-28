@@ -5,6 +5,8 @@ import pk.risiko.pojo.GameState;
 import pk.risiko.pojo.Player;
 import pk.risiko.ui.elements.GameMapUI;
 import pk.risiko.ui.listener.SwingMouseEventDispatcher;
+import pk.risiko.util.AsyncAIActionDispatcher;
+import pk.risiko.util.AsyncRoundListener;
 import pk.risiko.util.GameScreenManager;
 import pk.risiko.util.RoundManager;
 
@@ -34,15 +36,23 @@ public class GamePanel implements GameScreen {
                                                              ,BufferedImage.TYPE_INT_ARGB);
     private final UserInterface userInterface;
     private final SwingMouseEventDispatcher mouseHandler = new SwingMouseEventDispatcher();
+    private final AsyncAIActionDispatcher aiActionDispatcher;
+    private final AsyncRoundListener roundListener = new AsyncRoundListener();
+
 
     private GameState currentMetaState = GameState.HIDE_MENU;
     private RoundManager roundManager;
 
     public GamePanel(GameMap gameMap,List<Player> playerList,GameScreenManager gameScreenManager) {
-        this.roundManager = new RoundManager(playerList,gameMap);
+        this.aiActionDispatcher = new AsyncAIActionDispatcher(this.roundListener);
+        this.roundManager = new RoundManager(playerList,gameMap,aiActionDispatcher);
         this.gameMapUI = new GameMapUI(gameMap,roundManager);
 
         this.userInterface = new UserInterface(this);
+
+        //lazy init round listener
+        this.roundListener.setRm(this.roundManager);
+        this.roundListener.setAiActionDispatcher(this.aiActionDispatcher);
 
         //Init mouse handler
         this.mouseHandler.registerListener(this.userInterface);

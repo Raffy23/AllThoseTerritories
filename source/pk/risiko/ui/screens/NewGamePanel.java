@@ -1,7 +1,6 @@
 package pk.risiko.ui.screens;
 
 import pk.risiko.dao.MapFileReader;
-import pk.risiko.pojo.ContinentBasedAI;
 import pk.risiko.pojo.GameMap;
 import pk.risiko.pojo.Player;
 import pk.risiko.pojo.RandomAI;
@@ -184,12 +183,12 @@ public class NewGamePanel implements GameScreen {
         if( this.player2.getType() == PlayerConfigElement.PlayerType.HUMAN )
             players.add(new Player(player2.getPlayerName(),player2.getPlayerColor(),currentSelctedMap));
         else if( this.player2.getType() == PlayerConfigElement.PlayerType.AI )
-            players.add(new ContinentBasedAI(player2.getPlayerName(),player2.getPlayerColor(),currentSelctedMap));
+            players.add(new RandomAI(player2.getPlayerName(),player2.getPlayerColor(),currentSelctedMap));
 
         if( this.player3.getType() == PlayerConfigElement.PlayerType.HUMAN )
             players.add(new Player(player3.getPlayerName(),player3.getPlayerColor(),currentSelctedMap));
         else if( this.player3.getType() == PlayerConfigElement.PlayerType.AI )
-            players.add(new ContinentBasedAI(player3.getPlayerName(),player3.getPlayerColor(),currentSelctedMap));
+            players.add(new RandomAI(player3.getPlayerName(),player3.getPlayerColor(),currentSelctedMap));
 
         if( this.player4.getType() == PlayerConfigElement.PlayerType.HUMAN )
             players.add(new Player(player4.getPlayerName(),player4.getPlayerColor(),currentSelctedMap));

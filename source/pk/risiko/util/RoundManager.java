@@ -22,10 +22,13 @@ public class RoundManager {
     private int currentRound;
     private GameState currentGameState;
 
-    public RoundManager(List<Player> players,GameMap map) {
+    private final AsyncAIActionDispatcher aiDispatcher;
+
+    public RoundManager(List<Player> players,GameMap map,AsyncAIActionDispatcher aiDispatcher) {
         this.players.addAll(players);
         this.gameMap = map;
         this.currentGameState = GameState.SET_UNIT;
+        this.aiDispatcher = aiDispatcher;
     }
 
     public int getCurrentRound() {
@@ -55,7 +58,9 @@ public class RoundManager {
                 currentGameState = GameState.ATTACK_OR_MOVE_UNIT;
             }
 
-        if (p instanceof PlayerAI) manageAIActions();
+        if( p instanceof PlayerAI ) manageAIActions();
+        this.aiDispatcher.startDispatching();
+
         return this.getCurrentPlayer();
     }
 
@@ -64,8 +69,8 @@ public class RoundManager {
     }
 
     // returns true if current Player still ownes at least 1 territory
-    public boolean isPlayerAlive(GameMap map) {
-        for(Territory t:map.getTerritories())
+    public boolean isPlayerAlive() {
+        for(Territory t:this.gameMap.getTerritories())
             if( t.getOwner().equals(getCurrentPlayer()) ) return true;
 
         return false;
@@ -105,7 +110,7 @@ public class RoundManager {
                         this.calculateReinforcements();
                         this.currentGameState = GameState.REINFORCE_UNITS;
 
-                        //should not jup to the start of the player list?
+                        //should not jump to the start of the player list?
                         this.players.reset();
                         this.players.prev();
                     }
@@ -119,6 +124,7 @@ public class RoundManager {
                 if (targetTerritory.getOwner().equals(p))
                     if (p.reinforcementPossible())
                         targetTerritory.increaseArmy(1);
+
                 if (p.getReinforcements()==0) {
                     System.out.println("NEXT_PLAYER");
                     this.nextPlayer();
@@ -159,14 +165,14 @@ public class RoundManager {
         switch(this.currentGameState) {
             case SET_UNIT: doActionOn(playerAI.setUnitAction()); break;
             case REINFORCE_UNITS:
-                playerAI.reinforceUnitsAction().forEach(this::doActionOn);
+                List<Territory> reinforcements = playerAI.reinforceUnitsAction();
+                reinforcements.forEach(this::doActionOn);
+
+                //if can't set Player as fewer than 3 Territories
+                if( reinforcements.size() == 0 ) this.nextPlayer();
                 break;
             case ATTACK_OR_MOVE_UNIT:
-                playerAI.moveOrAttackAction().forEach(action -> {
-                    playerAI.setCurrentActiveTerritory(action.y);
-                    doActionOn(action.z);
-                });
-                this.nextPlayer();
+                this.aiDispatcher.queueActions(playerAI.moveOrAttackAction());
                 break;
         }
 
@@ -179,4 +185,5 @@ public class RoundManager {
     public GameState getCurrentGameState() {
         return this.currentGameState;
     }
+
 }

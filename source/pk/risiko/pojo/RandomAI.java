@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+import java.util.stream.Collectors;
 
 /**
  * Completely random based AI
@@ -74,22 +75,20 @@ public class RandomAI extends PlayerAI {
         assert  !my.isEmpty() : "Error: i'm already defeated so what should i do, crawl back from the dead?";
 
         List<Tripel<AiTroupState,Territory,Territory>> movements = new ArrayList<>();
-        my.stream().filter(c -> c.getStationedArmies()>1)
-                   .forEach(c -> movements.add(new Tripel<>(AiTroupState.ATTACK
-                                                           ,c
-                                                           ,c.getNeighbours().get(throwDice(c.getNeighbours().size()))))
-                   );
+        my = my.stream().filter(c -> c.getStationedArmies()>1).collect(Collectors.toList());
+
+        //no units left ... i lost
+        if( my.isEmpty() ) return movements;
+
+        Territory c = my.get( throwDice(my.size()) );
+        List<Territory> enemy = c.getNeighbours().stream().filter(e -> !e.getOwner().equals(this)).collect(Collectors.toList());
+
+        movements.add(new Tripel<>(AiTroupState.ATTACK,c,enemy.get(throwDice(enemy.size()))));
+        int maxMovements = throwDice(c.getStationedArmies());
+        for(int i=0;i<maxMovements;i++)
+            if( throwDice(100) > 50 )
+                movements.add(new Tripel<>(AiTroupState.MOVE,c,enemy.get(throwDice(enemy.size()))));
 
         return movements;
-    }
-
-    @Override
-    public void attackOrMove(Territory targetTerritory) {
-        targetTerritory.setMouseState(MouseState.R_CLICKED);
-
-        System.out.println("Process RandomAI attackOrMove()");
-        super.attackOrMove(targetTerritory);
-
-        targetTerritory.setMouseState(MouseState.NORMAL);
     }
 }

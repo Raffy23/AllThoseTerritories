@@ -35,7 +35,8 @@ public interface AI {
      * z=TargetTerritory
      *
      * This List does represent all actions the AI does want to perform in his
-     * current round
+     * current round. There may only be one ATTACK but Multiple Move States in
+     * it.
      *
      * @return List of all actions the AI does want to do
      */
