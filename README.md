@@ -1,9 +1,19 @@
-# pkRisiko
-GitRepo für das Abschlussprojekt für Programmkonstruktion.
-Das Spiel Risiko soll nachprogramiert werden. Yay ^^
+# AllThosesTerritories
+Ist ein Spiel wie Risiko, nur etwas simpler gestaltet.
+Für das Abschlussprojekt für Programmkonstruktion ist dieses nachzubauen.
+(siehen Angabe)
 
-## Ziele: 
-* Funktionierendes Spiel 
-* Ein bisschen AI 
-* Code soll halbwegs 'schön' sein ^^
-* "Eyecandy" (Ein bisschen UI schadet nicht)
+## Features:
+    - Ein spiel mit bis zu 4 Spielern
+    - Wählbarer Name und Farbe
+    - (Laden / Speichern)
+    - Dem AI beim Spielen zusehen
+
+## Status:
+    - siehe Issues
+
+## Ziele
+    [ ] Spielbares Spiel
+    [x] Graphisch etwas aufwändiger
+    [x] Funktionierende AI
+    [ ] Speichern / Laden
