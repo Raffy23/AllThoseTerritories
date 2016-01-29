@@ -180,8 +180,8 @@ public class Player {
             if (!targetTerritory.getOwner().equals(this.getCurrentActiveTerritory().getOwner())) {
                 if (attackAvailable) {
                     System.out.println(this.getName() + " attacks " + targetTerritory.getName());
-                    // TODO: uncomment this line
-                    //attackAvailable = false;
+                    // TODO: comment this line to attack more often per round
+                    attackAvailable = false;
                     this.fightingTerritory = this.getCurrentActiveTerritory();
                     int survivors=targetTerritory.defendAgainst(this.getCurrentActiveTerritory());
                     if (survivors>0)

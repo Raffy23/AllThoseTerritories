@@ -97,12 +97,6 @@ public class RoundManager {
     {
         Player p = this.getCurrentPlayer();
 
-        /*if (targetTerritory.getMouseState().equals(MouseState.L_CLICKED))
-            System.out.println("left button");
-        else if (targetTerritory.getMouseState().equals(MouseState.R_CLICKED))
-            System.out.println("right button");
-        */
-
         switch (this.currentGameState)
         {
             case SET_UNIT:
@@ -112,9 +106,6 @@ public class RoundManager {
                     //if(!(this.getCurrentPlayer() instanceof PlayerAI))
                     this.getCurrentPlayer().conquerTerritory(targetTerritory,1);
                     if (!this.gameMap.hasFreeTerrotories()) { //lowering is done above
-                        //winlose?
-                        //checkWinLose();
-
 
                         this.calculateReinforcements();
                         this.currentGameState = GameState.REINFORCE_UNITS;
@@ -138,8 +129,6 @@ public class RoundManager {
                 if (p.getReinforcements()==0) {
                     if( !(p instanceof AI) ) this.nextPlayer();
                 }
-
-                //checkWinLose();
                 break;
             case ATTACK_OR_MOVE_UNIT:
                 if( p.getCurrentActiveTerritory() != null) {
@@ -159,15 +148,6 @@ public class RoundManager {
                         System.out.println("Info: Target Territory selected!");
                     }
                 }
-                //checkWinLose();
-                break;
-            case NEXT_ROUND:
-                // TODO: did someone win already?
-
-                System.out.println("button new round pressed");
-                setNewRoundDefaults();
-                this.currentGameState=GameState.REINFORCE_UNITS;
-
                 break;
         }
     }
