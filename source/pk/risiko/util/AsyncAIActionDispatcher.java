@@ -2,6 +2,7 @@ package pk.risiko.util;
 
 import pk.risiko.pojo.AI;
 import pk.risiko.pojo.MouseState;
+import pk.risiko.pojo.PlayerAI;
 import pk.risiko.pojo.TaskFinishedListener;
 import pk.risiko.pojo.Territory;
 import pk.risiko.pojo.Tripel;
@@ -39,7 +40,6 @@ public class AsyncAIActionDispatcher {
                     try {
                        synchronized (actions) { actions.wait(); }
                     } catch (InterruptedException e) {
-                        e.printStackTrace();
                         break;
                     }
 
@@ -50,12 +50,26 @@ public class AsyncAIActionDispatcher {
         }
 
         private boolean executeTasks(int max) {
+            String moveType,succType;
+
             int i = 0;
             for(;i<max;i++) {
                 //Pump Action:
                 Tripel<AI.AiTroupState,Territory,Territory> act = actions.get(0);
-                if( !act.y.getOwner().equals(act.z.getOwner()) ) verboseActions.add(act.y.getOwner().getName() + " attacks " + act.z.getName());
-                else verboseActions.add(act.y.getOwner().getName() + " moves units to " + act.z.getName());
+
+                assert (act.y.getOwner() instanceof AI) : "Can only process AIs!";
+
+                //validate action:
+                if( act.y.getStationedArmies() <= 1                                                  ||
+                    ( !((PlayerAI)act.y.getOwner()).canAttack() && act.x == AI.AiTroupState.ATTACK ) ||
+                    ( !act.z.getOwner().equals(act.y.getOwner()) && act.x == AI.AiTroupState.MOVE  ) ){ // abort action
+                    actions.remove(act);
+                    continue;
+                }
+
+                //do some user feedback
+                if( !act.y.getOwner().equals(act.z.getOwner()) ) moveType = " attacks ";
+                else moveType = " moves ";
 
                 //do left click action
                 act.y.getOwner().setCurrentActiveTerritory(act.y);
@@ -67,8 +81,21 @@ public class AsyncAIActionDispatcher {
                 act.z.setMouseState(MouseState.HOVER);
                 if( !wait(CLICK_TIMEOUT) ) break;
 
+                final int oldAttacker = act.y.getStationedArmies();
+                //final int oldDefender = act.z.getStationedArmies();
+
                 //perform attack
-                act.y.getOwner().attackOrMove(act.z);
+                if( act.y.getOwner().attackOrMove(act.z) ) {
+                    if (moveType.equals(" attacks ")) {
+                        succType = " (successfully conquered with " + (act.y.getStationedArmies() - oldAttacker) + " armies !)";
+                    } else succType = " (moved 1 army there)";
+                } else {
+                    if (moveType.equals(" attacks ")) {
+                        succType = " (failed to conquer Territory, " + (act.z.getStationedArmies()) + " armies still alive)";
+                    } else succType = " (failed to move the army there ....)";
+                }
+                verboseActions.add(act.y.getOwner().getName() + moveType + act.z.getName() + succType);
+
                 if( !wait(CLICK_TIMEOUT/2) ) break;
 
                 //undo selecting

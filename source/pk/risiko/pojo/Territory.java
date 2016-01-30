@@ -249,23 +249,22 @@ public class Territory extends UIElement {
         List<Integer> attackRolls = randomIntList(dice, numberOfAttacks);
         List<Integer> defendRolls = randomIntList(dice, defendingTroups);
 
-        // TODO: remove eventually
-        System.out.print("Battle!\nAttacking Troups: " +numberOfAttacks+ " [");
+        /*System.out.print("Battle!\nAttacking Troups: " +numberOfAttacks+ " [");
         for (int i:attackRolls) {
             System.out.print(i+";");
         }
-        System.out.print("]\nDefending Troups: "+defendingTroups+ " [");
+        /System.out.print("]\nDefending Troups: "+defendingTroups+ " [");
         for (int i:defendRolls) {
             System.out.print(i+";");
         }
         System.out.println("]");
-
+        */
 
         // iterate through attacks
         for (int i = 0; i < attackRolls.size();i++) {
             if (attackRolls.get(i)> (defendRolls.size()>=i ? defendRolls.get(i):0)) {
                 // attack successful
-                System.out.println("attack "+ (i+1) + " successful!");
+                //System.out.println("attack "+ (i+1) + " successful!");
                 --defendingTroups;
                 --this.currentArmyCount;
                 if (currentArmyCount == 0)
@@ -278,12 +277,11 @@ public class Territory extends UIElement {
                 // defense successful
                 --numberOfAttacks;
                 --attacker.currentArmyCount;
-                System.out.println("attack "+ (i+1) + " failed!");
+                //System.out.println("attack "+ (i+1) + " failed!");
 
                 defendRolls.add(dice.nextInt(6));
 
-                // TODO: remove eventually
-                System.out.println("new defens roll: "+defendRolls.get(defendRolls.size()-1));
+                //System.out.println("new defens roll: "+defendRolls.get(defendRolls.size()-1));
             }
         }
         return -1;

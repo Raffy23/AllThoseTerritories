@@ -42,6 +42,8 @@ public class GameMapUI extends UIElement {
     /** A flag which is false if the game is paused otherwise its true **/
     private boolean isCurrentlyPlaying = true;
 
+    private boolean isAIPlaying = false;
+
     /**
      * To be able for the GameMapUI to function corretly it does need to known what it
      * should paint and therefore needs the GameMap
@@ -95,7 +97,7 @@ public class GameMapUI extends UIElement {
     @Override
     public void mouseClicked(MouseEvent e) {
         //if not playing why should events be processed
-        if( !this.isCurrentlyPlaying() ) return;
+        if( !this.isCurrentlyPlaying() || this.isAIPlaying ) return;
 
         //deligate all the events to the territories
         this.gameMap.getTerritories().forEach(t -> t.mouseClicked(e));
@@ -125,7 +127,7 @@ public class GameMapUI extends UIElement {
     @Override
     public boolean isMouseIn(int x, int y) {
         //if not playing why should events be processed
-        if( !this.isCurrentlyPlaying() ) return false;
+        //if( !this.isCurrentlyPlaying() ) return false;
 
         //search for hovered Territory
         for(Territory t:this.gameMap.getTerritories())
@@ -183,5 +185,13 @@ public class GameMapUI extends UIElement {
      */
     public void setCurrentlyPlaying(boolean currentlyPlaying) {
         isCurrentlyPlaying = currentlyPlaying;
+    }
+
+    public boolean isAIPlaying() {
+        return isAIPlaying;
+    }
+
+    public void setAIPlaying(boolean AIPlaying) {
+        isAIPlaying = AIPlaying;
     }
 }

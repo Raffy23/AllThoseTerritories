@@ -59,11 +59,16 @@ public abstract class PlayerAI extends Player implements AI {
     }
 
     @Override
-    public void attackOrMove(Territory targetTerritory) {
+    public boolean attackOrMove(Territory targetTerritory) {
         targetTerritory.setMouseState(MouseState.R_CLICKED);
 
-        super.attackOrMove(targetTerritory);
+        boolean ret = super.attackOrMove(targetTerritory);
 
         targetTerritory.setMouseState(MouseState.NORMAL);
+        return ret;
+    }
+
+    public boolean canAttack() {
+        return super.attackAvailable;
     }
 }

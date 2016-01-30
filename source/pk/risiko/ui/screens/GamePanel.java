@@ -1,5 +1,6 @@
 package pk.risiko.ui.screens;
 
+import pk.risiko.pojo.AI;
 import pk.risiko.pojo.GameMap;
 import pk.risiko.pojo.GameState;
 import pk.risiko.pojo.Player;
@@ -10,7 +11,6 @@ import pk.risiko.util.AsyncRoundListener;
 import pk.risiko.util.GameScreenManager;
 import pk.risiko.util.RoundManager;
 
-import javax.swing.*;
 import java.awt.AlphaComposite;
 import java.awt.Color;
 import java.awt.Component;
@@ -25,7 +25,7 @@ import java.util.List;
  * This class represents the Game Frame with the User Interface.
  * It does also handle some state changes in the game
  *
- * @author Raphael
+ * @author Raphael Ludwig
  * @version 08.01.2016
  */
 public class GamePanel implements GameScreen {
@@ -39,8 +39,6 @@ public class GamePanel implements GameScreen {
     private final AsyncAIActionDispatcher aiActionDispatcher;
     private final AsyncRoundListener roundListener = new AsyncRoundListener();
 
-
-    private GameState currentMetaState = GameState.HIDE_MENU;
     private RoundManager roundManager;
     private GameScreenManager gsm;
 
@@ -70,6 +68,10 @@ public class GamePanel implements GameScreen {
             }
             @Override
             public void mouseClicked(MouseEvent e) {
+                //If AI plays, no events possible
+                if( roundManager.getCurrentPlayer() instanceof AI) gameMapUI.setAIPlaying(true);
+                else gameMapUI.setAIPlaying(false);
+
                 gameMapUI.mouseClicked(generateProxyEvent(e));
             }
             @Override
@@ -94,19 +96,14 @@ public class GamePanel implements GameScreen {
      * @param state new GameState
      */
     public void changeState(GameState state) {
-        System.out.println("Switch to State: " + state);
-
         switch (state) { //switch Meta Gamestates:
             case NEXT_ROUND: this.roundManager.nextPlayer(); break;
             case SHOW_MENU: this.gameMapUI.setCurrentlyPlaying(false); break;
             case HIDE_MENU: this.gameMapUI.setCurrentlyPlaying(true); break;
             case SHOW_WINLOSE: this.gameMapUI.setCurrentlyPlaying(false); break;
             case HIDE_WINLOSE: this.gameMapUI.setCurrentlyPlaying(true); break;
-            default: System.out.println("State is unknown!");
+            //default: System.out.println("State is unknown!");
         }
-
-        if( state == GameState.HIDE_MENU || state == GameState.SHOW_MENU||state==GameState.SHOW_WINLOSE||state==GameState.HIDE_WINLOSE)
-            this.currentMetaState = state;
     }
 
     public Player getWinningPlayer() {
@@ -167,4 +164,7 @@ public class GamePanel implements GameScreen {
         gsm.showMenu();
     }
 
+    public boolean isAIPlaying() {
+        return this.roundManager.getCurrentPlayer() instanceof AI;
+    }
 }

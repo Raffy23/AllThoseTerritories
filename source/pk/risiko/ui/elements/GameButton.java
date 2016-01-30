@@ -12,23 +12,16 @@ import java.awt.Shape;
  * it is a simple alternative to the JButton (does not have LayoutManger
  * the tight swing bindings)
  *
- * @author Raphael
+ * @author Raphael Ludwig
  * @version 11.01.2016
  */
 public class GameButton extends UIElement {
-    /** The default color of the of the Button which is kind of black trasparent **/
-    private static final Color DEFAULT_BACKGROUND_COLOR   = new Color(0.15f,0.15f,0.15f,0.65f);
-    /** The default border color is white but slightly transparent **/
-    private static final Color DEFAULT_BORDER_COLOR = new Color(1f,1f,1f,0.65f);
-    /** Default Text color which should be solid white **/
-    private static final Color DEFAULT_TEXT_COLOR = new Color(255, 255, 255);
-
     /** The actual backgroud color of the Button **/
-    private Color backgroundColor = DEFAULT_BACKGROUND_COLOR;
+    private Color backgroundColor = DefaultDesigns.BACKGROUND_COLOR;
     /** The actual border color of the Button **/
-    private Color borderColor = DEFAULT_BORDER_COLOR;
+    private Color borderColor = DefaultDesigns.BORDER_COLOR;
     /** The actual text color of the Button **/
-    private Color textColor = DEFAULT_TEXT_COLOR;
+    private Color textColor = DefaultDesigns.TEXT_COLOR;
 
     /** The Mouse clicked listener which is registered with the button **/
     private MouseClickedListener listener;

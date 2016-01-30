@@ -6,7 +6,9 @@ import pk.risiko.ui.listener.MouseClickedListener;
 import pk.risiko.ui.screens.UserInterface;
 import pk.risiko.util.FontLoader;
 
-import java.awt.*;
+import java.awt.Font;
+import java.awt.Graphics2D;
+import java.awt.Rectangle;
 import java.awt.event.MouseEvent;
 import java.awt.geom.Rectangle2D;
 
@@ -40,8 +42,8 @@ public class WinLoseDialog extends UIElement {
      * @see GameWindow
      */
     public WinLoseDialog() {
-        super(new Rectangle(GameWindow.WINDOW_SIZE_WIDTH/2-DIALOG_WIDTH/2
-                ,GameWindow.WINDOW_SIZE_HEIGHT/2-DIALOG_HEIGHT/2
+        super(new Rectangle(GameWindow.WINDOW_WIDTH /2-DIALOG_WIDTH/2
+                ,GameWindow.WINDOW_HEIGHT /2-DIALOG_HEIGHT/2
                 ,DIALOG_WIDTH
                 ,DIALOG_HEIGHT));
 
@@ -63,14 +65,14 @@ public class WinLoseDialog extends UIElement {
     public void paint(Graphics2D g) {
         final Font oldFont = g.getFont();
 
-        g.setColor(DefaultDesigns.DEFAULT_BACKGROUND_COLOR);
-        g.fillRect(0, UserInterface.BAR_HEIGHT,GameWindow.WINDOW_SIZE_WIDTH,GameWindow.WINDOW_SIZE_HEIGHT);
+        g.setColor(DefaultDesigns.LIGHT_BACKGROUND_COLOR);
+        g.fillRect(0, UserInterface.BAR_HEIGHT,GameWindow.WINDOW_WIDTH,GameWindow.WINDOW_HEIGHT);
 
-        g.setColor(DefaultDesigns.DEFAULT_PANE_COLOR);
+        g.setColor(DefaultDesigns.PANE_COLOR);
         g.fill(this.getElementShape());
 
         g.setFont(this.headlineFont);
-        g.setColor(DefaultDesigns.DEFAULT_TEXT_COLOR);
+        g.setColor(DefaultDesigns.TEXT_COLOR);
 
         final int fontHeight = g.getFontMetrics().getHeight()/2;
         final int fontWidth = g.getFontMetrics().stringWidth("Player \""+winner.getName()+"\" wins!");

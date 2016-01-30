@@ -77,6 +77,10 @@ public class SettingsProvider {
         return  settings.getProperty("assets") + settings.getProperty("fonts") + File.separator;
     }
 
+    public String getResourceDirectory() {
+        return  settings.getProperty("assets") + File.separator;
+    }
+
     /**
      * @return how many FPS the GameWindow should have
      * @see pk.risiko.ui.GameWindow
@@ -97,5 +101,9 @@ public class SettingsProvider {
      */
     public CommandParser getCommandLine() {
         return this.parser;
+    }
+
+    public Properties getSettings() {
+        return this.settings;
     }
 }

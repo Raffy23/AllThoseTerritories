@@ -22,11 +22,11 @@ import java.awt.geom.Rectangle2D;
 public class InGameMenu extends UIElement {
 
     /** The default background color of the Menu **/
-    private static final Color DEFAULT_BACKGROUND_COLOR   = DefaultDesigns.DEFAULT_BACKGROUND_COLOR;
+    private static final Color DEFAULT_BACKGROUND_COLOR   = DefaultDesigns.LIGHT_BACKGROUND_COLOR;
     /** The default border color of the Menu **/
-    private static final Color DEFAULT_PANE_COLOR = DefaultDesigns.DEFAULT_PANE_COLOR;
+    private static final Color DEFAULT_PANE_COLOR = DefaultDesigns.PANE_COLOR;
     /** The default text color of the Menu **/
-    private static final Color DEFAULT_TEXT_COLOR = DefaultDesigns.DEFAULT_TEXT_COLOR;
+    private static final Color DEFAULT_TEXT_COLOR = DefaultDesigns.TEXT_COLOR;
 
     /** The width of the menu in pixel **/
     private static final int MENU_WIDTH  = 200;
@@ -55,8 +55,8 @@ public class InGameMenu extends UIElement {
      * @see GameWindow
      */
     public InGameMenu() {
-        super(new Rectangle(GameWindow.WINDOW_SIZE_WIDTH/2-MENU_WIDTH/2
-                           ,GameWindow.WINDOW_SIZE_HEIGHT/2-MENU_HEIGHT/2
+        super(new Rectangle(GameWindow.WINDOW_WIDTH /2-MENU_WIDTH/2
+                           ,GameWindow.WINDOW_HEIGHT /2-MENU_HEIGHT/2
                            ,MENU_WIDTH
                            ,MENU_HEIGHT));
 
@@ -92,7 +92,7 @@ public class InGameMenu extends UIElement {
         final Font oldFont = g.getFont();
 
         g.setColor(DEFAULT_BACKGROUND_COLOR);
-        g.fillRect(0, UserInterface.BAR_HEIGHT,GameWindow.WINDOW_SIZE_WIDTH,GameWindow.WINDOW_SIZE_HEIGHT);
+        g.fillRect(0, UserInterface.BAR_HEIGHT,GameWindow.WINDOW_WIDTH,GameWindow.WINDOW_HEIGHT);
 
         g.setColor(DEFAULT_PANE_COLOR);
         g.fill(this.getElementShape());

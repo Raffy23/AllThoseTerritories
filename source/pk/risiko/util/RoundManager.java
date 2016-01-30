@@ -51,7 +51,13 @@ public class RoundManager {
     }
 
     public Player nextPlayer() {
-        Player p = players.next();
+        Player p = players.peek();
+
+        //Block next action if player has still reinforcements
+        if( currentGameState == GameState.REINFORCE_UNITS &&
+            p.getReinforcements() > 0  && !(p instanceof AI) ) return p;
+        else p = players.next();
+
 
         if( this.players.isAtBeginning() )
             if (this.currentGameState == GameState.REINFORCE_UNITS) {
@@ -72,6 +78,7 @@ public class RoundManager {
         if( p instanceof PlayerAI ) {
             manageAIActions();
             this.aiDispatcher.startDispatching();
+            this.lastAction = null;
         }
 
         return this.getCurrentPlayer();
@@ -171,6 +178,10 @@ public class RoundManager {
         return null;
     }
 
+    public boolean isOnePlayerLeft() {
+        return this.players.size() == 1;
+    }
+
     private void manageAIActions()
     {
         if (!(this.getCurrentPlayer() instanceof PlayerAI))
@@ -184,7 +195,7 @@ public class RoundManager {
                 reinforcements.forEach(this::doActionOn);
 
                 //if can't set Player as fewer than 3 Territories
-                if( reinforcements.size() == 0 ) this.nextPlayer();
+                if( reinforcements.isEmpty() ) this.nextPlayer();
                 break;
             case ATTACK_OR_MOVE_UNIT:
                 this.aiDispatcher.queueActions(playerAI.moveOrAttackAction());
@@ -202,6 +213,7 @@ public class RoundManager {
     }
 
     public String getLastAction() {
-        return (getCurrentPlayer() instanceof  AI)?this.aiDispatcher.getNextAction():this.lastAction;
+        return (getCurrentPlayer() instanceof  AI)?this.aiDispatcher.getNextAction():
+               (this.lastAction!=null)?this.lastAction:this.aiDispatcher.getNextAction();
     }
 }

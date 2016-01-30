@@ -77,20 +77,20 @@ public class Connection extends UIElement {
 
             //some helper points
             Point leftPartner = new Point(-5,right.y);
-            Point rightPartner = new Point(GameWindow.WINDOW_SIZE_WIDTH +5,left.y);
+            Point rightPartner = new Point(GameWindow.WINDOW_WIDTH +5,left.y);
 
             //start drawing the line
             Polygon line = new Polygon();
             line.addPoint(left.x,left.y);
             line.addPoint(leftPartner.x,leftPartner.y);
             line.addPoint(-5,-5);
-            line.addPoint(GameWindow.WINDOW_SIZE_WIDTH +5,-5);
+            line.addPoint(GameWindow.WINDOW_WIDTH +5,-5);
             line.addPoint(rightPartner.x,rightPartner.y);
             line.addPoint(right.x,right.y);
 
             //Backtracking (due the fact that the polygon is always closed)
             line.addPoint(rightPartner.x,rightPartner.y);
-            line.addPoint(GameWindow.WINDOW_SIZE_WIDTH +5,-5);
+            line.addPoint(GameWindow.WINDOW_WIDTH +5,-5);
             line.addPoint(-5,-5);
             line.addPoint(leftPartner.x,leftPartner.y);
 

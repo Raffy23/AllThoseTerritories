@@ -2,6 +2,7 @@ package pk.risiko;
 
 import pk.risiko.ui.MainWindow;
 import pk.risiko.util.CommandParser;
+import pk.risiko.util.ImageStore;
 import pk.risiko.util.SettingsProvider;
 
 import java.awt.EventQueue;
@@ -33,7 +34,7 @@ public class Risiko {
         final CommandParser cmdParser = new CommandParser(argvs.toArray(new String[argvs.size()]));
         if( cmdParser.isInvalid() ) {
             System.out.println("Usage: Risik.java [--map <name-of-mapfile>] [--skip-menu]");
-            return; //huston we have a problem, garbage on our command line!
+            return;
         }
 
         // read settings
@@ -48,6 +49,10 @@ public class Risiko {
 
         /* Globally saves constants as in settings.properties */
         SettingsProvider.createSettingsProvider(settings,cmdParser);
+
+        /* Do some I/O Stuff (like pre-loading resources) */
+        ImageStore.initialize(SettingsProvider.getInstance().getResourceDirectory()
+                             ,Boolean.valueOf(SettingsProvider.getInstance().getSettings().getProperty("preloadImages")));
 
         /* start the game & display window */
         EventQueue.invokeLater(Risiko::new);

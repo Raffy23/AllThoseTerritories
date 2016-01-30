@@ -15,8 +15,8 @@ public class AsyncRoundListener implements TaskFinishedListener {
 
     @Override
     public void taskFinished() {
-        //TODO: is won do not do that -> may crash something (also stop aiActionDispatcher)
-        this.rm.nextPlayer();
+        if( this.rm.isOnePlayerLeft() ) Thread.currentThread().interrupt(); //kill myself
+        else this.rm.nextPlayer();
     }
 
     public void setRm(RoundManager rm) {

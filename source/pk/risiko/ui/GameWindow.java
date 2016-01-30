@@ -4,8 +4,8 @@ import pk.risiko.ui.elements.GameMapUI;
 import pk.risiko.ui.listener.SwingMouseEventDispatcher;
 import pk.risiko.ui.screens.UserInterface;
 import pk.risiko.util.GameScreenManager;
+import pk.risiko.util.ImageStore;
 
-import javax.imageio.ImageIO;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.WindowConstants;
@@ -20,8 +20,6 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
 import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
 
 /**
  * GameWindow represents the Game Window of the Game.
@@ -33,9 +31,8 @@ import java.io.IOException;
  */
 public class GameWindow extends JFrame {
 
-    //TODO: Should be max of game window + ui
-    public static final int WINDOW_SIZE_WIDTH = GameMapUI.GAME_MAP_WIDTH;
-    public static final int WINDOW_SIZE_HEIGHT = GameMapUI.GAME_MAP_HEIGHT + UserInterface.BAR_HEIGHT;
+    public static final int WINDOW_WIDTH = GameMapUI.GAME_MAP_WIDTH;
+    public static final int WINDOW_HEIGHT = GameMapUI.GAME_MAP_HEIGHT + UserInterface.BAR_HEIGHT;
     private static final Color BACKGROUND_COLOR = new Color(58, 164, 255);
 
     private final PanelArea rootPanel;
@@ -54,7 +51,7 @@ public class GameWindow extends JFrame {
     private class PanelArea extends JPanel {
 
         public PanelArea() {
-            this.setBounds(0,0, WINDOW_SIZE_WIDTH, WINDOW_SIZE_HEIGHT);
+            this.setBounds(0,0, WINDOW_WIDTH, WINDOW_HEIGHT);
         }
 
         @Override
@@ -78,11 +75,11 @@ public class GameWindow extends JFrame {
                 GameWindow.this.gameScreenManager.getActiveScreen().paint(g2d);
             else {
                 g.setColor(new Color(75,75,75));
-                g.fillRect(0,0,GameWindow.WINDOW_SIZE_WIDTH,GameWindow.WINDOW_SIZE_HEIGHT);
+                g.fillRect(0,0,GameWindow.WINDOW_WIDTH,GameWindow.WINDOW_HEIGHT);
                 g.setColor(new Color(240,240,240));
                 g.drawString("Still waiting for something useful to display ..."
-                            ,GameWindow.WINDOW_SIZE_WIDTH/2-g.getFontMetrics().stringWidth("Still waiting for something useful to display ...")/2
-                            ,GameWindow.WINDOW_SIZE_HEIGHT/2);
+                            ,GameWindow.WINDOW_WIDTH /2-g.getFontMetrics().stringWidth("Still waiting for something useful to display ...")/2
+                            ,GameWindow.WINDOW_HEIGHT /2);
             }
 
             /*
@@ -109,30 +106,23 @@ public class GameWindow extends JFrame {
     public GameWindow(int fps) {
         super("AllThoseTerritories - Risiko");
         //Setup Window:
-        this.setSize(GameWindow.WINDOW_SIZE_WIDTH,GameWindow.WINDOW_SIZE_HEIGHT);
+        this.setSize(GameWindow.WINDOW_WIDTH,GameWindow.WINDOW_HEIGHT);
         this.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         this.setResizable(false);
         Dimension windowSize = Toolkit.getDefaultToolkit().getScreenSize();
-        x =(int)((windowSize.getWidth() - WINDOW_SIZE_WIDTH)/2);
-        y =(int)((windowSize.getHeight() - WINDOW_SIZE_HEIGHT)/2);
+        x =(int)((windowSize.getWidth() - WINDOW_WIDTH)/2);
+        y =(int)((windowSize.getHeight() - WINDOW_HEIGHT)/2);
         System.out.println(x);
         System.out.println(y);
-        this.setBounds(x,y,WINDOW_SIZE_WIDTH,WINDOW_SIZE_HEIGHT);
+        this.setBounds(x,y, WINDOW_WIDTH, WINDOW_HEIGHT);
 
 
         //Setup Manager:
         this.gameScreenManager = new GameScreenManager(this);
 
-
-        try {
-            this.background = ImageIO.read(new File("./assets/background-game-small.jpg"));
-            this.icon = ImageIO.read(new File("./assets/risiko.icon.png"));
-
-            this.setIconImage(icon);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
+        //Get some Images from the ImageStore
+        this.background = ImageStore.getInstance().getImage("background-game-small");
+        this.setIconImage(ImageStore.getInstance().getImage("icon"));
 
         //Setup Draw Area:
         this.add(this.rootPanel = new PanelArea());

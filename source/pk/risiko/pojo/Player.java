@@ -38,7 +38,7 @@ public class Player {
      */
     private Territory currentActiveTerritory;
 
-    private boolean attackAvailable=true;
+    protected boolean attackAvailable=true;
     private Territory receivingTerritory=null;
     private Territory sendingTerritory=null;
     private Territory fightingTerritory=null;
@@ -174,21 +174,28 @@ public class Player {
         }
     }
 
-    public void attackOrMove(Territory targetTerritory) {
+    public boolean attackOrMove(Territory targetTerritory) {
         if (targetTerritory.getMouseState() == MouseState.R_CLICKED) {
             // attack
             if (!targetTerritory.getOwner().equals(this.getCurrentActiveTerritory().getOwner())) {
                 if (attackAvailable) {
-                    System.out.println(this.getName() + " attacks " + targetTerritory.getName());
+                    //System.out.println(this.getName() + " attacks " + targetTerritory.getName());
                     // TODO: comment this line to attack more often per round
                     attackAvailable = false;
                     this.fightingTerritory = this.getCurrentActiveTerritory();
+
                     int survivors=targetTerritory.defendAgainst(this.getCurrentActiveTerritory());
-                    if (survivors>0)
+                    if (survivors>0) {
                         this.conquerTerritory(targetTerritory, survivors);
+                        return true;
+                    } else {
+                        return false;
+                    }
                 }
-            } else
+            } else {
                 tryMove(targetTerritory);
+                return true;
+            }
         }
         // trail per left-click!
         else if (targetTerritory.getMouseState() == MouseState.L_CLICKED&&targetTerritory==conqueredTerritory&&this.currentActiveTerritory==fightingTerritory)
@@ -199,10 +206,12 @@ public class Player {
                 targetTerritory.increaseArmy(1);
             }
         }
+
+        return false;
     }
     private void tryMove(Territory targetTerritory)
     {
-        System.out.println(this.getName() + " moves 1 army to " + targetTerritory.getName());
+        //System.out.println(this.getName() + " moves 1 army to " + targetTerritory.getName());
         if (this.getCurrentActiveTerritory().getStationedArmies()>1) {
             if (receivingTerritory == null && sendingTerritory == null) {
                 receivingTerritory = targetTerritory;

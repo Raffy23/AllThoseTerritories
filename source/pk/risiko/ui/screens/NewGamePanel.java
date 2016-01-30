@@ -31,8 +31,8 @@ import java.util.List;
 public class NewGamePanel implements GameScreen {
 
     private static final Color DEFAULT_BACKGROUND_COLOR   = new Color(0.15f,0.15f,0.15f,0.65f);
-    private static final int PREVIEW_MAP_WIDTH = GameWindow.WINDOW_SIZE_WIDTH/3;
-    private static final int PREVIEW_MAP_HEIGHT = GameWindow.WINDOW_SIZE_HEIGHT/3;
+    private static final int PREVIEW_MAP_WIDTH = GameWindow.WINDOW_WIDTH /3;
+    private static final int PREVIEW_MAP_HEIGHT = GameWindow.WINDOW_HEIGHT /3;
 
     private final SwingMouseEventDispatcher dispatcher = new SwingMouseEventDispatcher();
     private final MapFileReader mapFileReader;
@@ -49,8 +49,8 @@ public class NewGamePanel implements GameScreen {
     private static final int START_BUTTON_H=20*2;
     private static final int MAP_BUTTONS_WH= 20*2;
     private static final int SEGMENT_LEFT= 115;
-    private static final int SEGMENT_MIDDLE= GameWindow.WINDOW_SIZE_WIDTH-PREVIEW_MAP_WIDTH-75;
-    private static final int SEGMENT_RIGHT=GameWindow.WINDOW_SIZE_WIDTH-95+20;
+    private static final int SEGMENT_MIDDLE= GameWindow.WINDOW_WIDTH -PREVIEW_MAP_WIDTH-75;
+    private static final int SEGMENT_RIGHT=GameWindow.WINDOW_WIDTH -95+20;
 
     public NewGamePanel(MapFileReader mapFileReader) {
         this.mapFileReader = mapFileReader;
@@ -59,13 +59,13 @@ public class NewGamePanel implements GameScreen {
         this.mapFiles.add(0,SettingsProvider.getInstance().getDefaultMapName());
 
         /* setup ui: */
-        this.beginGameBtn = new GameButton(new Rectangle2D.Double(SEGMENT_RIGHT-START_BUTTON_W  //GameWindow.WINDOW_SIZE_WIDTH-95+20-75
+        this.beginGameBtn = new GameButton(new Rectangle2D.Double(SEGMENT_RIGHT-START_BUTTON_W  //GameWindow.WINDOW_WIDTH-95+20-75
                                                             ,225+PREVIEW_MAP_HEIGHT+75,START_BUTTON_W,START_BUTTON_H),"Start Game");
 
 
-        this.nextMap = new GameButton(new Rectangle2D.Double(SEGMENT_RIGHT-MAP_BUTTONS_WH  //GameWindow.WINDOW_SIZE_WIDTH-95
+        this.nextMap = new GameButton(new Rectangle2D.Double(SEGMENT_RIGHT-MAP_BUTTONS_WH  //GameWindow.WINDOW_WIDTH-95
                                                             ,225+PREVIEW_MAP_HEIGHT,MAP_BUTTONS_WH,MAP_BUTTONS_WH),">");
-        this.prevMap = new GameButton(new Rectangle2D.Double(SEGMENT_MIDDLE //GameWindow.WINDOW_SIZE_WIDTH-PREVIEW_MAP_WIDTH-75
+        this.prevMap = new GameButton(new Rectangle2D.Double(SEGMENT_MIDDLE //GameWindow.WINDOW_WIDTH-PREVIEW_MAP_WIDTH-75
 
                                                             ,225+PREVIEW_MAP_HEIGHT,MAP_BUTTONS_WH,MAP_BUTTONS_WH),"<");
         this.beginGameBtn.setFontSize(START_BUTTON_H/2);
@@ -103,8 +103,8 @@ public class NewGamePanel implements GameScreen {
     }
 
     private void drawMapPreview() {
-        this.gameMapPreview = new BufferedImage(GameWindow.WINDOW_SIZE_WIDTH
-                                               ,GameWindow.WINDOW_SIZE_HEIGHT
+        this.gameMapPreview = new BufferedImage(GameWindow.WINDOW_WIDTH
+                                               ,GameWindow.WINDOW_HEIGHT
                                                ,BufferedImage.TYPE_INT_ARGB);
 
         Graphics2D g2d = this.gameMapPreview.createGraphics();
@@ -127,28 +127,28 @@ public class NewGamePanel implements GameScreen {
         int fontHeight = g.getFontMetrics().getHeight();
         int fontWidth  = g.getFontMetrics().stringWidth(MainMenuPanel.TITLE);
         g.setColor(MainMenuPanel.HEADLINE_COLOR);
-        g.drawString(MainMenuPanel.TITLE,GameWindow.WINDOW_SIZE_WIDTH/2-fontWidth/2,fontHeight + 5);
+        g.drawString(MainMenuPanel.TITLE,GameWindow.WINDOW_WIDTH /2-fontWidth/2,fontHeight + 5);
 
         g.setFont(headlineFont.deriveFont(31f));
         g.drawString("Start a new Game: ",75,fontHeight+g.getFontMetrics().getHeight());
 
         g.setColor(DEFAULT_BACKGROUND_COLOR);
-        g.fillRect(GameWindow.WINDOW_SIZE_WIDTH-PREVIEW_MAP_WIDTH-76
+        g.fillRect(GameWindow.WINDOW_WIDTH -PREVIEW_MAP_WIDTH-76
                   ,220
                   ,PREVIEW_MAP_WIDTH+1
                   ,PREVIEW_MAP_HEIGHT);
         g.drawImage(this.gameMapPreview
-                   ,GameWindow.WINDOW_SIZE_WIDTH-PREVIEW_MAP_WIDTH-75
+                   ,GameWindow.WINDOW_WIDTH -PREVIEW_MAP_WIDTH-75
                    ,220
-                   ,GameWindow.WINDOW_SIZE_WIDTH-75
+                   ,GameWindow.WINDOW_WIDTH -75
                    ,220+PREVIEW_MAP_HEIGHT
-                   ,0,0,GameWindow.WINDOW_SIZE_WIDTH,GameWindow.WINDOW_SIZE_HEIGHT,null);
+                   ,0,0,GameWindow.WINDOW_WIDTH,GameWindow.WINDOW_HEIGHT,null);
 
         g.setFont(oldFont.deriveFont(28f));
         g.setColor(Color.BLACK);
         fontWidth  = g.getFontMetrics().stringWidth(this.currentSelctedMap.getMapName());
         g.drawString(this.currentSelctedMap.getMapName()
-                    ,GameWindow.WINDOW_SIZE_WIDTH-PREVIEW_MAP_WIDTH/2-76-fontWidth/2
+                    ,GameWindow.WINDOW_WIDTH -PREVIEW_MAP_WIDTH/2-76-fontWidth/2
                     ,225+PREVIEW_MAP_HEIGHT+g.getFontMetrics().getHeight()/2);
 
 
