@@ -263,4 +263,12 @@ public class Player {
     public void setGameMap(GameMap map) {
         this.gameMap = map;
     }
+
+    public int getMoveCount() {
+        return moveCount;
+    }
+
+    public boolean getAttackAvailable() {
+        return attackAvailable;
+    }
 }

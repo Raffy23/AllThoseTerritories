@@ -42,9 +42,7 @@ public class AsyncAIActionDispatcher {
                     } catch (InterruptedException e) {
                         break;
                     }
-
                 }
-
                 if( Thread.interrupted() ) return;
             }
         }

@@ -281,7 +281,7 @@ public class Territory extends UIElement {
 
                 defendRolls.add(dice.nextInt(6));
 
-                //System.out.println("new defens roll: "+defendRolls.get(defendRolls.size()-1));
+                //System.out.println("new defense roll: "+defendRolls.get(defendRolls.size()-1));
             }
         }
         return -1;

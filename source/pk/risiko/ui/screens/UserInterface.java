@@ -113,13 +113,12 @@ public class UserInterface extends MouseAdapter implements Drawable, MouseClicke
             case REINFORCE_UNITS: return "Reinforce your units!";
             case SET_UNIT: return "Deploy your units to conquer";
         }
-
         return "<NONE>";
     }
 
     @Override
     public void mouseClicked(MouseEventHandler what) {
-        if( what.equals(this.nextButton) && !this.master.isAIPlaying() ) {
+        if( what.equals(this.nextButton) && !this.master.isAIPlaying() &&this.master.getGameState()!=GameState.SET_UNIT&&this.master.getGameState()!=GameState.REINFORCE_UNITS) {
             this.master.changeState(GameState.NEXT_ROUND);
         } else if( what.equals(this.menuButton) ) {
             if( !this.menu.isActive() ) { this.master.changeState(GameState.SHOW_MENU); this.menu.show(); }
