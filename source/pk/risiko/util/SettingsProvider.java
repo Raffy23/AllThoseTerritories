@@ -103,6 +103,10 @@ public class SettingsProvider {
         return this.parser;
     }
 
+    public String getSavefileDirectory() {
+        return settings.getProperty("saves");
+    }
+
     public Properties getSettings() {
         return this.settings;
     }

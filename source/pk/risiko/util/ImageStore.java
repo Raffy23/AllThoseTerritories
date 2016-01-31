@@ -11,11 +11,11 @@ import java.util.Map;
 /**
  * Created by:
  *
- * @author Raphael
+ * @author Raphael Ludwig
  * @version 30.01.2016
  */
 public class ImageStore {
-    private static ImageStore instance;
+    private static ImageStore instance = null;
 
     private Map<String,BufferedImage> images = new HashMap<>();
     private String rootDirectory;
@@ -30,6 +30,8 @@ public class ImageStore {
     }
 
     public static ImageStore getInstance() {
+        assert instance != null : "Error: ImageStore must be initialized!";
+
         return instance;
     }
 

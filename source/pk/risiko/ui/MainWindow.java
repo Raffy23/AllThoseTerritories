@@ -1,6 +1,7 @@
 package pk.risiko.ui;
 
 import pk.risiko.dao.MapFileReader;
+import pk.risiko.dao.SaveGameDAO;
 import pk.risiko.pojo.GameMap;
 import pk.risiko.pojo.GameScreenType;
 import pk.risiko.pojo.Player;
@@ -47,7 +48,7 @@ public class MainWindow extends GameWindow {
 
         /* setup menu listeners */
         this.gameMenu.getExitGame().setListener((what) -> this.exitGame());
-        this.gameMenu.getLoadGame().setListener((what) -> System.out.println("No loading implemented!"));
+        this.gameMenu.getLoadGame().setListener((what) -> this.loadGame());
         this.gameMenu.getNewGame().setListener((what) -> this.showNewGameScreen());
 
         /* setup new game menu listeners */
@@ -66,6 +67,17 @@ public class MainWindow extends GameWindow {
             this.startNewGame(map,players);
         } else {
             System.err.println("A Game without Players is not very useful!");
+        }
+    }
+
+    private void loadGame() {
+        final SaveGameDAO dao = new SaveGameDAO(SettingsProvider.getInstance().getSavefileDirectory());
+        if( dao.getSaveGames().containsKey(0) ) {
+            GameMap map = dao.loadSaveGame(0);
+            List<Player> p = dao.getSaveGames().get(0).getPlayerList();
+            this.startNewGame(map,p);
+        } else {
+            System.err.println("No Savegame in slot 0!");
         }
     }
 

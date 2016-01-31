@@ -259,4 +259,8 @@ public class Player {
 
         return (count>=3||armycount>count);
     }
+
+    public void setGameMap(GameMap map) {
+        this.gameMap = map;
+    }
 }

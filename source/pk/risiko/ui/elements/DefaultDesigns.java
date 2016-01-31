@@ -21,7 +21,9 @@ public class DefaultDesigns {
     /** The height in pixel **/
     public static final int DEFAULT_HEIGHT = 200;
 
+    /** The Default Button Width **/
     public static final int BUTTON_WIDTH = (DEFAULT_WIDTH/2) - 10;
+    /** The Default Button Height **/
     public static final int BUTTON_HEIGHT = DEFAULT_HEIGHT/5;
 
     /** The default headline font of the Hover Element **/

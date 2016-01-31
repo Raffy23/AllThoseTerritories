@@ -1,5 +1,6 @@
 package pk.risiko.ui.screens;
 
+import pk.risiko.dao.SaveGameDAO;
 import pk.risiko.pojo.AI;
 import pk.risiko.pojo.GameMap;
 import pk.risiko.pojo.GameState;
@@ -10,6 +11,7 @@ import pk.risiko.util.AsyncAIActionDispatcher;
 import pk.risiko.util.AsyncRoundListener;
 import pk.risiko.util.GameScreenManager;
 import pk.risiko.util.RoundManager;
+import pk.risiko.util.SettingsProvider;
 
 import java.awt.AlphaComposite;
 import java.awt.Color;
@@ -82,9 +84,13 @@ public class GamePanel implements GameScreen {
 
         //Init Button Listener in Menu:
         this.userInterface.getMenu().setExitGameListener((btn) -> this.endGame());
-        this.userInterface.getMenu().setSaveGameListener((btn) -> System.out.println("Not Implemented! (in GamePanel)"));
+        this.userInterface.getMenu().setSaveGameListener((btn) -> {
+            final SaveGameDAO dao = new SaveGameDAO(SettingsProvider.getInstance().getSavefileDirectory());
+            dao.saveGameToSlot(gameMap,playerList,"==_TEST_SAVE_==",this.roundManager.getCurrentRound(),0);
+        });
 
         this.userInterface.getWinLoseDialog().setExitToMenuListener((btn) -> this.endGame());
+
 
         //Start Game (round 0 - AI events)
         this.roundManager.startGame();
