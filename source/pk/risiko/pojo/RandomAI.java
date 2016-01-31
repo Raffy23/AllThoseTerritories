@@ -80,6 +80,19 @@ public class RandomAI extends PlayerAI {
         //no units left ... i lost
         if( my.isEmpty() ) return movements;
 
+        my.forEach(c -> {
+            if( throwDice(100) >= 50 ) {
+                List<Territory> enemy = c.getNeighbours().stream().filter(e -> !e.getOwner().equals(this)).collect(Collectors.toList());
+
+                movements.add(new Tripel<>(AiTroupState.ATTACK, c, enemy.get(throwDice(enemy.size()))));
+                int maxMovements = throwDice(c.getStationedArmies());
+                for (int i = 0; i < maxMovements; i++)
+                    if (throwDice(100) > 50)
+                        movements.add(new Tripel<>(AiTroupState.MOVE, c, enemy.get(throwDice(enemy.size()))));
+            }
+        });
+
+/*
         Territory c = my.get( throwDice(my.size()) );
         List<Territory> enemy = c.getNeighbours().stream().filter(e -> !e.getOwner().equals(this)).collect(Collectors.toList());
 
@@ -88,7 +101,7 @@ public class RandomAI extends PlayerAI {
         for(int i=0;i<maxMovements;i++)
             if( throwDice(100) > 50 )
                 movements.add(new Tripel<>(AiTroupState.MOVE,c,enemy.get(throwDice(enemy.size()))));
-
+*/
         return movements;
     }
 }

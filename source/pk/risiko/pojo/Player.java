@@ -181,7 +181,7 @@ public class Player {
                 if (attackAvailable) {
                     //System.out.println(this.getName() + " attacks " + targetTerritory.getName());
                     // TODO: comment this line to attack more often per round
-                    attackAvailable = false;
+                    //attackAvailable = false;
                     this.fightingTerritory = this.getCurrentActiveTerritory();
 
                     int survivors=targetTerritory.defendAgainst(this.getCurrentActiveTerritory());

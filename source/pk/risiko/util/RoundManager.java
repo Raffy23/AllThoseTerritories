@@ -191,6 +191,9 @@ public class RoundManager {
         switch(this.currentGameState) {
             case SET_UNIT: doActionOn(playerAI.setUnitAction()); break;
             case REINFORCE_UNITS:
+                //is dead allready:
+                if( !playerAI.isAlive() ) this.nextPlayer();
+
                 List<Territory> reinforcements = playerAI.reinforceUnitsAction();
                 reinforcements.forEach(this::doActionOn);
 
