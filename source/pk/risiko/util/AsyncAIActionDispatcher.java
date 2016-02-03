@@ -30,26 +30,41 @@ public class AsyncAIActionDispatcher {
     private final TaskFinishedListener finListener;
     private final Vector<Tripel<AI.AiTroupState,Territory,Territory>> actions = new Vector<>();
     private final Vector<String> verboseActions = new Vector<>();
+
+    /**
+     * This class does handle the logic and wotk in the run Method:
+     */
     private final Runnable dispatcher = new Runnable() {
         @Override
         public void run() {
+            //yes this is a endless loop ... we wait for a thread interruption
             while( true ) {
                 final int max = actions.size();
 
+                //exceute tasks
                 if( max > 0 ) { if( !executeTasks(max) ) return; }
                 else {
+                    //we are finished
                     new Thread(finListener::taskFinished).start();
 
+                    //let's wait for more work
                     try {
                        synchronized (actions) { actions.wait(); }
                     } catch (InterruptedException e) {
                         break;
                     }
                 }
+
+                //if we are interrupted we do stop
                 if( Thread.interrupted() ) return;
             }
         }
 
+        /**
+         * All tasks till max index are dispatched
+         * @param max the max number of tasks which should be dispatched
+         * @return true if all the tasks could be dispatched
+         */
         private boolean executeTasks(int max) {
             String moveType,succType;
 
@@ -112,6 +127,11 @@ public class AsyncAIActionDispatcher {
             return i==max;
         }
 
+        /**
+         * Just waits for a specific timeout
+         * @param timeout timeout in ms
+         * @return true if successful, false if interrupted
+         */
         private boolean wait(int timeout) {
             try { Thread.sleep(timeout); } catch (InterruptedException e) { return false; }
             return true;
@@ -124,11 +144,18 @@ public class AsyncAIActionDispatcher {
         this.verboseActions.add("AI is thinking ...");
     }
 
+    /**
+     * Send a notification the the BackgroundTask, should be used
+     * to notify the BackgroundTask about new work
+     */
     private void notifyRunningTask() {
         if( this.worker.isAlive() ) synchronized (actions) { actions.notifyAll(); }
         else this.startWorker();
     }
 
+    /**
+     * Starts the BackgroundTask
+     */
     private void startWorker() {
         this.worker = new Thread(dispatcher);
         this.worker.setDaemon(true);
@@ -136,25 +163,34 @@ public class AsyncAIActionDispatcher {
         this.worker.start();
     }
 
+    /**
+     * Starts Dispatching the tasks in the TaskQueue
+     */
     public synchronized void startDispatching() {
         if( this.worker != null ) this.notifyRunningTask();
         else this.startWorker();
     }
 
-    public synchronized void restartDispatching() {
-        if( this.worker.isAlive() ) this.worker.interrupt();
-        this.startWorker();
-    }
 
+    /**
+     * Stops Dispatching, leaves data in the TaskQueue
+     */
     public synchronized void abortDispatching() {
         if( this.worker != null && this.worker.isAlive() )
             this.worker.interrupt();
     }
 
+    /**
+     * Add some AI actions to the Queue
+     * @param actions a list of actions
+     */
     public synchronized void queueActions(List<Tripel<AI.AiTroupState,Territory,Territory>> actions) {
         this.actions.addAll(actions);
     }
 
+    /**
+     * @return a string of the dispatched actions, in the order in which they where dispatched
+     */
     public String getNextAction() {
         if( verboseActions.size() == 1 ) return verboseActions.get(0);
         return verboseActions.remove(0);
