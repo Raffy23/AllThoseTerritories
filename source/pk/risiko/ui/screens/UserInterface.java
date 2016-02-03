@@ -144,8 +144,10 @@ public class UserInterface extends MouseAdapter implements Drawable, MouseClicke
     }
 
     private boolean checkHover(int x, int y) {
-        if (master.getGameState()!=GameState.ATTACK_OR_MOVE_UNIT||master.getCurrentPlayer().getCurrentActiveTerritory()==null)
+        if (master.getGameState()!=GameState.ATTACK_OR_MOVE_UNIT||master.getCurrentPlayer().getCurrentActiveTerritory()==null) {
+            this.nextButton.setImage(null);
             return false;
+        }
         for(Territory t:master.getCurrentPlayer().getCurrentActiveTerritory().getNeighbours())
             if( t.isMouseIn(x,y-BAR_HEIGHT) ) {
                 if (t.getOwner()==master.getCurrentPlayer()) {

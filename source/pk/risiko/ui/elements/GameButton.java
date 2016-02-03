@@ -49,7 +49,7 @@ public class GameButton extends UIElement {
         g2d.setColor(backgroundColor);
         g2d.fill(this.getElementShape());
 
-        double radiusX = this.getElementShape().getBounds2D().getWidth()/2;
+        /*double radiusX = this.getElementShape().getBounds2D().getWidth()/2;
         double radiusY = this.getElementShape().getBounds2D().getHeight()/2;
 
         double diagonalX=Math.sqrt(radiusX*radiusX + radiusX*radiusX)-radiusX;
@@ -61,14 +61,20 @@ public class GameButton extends UIElement {
 
         double circleX= this.getElementShape().getBounds2D().getX() + a;
         double circleY= this.getElementShape().getBounds2D().getY() + b;
-
+*/
         g2d.setColor(borderColor);
         g2d.draw(this.getElementShape());
 
-        if(defaultImage!=null)
-            g2d.drawImage(defaultImage, (int)circleX, (int)circleY,
-                    (int)(2*radiusX-2*a),
-                    (int)(2*radiusY-2*b), null);
+        if(defaultImage!=null) {
+            //g2d.drawImage(defaultImage, (int)circleX, (int)circleY, (int)(2*radiusX-2*a), (int)(2*radiusY-2*b), null);
+            g2d.drawImage(defaultImage, (int) this.getElementShape().getBounds().getX(),
+                    (int) this.getElementShape().getBounds().getY(),
+                    (int) this.getElementShape().getBounds().getWidth(),
+                    (int) this.getElementShape().getBounds().getHeight(), null);
+
+
+            System.out.println(this.getElementShape().getBounds().getWidth());
+        }
         else
         {
             final Font oldFont = g2d.getFont();
