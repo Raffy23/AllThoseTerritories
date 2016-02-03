@@ -83,15 +83,15 @@ public class MainWindow extends GameWindow {
         final SaveGameDAO dao = new SaveGameDAO(SettingsProvider.getInstance().getSavefileDirectory());
         if( content.getSlot() >= 0 ) {
             GameMap map = dao.loadSaveGame(content.getSlot());
-            List<Player> p = content.getPlayerList();
-            this.startNewGame(map,p);
+            List<Player> players = dao.getSaveGames().get(content.getSlot()).getPlayerList();
+            this.getGameScreenManager().showGame( new GamePanel(map,players,this.getGameScreenManager(),true));
         } else {
             System.err.println("Unable to load EMPTY savegame!");
         }
     }
 
     private void startNewGame(GameMap map,List<Player> players) {
-        this.getGameScreenManager().showGame( new GamePanel(map,players,this.getGameScreenManager()));
+        this.getGameScreenManager().showGame( new GamePanel(map,players,this.getGameScreenManager(),false));
     }
 
     private void exitGame() {

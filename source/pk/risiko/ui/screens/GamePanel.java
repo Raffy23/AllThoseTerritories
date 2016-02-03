@@ -39,15 +39,16 @@ public class GamePanel implements GameScreen {
     private final UserInterface userInterface;
     private final SwingMouseEventDispatcher mouseHandler = new SwingMouseEventDispatcher();
     private final AsyncAIActionDispatcher aiActionDispatcher;
-    private final AsyncRoundListener roundListener = new AsyncRoundListener();
+    private final AsyncRoundListener roundListener;
 
     private RoundManager roundManager;
     private GameScreenManager gsm;
 
-    public GamePanel(GameMap gameMap,List<Player> playerList,GameScreenManager gameScreenManager) {
+    public GamePanel(GameMap gameMap,List<Player> playerList,GameScreenManager gameScreenManager,boolean loaded) {
         this.gsm = gameScreenManager;
+        this.roundListener = new AsyncRoundListener(this);
         this.aiActionDispatcher = new AsyncAIActionDispatcher(this.roundListener);
-        this.roundManager = new RoundManager(playerList,gameMap,aiActionDispatcher);
+        this.roundManager = new RoundManager(playerList,gameMap,aiActionDispatcher,loaded);
         this.gameMapUI = new GameMapUI(gameMap,roundManager);
 
         this.userInterface = new UserInterface(this);
@@ -105,7 +106,7 @@ public class GamePanel implements GameScreen {
         switch (state) { //switch Meta Gamestates:
             case NEXT_ROUND: this.roundManager.nextPlayer(); break;
             case SHOW_MENU: this.gameMapUI.setCurrentlyPlaying(false); break;
-            case HIDE_MENU: this.gameMapUI.setCurrentlyPlaying(true); break;
+            case HIDE_MENU: this.gameMapUI.setCurrentlyPlaying(true);  break;
             case SHOW_WINLOSE: this.gameMapUI.setCurrentlyPlaying(false); break;
             case HIDE_WINLOSE: this.gameMapUI.setCurrentlyPlaying(true); break;
             //default: System.out.println("State is unknown!");
@@ -168,6 +169,10 @@ public class GamePanel implements GameScreen {
     private void endGame() {
         this.aiActionDispatcher.abortDispatching();
         gsm.showMenu();
+    }
+
+    public boolean isGamePaused() {
+        return !this.gameMapUI.isCurrentlyPlaying();
     }
 
     public boolean isAIPlaying() {

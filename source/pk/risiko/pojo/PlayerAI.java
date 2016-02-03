@@ -30,6 +30,7 @@ public abstract class PlayerAI extends Player implements AI {
      * @return all empty territories in the current GameMap
      */
     protected List<Territory> getAllEmptyTerritories() {
+        System.out.println("DEBUG:");
         return gameMap.getTerritories().stream().filter(t -> t.getOwner()==null).collect(Collectors.toList());
     }
 

@@ -26,10 +26,10 @@ public class RoundManager {
 
     private final AsyncAIActionDispatcher aiDispatcher;
 
-    public RoundManager(List<Player> players,GameMap map,AsyncAIActionDispatcher aiDispatcher) {
+    public RoundManager(List<Player> players,GameMap map,AsyncAIActionDispatcher aiDispatcher,boolean loaded) {
         this.players.addAll(players);
         this.gameMap = map;
-        this.currentGameState = GameState.SET_UNIT;
+        this.currentGameState = loaded?GameState.REINFORCE_UNITS:GameState.SET_UNIT;
         this.aiDispatcher = aiDispatcher;
         lastAction = "Game hast started ... ";
     }

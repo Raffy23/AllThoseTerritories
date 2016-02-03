@@ -1,6 +1,7 @@
 package pk.risiko.util;
 
 import pk.risiko.pojo.TaskFinishedListener;
+import pk.risiko.ui.screens.GamePanel;
 
 /**
  * Created by
@@ -12,10 +13,24 @@ public class AsyncRoundListener implements TaskFinishedListener {
 
     private RoundManager rm;
     private AsyncAIActionDispatcher aiActionDispatcher;
+    private GamePanel panel;
+
+    public AsyncRoundListener(GamePanel p) {
+        this.panel = p;
+    }
 
     @Override
     public void taskFinished() {
-        if( this.rm.isOnePlayerLeft() ) Thread.currentThread().interrupt(); //kill myself
+
+        while( panel.isGamePaused() )
+            try {
+                Thread.sleep(100);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+                Thread.currentThread().interrupt();
+            }
+
+        if( this.rm.isOnePlayerLeft() || panel.isGamePaused() ) Thread.currentThread().interrupt();
         else this.rm.nextPlayer();
     }
 
