@@ -5,6 +5,7 @@ import pk.risiko.pojo.GameMap;
 import pk.risiko.pojo.Player;
 import pk.risiko.pojo.RandomAI;
 import pk.risiko.ui.GameWindow;
+import pk.risiko.ui.elements.DefaultDesigns;
 import pk.risiko.ui.elements.GameButton;
 import pk.risiko.ui.elements.PlayerConfigElement;
 import pk.risiko.ui.listener.MouseClickedListener;
@@ -78,7 +79,7 @@ public class NewGamePanel implements GameScreen {
         this.player4 = new PlayerConfigElement(115,410,"Player 4",new Color(75,75,25,200));
 
         /* load font */
-        this.headlineFont = FontLoader.loadFont(MainMenuPanel.HEADLINE_FONT,MainMenuPanel.HEADLINE_FONT_SIZE);
+        this.headlineFont = FontLoader.loadFont(DefaultDesigns.HEADLINE_FONT,MainMenuPanel.HEADLINE_FONT_SIZE);
 
         /* register event listener */
         this.dispatcher.registerListener(beginGameBtn);

@@ -6,9 +6,12 @@ import pk.risiko.pojo.GameMap;
 import pk.risiko.pojo.GameScreenType;
 import pk.risiko.pojo.Player;
 import pk.risiko.pojo.RandomAI;
+import pk.risiko.pojo.SaveGameContent;
+import pk.risiko.ui.elements.SaveGameUIRow;
 import pk.risiko.ui.screens.GamePanel;
 import pk.risiko.ui.screens.MainMenuPanel;
 import pk.risiko.ui.screens.NewGamePanel;
+import pk.risiko.ui.screens.SaveGamePanel;
 import pk.risiko.util.SettingsProvider;
 
 import java.awt.Color;
@@ -27,28 +30,34 @@ public class MainWindow extends GameWindow {
     private final MainMenuPanel gameMenu;
     private final NewGamePanel newGameMenu;
     private final MapFileReader mapFileReader;
+    private final SaveGamePanel saveGamePanel;
 
     /**
      * Constructs a Window with a certain size.
      * (Size is fixed by the Game)
-     * #setVisible must be called explicitly to show the window!
+     * #{setVisible} must be called explicitly to show the window!
      */
     public MainWindow() {
-        //TODO: Map should not be placed here somewhere later
         super(SettingsProvider.getInstance().getFPS());
         mapFileReader = new MapFileReader(SettingsProvider.getInstance().getMapDirectoryPath());
 
         /* initialize components */
         this.gameMenu = new MainMenuPanel(this.getWidth(),this.getHeight());
         this.newGameMenu = new NewGamePanel(mapFileReader);
+        this.saveGamePanel = new SaveGamePanel();
+
+        /* initialize SaveGamePanel */
+        this.saveGamePanel.registerLoadGameListener((btn) -> this.loadGame(((SaveGameUIRow)btn).getSaveGame()));
+        this.saveGamePanel.getBackToMenuBtn().setListener((btn) -> getGameScreenManager().showMenu());
 
         /* register components */
         this.getGameScreenManager().addScreen(GameScreenType.START_MENU_SCREEN, this.gameMenu);
         this.getGameScreenManager().addScreen(GameScreenType.NEW_GAME_SCREEN,this.newGameMenu);
+        this.getGameScreenManager().addScreen(GameScreenType.SAVE_LOAD_GAME_SCREEN,this.saveGamePanel);
 
         /* setup menu listeners */
         this.gameMenu.getExitGame().setListener((what) -> this.exitGame());
-        this.gameMenu.getLoadGame().setListener((what) -> this.loadGame());
+        this.gameMenu.getLoadGame().setListener((what) -> this.getGameScreenManager().showScreen(GameScreenType.SAVE_LOAD_GAME_SCREEN));
         this.gameMenu.getNewGame().setListener((what) -> this.showNewGameScreen());
 
         /* setup new game menu listeners */
@@ -70,14 +79,14 @@ public class MainWindow extends GameWindow {
         }
     }
 
-    private void loadGame() {
+    private void loadGame(SaveGameContent content) {
         final SaveGameDAO dao = new SaveGameDAO(SettingsProvider.getInstance().getSavefileDirectory());
-        if( dao.getSaveGames().containsKey(0) ) {
-            GameMap map = dao.loadSaveGame(0);
-            List<Player> p = dao.getSaveGames().get(0).getPlayerList();
+        if( content.getSlot() >= 0 ) {
+            GameMap map = dao.loadSaveGame(content.getSlot());
+            List<Player> p = content.getPlayerList();
             this.startNewGame(map,p);
         } else {
-            System.err.println("No Savegame in slot 0!");
+            System.err.println("Unable to load EMPTY savegame!");
         }
     }
 

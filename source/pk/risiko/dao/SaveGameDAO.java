@@ -55,7 +55,8 @@ public class SaveGameDAO {
                                                              ,saveGame.getProperty("name")
                                                              ,saveGame.getProperty("mapName")
                                                              ,this.parsePlayers(saveGame)
-                                                             ,Integer.valueOf(saveGame.getProperty("rounds"))));
+                                                             ,Integer.valueOf(saveGame.getProperty("rounds"))
+                                                             ,Integer.valueOf(file.getName().charAt(4)-'0')));
             } catch (IOException e) {
                 assert false : "Unable to load SaveGame File! ("+file.getName()+")";
                 e.printStackTrace();

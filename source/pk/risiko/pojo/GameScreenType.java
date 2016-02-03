@@ -21,5 +21,7 @@ public enum GameScreenType {
      * This screen represents the menu that is shown if the user does want to start
      * a new game
      */
-    NEW_GAME_SCREEN
+    NEW_GAME_SCREEN,
+
+    SAVE_LOAD_GAME_SCREEN
 }

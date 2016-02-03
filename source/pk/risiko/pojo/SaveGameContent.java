@@ -16,13 +16,15 @@ public class SaveGameContent {
     private final String mapName;
     private final List<Player> playerList;
     private final int rounds;
+    private final int slot;
 
-    public SaveGameContent(File savFile, String name, String mapName, List<Player> playerList,int rounds) {
+    public SaveGameContent(File savFile, String name, String mapName, List<Player> playerList,int rounds,int slot) {
         this.savFile = savFile;
         this.name = name;
         this.mapName = mapName;
         this.playerList = playerList;
         this.rounds = rounds;
+        this.slot = slot;
     }
 
     public File getSavFile() {
@@ -43,5 +45,9 @@ public class SaveGameContent {
 
     public int getRounds() {
         return rounds;
+    }
+
+    public int getSlot() {
+        return slot;
     }
 }

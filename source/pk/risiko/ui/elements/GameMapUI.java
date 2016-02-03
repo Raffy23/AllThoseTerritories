@@ -80,7 +80,7 @@ public class GameMapUI extends UIElement {
     public void paint(Graphics2D g) {
         Graphics2D g2dCon = (Graphics2D) g.create(); //Clone for clipping
         g2dCon.clip(this.waterArea); //clip area to water only
-        this.connections.forEach(connection -> connection.paint(g2dCon));
+        this.connections.forEach(connection -> connection.paint(g));
         g2dCon.dispose(); //get rid of the new graphics object -> not needed anymore
 
         //paint the Territories (GameMap)

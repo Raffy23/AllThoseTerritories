@@ -1,5 +1,6 @@
 package pk.risiko.ui.screens;
 
+import pk.risiko.ui.elements.DefaultDesigns;
 import pk.risiko.ui.elements.GameButton;
 import pk.risiko.ui.listener.SwingMouseEventDispatcher;
 import pk.risiko.util.FontLoader;
@@ -18,7 +19,6 @@ import java.awt.geom.Rectangle2D;
 public class MainMenuPanel implements GameScreen {
 
     public static final String TITLE = "All those Territories";
-    public static final String HEADLINE_FONT = "aniron/anicb___.ttf";
     public static final float HEADLINE_FONT_SIZE = 64.5f;
     public static final Color HEADLINE_COLOR = new Color(14, 7, 4);
 
@@ -59,7 +59,7 @@ public class MainMenuPanel implements GameScreen {
         this.dispatcher.registerListener(this.loadGame);
         this.dispatcher.registerListener(this.exitGame);
 
-        this.headlineFont = FontLoader.loadFont(HEADLINE_FONT,HEADLINE_FONT_SIZE);
+        this.headlineFont = FontLoader.loadFont(DefaultDesigns.HEADLINE_FONT,HEADLINE_FONT_SIZE);
     }
 
     @Override
