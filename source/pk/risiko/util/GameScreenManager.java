@@ -65,4 +65,8 @@ public class GameScreenManager {
         return this.screens.get(this.activeScreen);
     }
 
+    public GameScreen getScreen(GameScreenType type) {
+        return screens.get(type);
+    }
+
 }

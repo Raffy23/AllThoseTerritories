@@ -24,16 +24,20 @@ public class SaveGameUIRow extends UIElement implements MouseClickedListener {
     private final GameButton saveGameBtn;
 
     private boolean hideLoadBtn;
+    private boolean hideSaveBtn;
     private SaveGameContent saveGame;
+    private int visibleSlot;
 
     private MouseClickedListener saveGameListener;
     private MouseClickedListener loadBtnListener;
     private MouseClickedListener saveBtnListener;
 
 
-    public SaveGameUIRow(int x,int y,SaveGameContent saveGame,boolean hideLoadBtn) {
+    public SaveGameUIRow(int x,int y,SaveGameContent saveGame,boolean hideLoadBtn,boolean hideSaveBtn,int visibleSlot) {
         super(new Rectangle(x,y,355,DefaultDesigns.BUTTON_HEIGHT));
         this.hideLoadBtn = hideLoadBtn;
+        this.hideSaveBtn = hideSaveBtn;
+        this.visibleSlot = visibleSlot;
 
         this.saveGameBtn = new GameButton(new Rectangle2D.Double(x,y,245,DefaultDesigns.BUTTON_HEIGHT),saveGame.getName());
         this.saveBtn = new GameButton(new Rectangle2D.Double(x+255,y,90,DefaultDesigns.BUTTON_HEIGHT),"SAVE");
@@ -56,29 +60,43 @@ public class SaveGameUIRow extends UIElement implements MouseClickedListener {
 
     @Override
     public void paint(Graphics2D g) {
-        if( !hideLoadBtn )
+        if( !hideLoadBtn && this.saveGame.getSlot() != -1 )
             this.loadBtn.paint(g);
 
-        this.saveBtn.paint(g);
+        if( !hideSaveBtn )
+            this.saveBtn.paint(g);
+
         this.saveGameBtn.paint(g);
     }
 
     @Override
     public void mouseClicked(MouseEvent e) {
-        if( !hideLoadBtn )
+        if( !hideLoadBtn && this.saveGame.getSlot() != -1 )
             this.loadBtn.mouseClicked(e);
 
-        this.saveBtn.mouseClicked(e);
+        if( !hideSaveBtn )
+            this.saveBtn.mouseClicked(e);
+
         this.saveGameBtn.mouseClicked(e);
     }
 
     @Override
     public void mouseMoved(MouseEvent e) {
-        if( !hideLoadBtn )
+        if( !hideLoadBtn && this.saveGame.getSlot() != -1 )
             this.loadBtn.mouseMoved(e);
 
-        this.saveBtn.mouseMoved(e);
+        if( !hideSaveBtn )
+            this.saveBtn.mouseMoved(e);
+
         this.saveGameBtn.mouseMoved(e);
+    }
+
+    public void setHideLoadBtn(boolean hideLoadBtn) {
+        this.hideLoadBtn = hideLoadBtn;
+    }
+
+    public void setHideSaveBtn(boolean hideSaveBtn) {
+        this.hideSaveBtn = hideSaveBtn;
     }
 
     @Override
@@ -98,8 +116,12 @@ public class SaveGameUIRow extends UIElement implements MouseClickedListener {
 
     @Override
     public void mouseClicked(MouseEventHandler what) {
-        if( this.loadBtnListener != null ) loadBtnListener.mouseClicked(this);
-        if( this.saveGameListener != null ) saveGameListener.mouseClicked(this);
+        if( this.loadBtnListener != null && !hideLoadBtn) loadBtnListener.mouseClicked(this);
+        if( this.saveGameListener != null && !hideSaveBtn) saveGameListener.mouseClicked(this);
         if( this.saveBtnListener != null ) saveBtnListener.mouseClicked(this);
+    }
+
+    public int getVisibleSlot() {
+        return visibleSlot;
     }
 }

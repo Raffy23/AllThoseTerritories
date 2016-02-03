@@ -57,7 +57,10 @@ public class MainWindow extends GameWindow {
 
         /* setup menu listeners */
         this.gameMenu.getExitGame().setListener((what) -> this.exitGame());
-        this.gameMenu.getLoadGame().setListener((what) -> this.getGameScreenManager().showScreen(GameScreenType.SAVE_LOAD_GAME_SCREEN));
+        this.gameMenu.getLoadGame().setListener((what) -> {
+            this.saveGamePanel.loadGameOnly();
+            this.getGameScreenManager().showScreen(GameScreenType.SAVE_LOAD_GAME_SCREEN);
+        });
         this.gameMenu.getNewGame().setListener((what) -> this.showNewGameScreen());
 
         /* setup new game menu listeners */

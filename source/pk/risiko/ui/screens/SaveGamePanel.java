@@ -29,7 +29,6 @@ public class SaveGamePanel implements GameScreen {
     private static final int SAVE_GAME_ROWS = 5;
     private static final SaveGameContent EMPTY_SAVE_GAME = new SaveGameContent(null,"EMPTY","",new ArrayList<>(),0,-1);
 
-    private boolean hideSaveButton = false;
     private final SaveGameUIRow[] saveGameUIRows = new SaveGameUIRow[SAVE_GAME_ROWS];
     private final GameButton backToMenuBtn;
 
@@ -41,7 +40,7 @@ public class SaveGamePanel implements GameScreen {
         for(int i=0;i<SAVE_GAME_ROWS;i++) {
             saveGameUIRows[i] = new SaveGameUIRow(GameWindow.WINDOW_WIDTH / 2 - SaveGameUIRow.ELEMENT_WIDTH / 2
                     , i * (20 + DefaultDesigns.BUTTON_HEIGHT) + X_OFFSET, EMPTY_SAVE_GAME
-                    , false);
+                    , false, true,i);
             this.dispatcher.registerListener(saveGameUIRows[i]);
         }
 
@@ -52,6 +51,7 @@ public class SaveGamePanel implements GameScreen {
         this.dispatcher.registerListener(this.backToMenuBtn);
 
         this.headlineFont = FontLoader.loadFont(DefaultDesigns.HEADLINE_FONT,MainMenuPanel.HEADLINE_FONT_SIZE);
+        this.loadGameOnly();
     }
 
 
@@ -91,5 +91,22 @@ public class SaveGamePanel implements GameScreen {
 
     public void registerLoadGameListener(MouseClickedListener l) {
         for(int i=0;i<SAVE_GAME_ROWS;i++) saveGameUIRows[i].setLoadBtnListener(l);
+    }
+    public void registerSaveGameListener(MouseClickedListener l) {
+        for(int i=0;i<SAVE_GAME_ROWS;i++) saveGameUIRows[i].setSaveGameListener(l);
+    }
+
+    public void saveGameOnly() {
+        for(int i=0;i<SAVE_GAME_ROWS;i++) {
+            saveGameUIRows[i].setHideLoadBtn(true);
+            saveGameUIRows[i].setHideSaveBtn(false);
+        }
+    }
+
+    public void loadGameOnly() {
+        for(int i=0;i<SAVE_GAME_ROWS;i++) {
+            saveGameUIRows[i].setHideSaveBtn(true);
+            saveGameUIRows[i].setHideLoadBtn(false);
+        }
     }
 }

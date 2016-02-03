@@ -3,9 +3,11 @@ package pk.risiko.ui.screens;
 import pk.risiko.dao.SaveGameDAO;
 import pk.risiko.pojo.AI;
 import pk.risiko.pojo.GameMap;
+import pk.risiko.pojo.GameScreenType;
 import pk.risiko.pojo.GameState;
 import pk.risiko.pojo.Player;
 import pk.risiko.ui.elements.GameMapUI;
+import pk.risiko.ui.elements.SaveGameUIRow;
 import pk.risiko.ui.listener.SwingMouseEventDispatcher;
 import pk.risiko.util.AsyncAIActionDispatcher;
 import pk.risiko.util.AsyncRoundListener;
@@ -13,6 +15,7 @@ import pk.risiko.util.GameScreenManager;
 import pk.risiko.util.RoundManager;
 import pk.risiko.util.SettingsProvider;
 
+import javax.swing.JOptionPane;
 import java.awt.AlphaComposite;
 import java.awt.Color;
 import java.awt.Component;
@@ -86,8 +89,24 @@ public class GamePanel implements GameScreen {
         //Init Button Listener in Menu:
         this.userInterface.getMenu().setExitGameListener((btn) -> this.endGame());
         this.userInterface.getMenu().setSaveGameListener((btn) -> {
-            final SaveGameDAO dao = new SaveGameDAO(SettingsProvider.getInstance().getSavefileDirectory());
-            dao.saveGameToSlot(gameMap,playerList,"==_TEST_SAVE_==",this.roundManager.getCurrentRound(),0);
+            gameMapUI.setCurrentlyPlaying(false);
+
+            final SaveGamePanel slpanel = (SaveGamePanel) gameScreenManager.getScreen(GameScreenType.SAVE_LOAD_GAME_SCREEN);
+            slpanel.saveGameOnly();
+            slpanel.registerSaveGameListener((saveBtn) -> {
+                final int slot = ((SaveGameUIRow)saveBtn).getVisibleSlot();
+                final SaveGameDAO dao = new SaveGameDAO(SettingsProvider.getInstance().getSavefileDirectory());
+
+                String saveGameName = JOptionPane.showInputDialog("Type in a name for the SaveGame: ");
+                if( saveGameName == null ) saveGameName = "Slot " + slot;
+
+                dao.saveGameToSlot(gameMap,playerList,saveGameName,this.roundManager.getCurrentRound(),slot);
+
+                gameScreenManager.showScreen(GameScreenType.GAME_SCREEN);
+                //gameMapUI.setCurrentlyPlaying(true); //player must close menu!
+            });
+
+            gameScreenManager.showScreen(GameScreenType.SAVE_LOAD_GAME_SCREEN);
         });
 
         this.userInterface.getWinLoseDialog().setExitToMenuListener((btn) -> this.endGame());
@@ -111,10 +130,6 @@ public class GamePanel implements GameScreen {
             case HIDE_WINLOSE: this.gameMapUI.setCurrentlyPlaying(true); break;
             //default: System.out.println("State is unknown!");
         }
-    }
-
-    public Player getWinningPlayer() {
-        return null; //TODO implement ...
     }
 
     public int getRounds() {
