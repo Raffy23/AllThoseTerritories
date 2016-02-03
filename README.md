@@ -13,7 +13,9 @@ Für das Abschlussprojekt für Programmkonstruktion ist dieses nachzubauen.
     Eigentlich fertig ;) 
 
 ## Ziele
-- [ ] Spielbares Spiel
+- [x] Spielbares Spiel
 - [x] Graphisch etwas aufwändiger
 - [x] Funktionierende AI
-- [ ] Speichern / Laden
+- [x] Speichern / Laden
+
+Alle Ziele errichet yay!
