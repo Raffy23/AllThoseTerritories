@@ -58,7 +58,7 @@ public class GamePanel implements GameScreen {
 
         //lazy init round listener
         this.roundListener.setRm(this.roundManager);
-        this.roundListener.setAiActionDispatcher(this.aiActionDispatcher);
+        //this.roundListener.setAiActionDispatcher(this.aiActionDispatcher);
 
         //Init mouse handler
         this.mouseHandler.registerListener(this.userInterface);

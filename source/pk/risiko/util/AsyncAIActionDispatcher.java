@@ -11,9 +11,10 @@ import java.util.List;
 import java.util.Vector;
 
 /**
- * Created by
+ * This class is responsible for dispatching the AI actions
+ * in a speed that a human can see what the AI is doing
  *
- * @author Raphael
+ * @author Raphael Ludwig
  * @version 28.01.2016
  */
 public class AsyncAIActionDispatcher {
@@ -22,8 +23,10 @@ public class AsyncAIActionDispatcher {
     private final static int CLICK_TIMEOUT = 800; //in ms
     private final static int MOUSE_PRESSED_TIMEOUT = 2; //in ms
 
+    /** Background Thread whi does the actual work **/
     private Thread worker;
 
+    /** This Listener is informed after the the taskqueue is empty **/
     private final TaskFinishedListener finListener;
     private final Vector<Tripel<AI.AiTroupState,Territory,Territory>> actions = new Vector<>();
     private final Vector<String> verboseActions = new Vector<>();

@@ -103,10 +103,16 @@ public class SettingsProvider {
         return this.parser;
     }
 
+    /**
+     * @return the path in which the savegame files are stored
+     */
     public String getSavefileDirectory() {
         return settings.getProperty("saves");
     }
 
+    /**
+     * @return the internal stored settings
+     */
     public Properties getSettings() {
         return this.settings;
     }

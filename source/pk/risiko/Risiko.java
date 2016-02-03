@@ -23,9 +23,18 @@ import java.util.Properties;
  */
 public class Risiko {
 
+    /** This is the Path to the global Settingsfile **/
     private static final String SETTINGS_FILE = "./settings.properties";
+    /** The MainMwindow for the Game is stored here **/
     private final MainWindow mainWindow;
 
+    /***
+     * This is the Entrypoint of the Game from the Normal Commandline.
+     * If the Game is loaded by any loader make sure that this Method is called
+     * instead of the Constructor, one or more things may not be initialized!
+     *
+     * @param args command line arguments
+     */
     public static void main(String[] args) {
         //Todo: remove this skip menu hack when not needed:
         List<String> argvs = new ArrayList<>(Arrays.asList(args));
@@ -58,8 +67,10 @@ public class Risiko {
         EventQueue.invokeLater(Risiko::new);
     }
 
-
-    public Risiko() {
+    /**
+     * The Cronstructor which sets up the MainWindow and starts to display stuff
+     */
+    private Risiko() {
         this.mainWindow = new MainWindow();
 
         if( !SettingsProvider.getInstance().getCommandLine().isSkipMenu() )
