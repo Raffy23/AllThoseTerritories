@@ -2,6 +2,7 @@ package pk.risiko.ui.screens;
 
 import pk.risiko.pojo.GameState;
 import pk.risiko.pojo.MouseState;
+import pk.risiko.pojo.PlayerAI;
 import pk.risiko.pojo.Territory;
 import pk.risiko.ui.Drawable;
 import pk.risiko.ui.GameWindow;
@@ -62,6 +63,11 @@ public class UserInterface extends MouseAdapter implements Drawable, MouseClicke
 
         if (!this.menu.isActive())
             master.changeState(GameState.HIDE_MENU);
+        if (this.master.isAIPlaying())
+            this.nextButton.setActive(false);
+        else
+            this.nextButton.setActive(true);
+
         g2d.setColor(BACKGROUND_COLOR);
         g2d.fillRect(0,0, GameWindow.WINDOW_WIDTH,BAR_HEIGHT);
         g2d.setColor(Color.WHITE);

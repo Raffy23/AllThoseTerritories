@@ -32,6 +32,7 @@ public class GameButton extends UIElement {
     private int fontSize = 12;
 
     private Image defaultImage=null;
+    private boolean active=true;
 
     /**
      * To construct a game Button a shape must be give (it can have any closed shape)
@@ -71,9 +72,6 @@ public class GameButton extends UIElement {
                     (int) this.getElementShape().getBounds().getY(),
                     (int) this.getElementShape().getBounds().getWidth(),
                     (int) this.getElementShape().getBounds().getHeight(), null);
-
-
-            System.out.println(this.getElementShape().getBounds().getWidth());
         }
         else
         {
@@ -160,5 +158,13 @@ public class GameButton extends UIElement {
      */
     public void setImage(Image image) {
         this.defaultImage=image;
+    }
+
+    public void setActive(boolean active) {
+        this.active = active;
+        if (active)
+            this.text=">>";
+        else
+            this.text="X";
     }
 }

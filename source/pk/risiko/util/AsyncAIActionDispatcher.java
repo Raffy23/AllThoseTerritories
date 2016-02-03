@@ -18,8 +18,8 @@ import java.util.Vector;
  */
 public class AsyncAIActionDispatcher {
 
-    private final static int ACTION_TIMEOUT = 20; //in ms
-    private final static int CLICK_TIMEOUT = 80; //in ms
+    private final static int ACTION_TIMEOUT = 200; //in ms
+    private final static int CLICK_TIMEOUT = 800; //in ms
     private final static int MOUSE_PRESSED_TIMEOUT = 2; //in ms
 
     private Thread worker;
