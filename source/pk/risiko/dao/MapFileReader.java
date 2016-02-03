@@ -19,27 +19,36 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * This class does read the given Mapfiles for the Game.
+ * This class reads all the given Mapfiles for the Game.
+ * The files are found in a specified directory
  *
  * @author Raphael Ludwig, Wilma Weixelbaum
  * @version 27.12.2015
  */
 public class MapFileReader {
 
-    /*
-    * TODO: Implement MapFileReader
-    *   > store assets directory / map file directory
-    *   > public GameMap readMap(String name) throws MapFileCorruptedException {} ?
-    * */
+    /** The name of the directory, that holds the .map files **/
     private String directory;
+
+    /** This list represents all the territories, that are read from the selected .map file **/
     private Map<String, Territory> territories = new HashMap<String,Territory>();
+
+    /** This list represents all the continents, that are read from the selected .map file **/
     private ArrayList<Continent> continentList = new ArrayList<Continent>();
 
+    /**
+     * For the creation of the component the directory must be known
+     * @param d is the name of the directory
+     */
     public MapFileReader(String d)
     {
         directory=d;
     }
 
+    /**
+     * This Method extracts the Name of a Territory
+     * @param arr is a line from .map file, split by spaces
+     */
     private String getName(String[] arr)
     {
         String s="";
@@ -50,6 +59,11 @@ public class MapFileReader {
         }
         return s.trim();
     }
+
+    /**
+     * Returns true if the given String is an Integer
+     * @param s
+     */
     private boolean isInteger(String s)
     {
         try {
@@ -60,10 +74,14 @@ public class MapFileReader {
             return false;
         }
     }
+
+    /**
+     * This Method creates a Polygon out of given points in an array
+     * @param arr is a line from .map file, split by spaces
+     */
     private Polygon createPolygon(String[] arr)
     {
         Polygon p = new Polygon();
-
         for (int i = 2; i < arr.length;) {
             if (!isInteger(arr[i]))
                 i++;
@@ -72,9 +90,14 @@ public class MapFileReader {
                 i+=2;
             }
         }
-
         return p;
     }
+
+    /**
+     * This Method reads a .map file
+     * @param name is the name of a file
+     * @return the created GameMap
+     */
     public GameMap readMap(String name)
     {
         /*BUG: multiple map loads produce funny maps, clear map: (why save them?) */
@@ -86,11 +109,8 @@ public class MapFileReader {
         try {
             br = new BufferedReader(new FileReader(directory+name));
             while ((line=br.readLine()) != null) {
-                //System.out.println(line);
-
                 String[] arr=line.split(" ");
                 String tname=getName(arr);
-
 
                 switch(arr[0])
                 {
@@ -110,7 +130,6 @@ public class MapFileReader {
                     case "neighbors-of":
                         String[] neighborsinfo = tname.split(":");
                         Territory main = territories.get(neighborsinfo[0].trim());
-
 
                         String[] neighbors = neighborsinfo[1].split("-");
 
@@ -135,8 +154,6 @@ public class MapFileReader {
                         continentList.add(continent);
                         break;
                 }
-                //if(tname.equals("GreatBritain"))
-                //    break;
             }
         }
         catch (IOException e) {
@@ -165,6 +182,10 @@ public class MapFileReader {
         return new GameMap(name, new ArrayList<>(territories.values()), continentList);
     }
 
+    /**
+     * This List reads all the available .map files from the directory
+     * @return a List of mapfilenames
+     */
     public List<String> getAvailableMapFiles() {
         List<String> mapFileNames = new LinkedList<>();
         try {

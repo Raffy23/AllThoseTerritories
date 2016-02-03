@@ -59,6 +59,11 @@ public abstract class PlayerAI extends Player implements AI {
         return territories;
     }
 
+    /**
+     * attacks a territory or moves units to a given territory
+     * @param targetTerritory is the actions target
+     * @return true if successfully conquered
+     */
     @Override
     public boolean attackOrMove(Territory targetTerritory) {
         targetTerritory.setMouseState(MouseState.R_CLICKED);
@@ -68,7 +73,9 @@ public abstract class PlayerAI extends Player implements AI {
         targetTerritory.setMouseState(MouseState.NORMAL);
         return ret;
     }
-
+    /**
+     * @return true if the PlayerAI can attack
+     */
     public boolean canAttack() {
         return super.attackAvailable;
     }

@@ -10,7 +10,7 @@ import java.awt.Color;
  * Besides that this class does store the name and the reinforcements
  * which the player can set.
  *
- * @author Raphael Ludwig
+ * @author Raphael Ludwig, Wilma Weixelbaum
  * @version 08.01.2016
  */
 public class Player {
@@ -38,11 +38,34 @@ public class Player {
      */
     private Territory currentActiveTerritory;
 
+    /**
+     * once was used to restrict attacks - not needed anymore
+     */
     protected boolean attackAvailable=true;
+
+    /**
+     * This is the territory that units are moved to
+     */
     private Territory receivingTerritory=null;
+
+    /**
+     * This is the territory that units are moved from
+     */
     private Territory sendingTerritory=null;
+
+    /**
+     * This is the last territory that started an attack
+     */
     private Territory fightingTerritory=null;
+
+    /**
+     * This is the last territory, that was conquered by the fightingTerritory
+     */
     private Territory conqueredTerritory=null;
+
+    /**
+     * This holds the number of moved units from the sending to the receiving territory
+     */
     private int moveCount=0;
 
     /**
@@ -89,7 +112,7 @@ public class Player {
 
         //reinforcements by held continents:
         this.gameMap.getContinents().forEach(c -> {
-            if( c.isOpenedByPlayer(this) ) {
+            if( c.isOwnedByPlayer(this) ) {
                 this.reinforcements += c.getValue();
             }
         });
@@ -174,6 +197,11 @@ public class Player {
         }
     }
 
+    /**
+     * This method moves units from the selected Territory or attacks a given territory
+     * @param targetTerritory either receives units or is attacked
+     * @return false if targetTerritory was not conquered
+     */
     public boolean attackOrMove(Territory targetTerritory) {
         if (targetTerritory.getMouseState() == MouseState.R_CLICKED) {
             // attack
@@ -206,12 +234,16 @@ public class Player {
                 targetTerritory.increaseArmy(1);
             }
         }
-
         return false;
     }
+
+    /**
+     * This is a helper method. Units are only moved to
+     * a given territory, if a move action is still possible (one per round)
+     * @param targetTerritory would be the receiving territory
+     */
     private void tryMove(Territory targetTerritory)
     {
-        //System.out.println(this.getName() + " moves 1 army to " + targetTerritory.getName());
         if (this.getCurrentActiveTerritory().getStationedArmies()>1) {
             if (receivingTerritory == null && sendingTerritory == null) {
                 receivingTerritory = targetTerritory;
@@ -234,7 +266,9 @@ public class Player {
         }
     }
 
-
+    /**
+     * This mothod resets all the round-based restrictions
+     */
     public void setNewRoundDefaults()
     {
         this.attackAvailable=true;
@@ -245,8 +279,9 @@ public class Player {
         moveCount=0;
     }
 
-    // returns true if current Player still ownes at least 3 territoroies with at least 1 army
-    // or less than 3 territories with more armies than territories
+    /** @return true if current Player still ownes at least 3 territoroies with at least 1 army
+        or less than 3 territories with more armies than territories
+     **/
     public boolean isAlive() {
         int count = 0;
         int armycount=0;
@@ -260,10 +295,17 @@ public class Player {
         return (count>=3||armycount>count);
     }
 
+    /**
+     * @param map is the new gameMap
+     */
     public void setGameMap(GameMap map) {
         this.gameMap = map;
     }
 
+    /**
+     * @return the current moveCount between the 2 territories,
+     * that are involved in the moving process
+     */
     public int getMoveCount() {
         return moveCount;
     }
