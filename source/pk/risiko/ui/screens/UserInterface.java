@@ -27,23 +27,54 @@ import java.util.List;
 
 /**
  * Class handles all the Interaction with non MapStuff in the Game
+ * and holds all the UserInterface-relevant objects
  *
- * @author Raphael Ludwig
+ * @author Raphael Ludwig, Wilma Weixelbaum
  * @version 08.01.2016
  */
 public class UserInterface extends MouseAdapter implements Drawable, MouseClickedListener {
 
+    /**
+     * The default BackgroundColor of the Interface
+     */
     private static final Color BACKGROUND_COLOR = new Color(0.15f,0.15f,0.15f,0.65f);
+
+    /**
+     * The default TextColor
+     */
     private static final Color TEXT_COLOR = DefaultDesigns.TEXT_COLOR;
 
+    /**
+     * This is the height of the top bar
+     */
     public static final int BAR_HEIGHT = 26;
 
+    /**
+     * The GamePanel, that holds the UserInterface
+     */
     private final GamePanel master;
 
+    /**
+     * buttons that can be clicked
+     * nextButton is only for human players, that are done with their turn
+     * menuButton is to show the InGameMenu
+     */
     private final GameButton nextButton, menuButton;
+
+    /**
+     * This is the InGameMenu, that can be opened while the game is running
+     */
     private final InGameMenu menu;
+
+    /**
+     * The winLoseDialog is shown, when the game is over
+     */
     private final WinLoseDialog winLoseDialog;
 
+    /**
+     * In order to create the UserInterface, the GamePanel that holds it, must be known
+     * @param masterPanel is the Panel that holds the UserInterface
+     */
     public UserInterface(GamePanel masterPanel) {
         this.master = masterPanel;
 
@@ -120,6 +151,9 @@ public class UserInterface extends MouseAdapter implements Drawable, MouseClicke
             this.winLoseDialog.paint(g2d);
     }
 
+    /**
+     * @return the information string, that is shown in the top bar of the UI
+     */
     private String getGameStateString() {
         switch( this.master.getGameState() ) {
             case ATTACK_OR_MOVE_UNIT: return "Attack or move Units";
@@ -129,6 +163,10 @@ public class UserInterface extends MouseAdapter implements Drawable, MouseClicke
         return "<NONE>";
     }
 
+    /**
+     * If a MouseClick happened on the UserInterface this method is executed
+     * @param what defines the object, that was clicked
+     */
     @Override
     public void mouseClicked(MouseEventHandler what) {
         if( what.equals(this.nextButton) && !this.master.isAIPlaying() &&this.master.getGameState()!=GameState.SET_UNIT&&this.master.getGameState()!=GameState.REINFORCE_UNITS) {
@@ -139,9 +177,13 @@ public class UserInterface extends MouseAdapter implements Drawable, MouseClicke
         }
     }
 
+    /**
+     * this method delegates
+     * the mouseMoved event to all the objects that need to process it
+     */
     @Override
     public void mouseMoved(MouseEvent e) {
-        checkHover(e.getX(), e.getY());
+        checkAttackMoveHover(e.getX(), e.getY());
 
         this.menuButton.mouseMoved(e);
         this.nextButton.mouseMoved(e);
@@ -149,10 +191,17 @@ public class UserInterface extends MouseAdapter implements Drawable, MouseClicke
         this.winLoseDialog.mouseMoved(e);
     }
 
-    private boolean checkHover(int x, int y) {
+    /**
+     * This method sets an Image for the nextRound button,
+     * if the a territory is hovered an it can be attacked from the selected territory
+     * or if this territory could theoretically receive units from the selected territory
+     * @param x is the x coordinate of the Click
+     * @param y is the y coordinate
+     */
+    private void checkAttackMoveHover(int x, int y) {
         if (master.getGameState()!=GameState.ATTACK_OR_MOVE_UNIT||master.getCurrentPlayer().getCurrentActiveTerritory()==null) {
             this.nextButton.setImage(null);
-            return false;
+            return;
         }
         for(Territory t:master.getCurrentPlayer().getCurrentActiveTerritory().getNeighbours())
             if( t.isMouseIn(x,y-BAR_HEIGHT) ) {
@@ -161,12 +210,14 @@ public class UserInterface extends MouseAdapter implements Drawable, MouseClicke
                 }
                 else
                     this.nextButton.setImage(ImageStore.getInstance().getImage("Swords"));
-                return true;
             }
         this.nextButton.setImage(null);
-        return false;
     }
 
+    /**
+     * this method delegates
+     * the click event to all the objects that need to process it
+     */
     @Override
     public void mouseClicked(MouseEvent e) {
         this.menuButton.mouseClicked(e);
@@ -176,10 +227,16 @@ public class UserInterface extends MouseAdapter implements Drawable, MouseClicke
         this.winLoseDialog.mouseClicked(e);
     }
 
+    /**
+     * @return the InGameMenu of the UserInterface
+     */
     public InGameMenu getMenu() {
         return this.menu;
     }
 
+    /**
+     * @return the WinLoseDialog of the UserInterface
+     */
     public WinLoseDialog getWinLoseDialog() {
         return winLoseDialog;
     }

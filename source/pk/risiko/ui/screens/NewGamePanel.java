@@ -23,7 +23,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * This class represents the Menue which is shown after the new game
+ * This class represents the Menu which is shown after the new game
  * button in the MainMenu has been clicked
  *
  * @author Raphael Ludwig
@@ -32,20 +32,47 @@ import java.util.List;
 public class NewGamePanel implements GameScreen {
 
     private static final Color DEFAULT_BACKGROUND_COLOR   = new Color(0.15f,0.15f,0.15f,0.65f);
+
+    /**
+     * The height of the area, that previews the maps
+     * */
     private static final int PREVIEW_MAP_WIDTH = GameWindow.WINDOW_WIDTH /3;
+
+    /**
+     * The width of the area, that previews the maps
+     */
     private static final int PREVIEW_MAP_HEIGHT = GameWindow.WINDOW_HEIGHT /3;
 
     private final SwingMouseEventDispatcher dispatcher = new SwingMouseEventDispatcher();
+
+    /**
+     * To read the mapfiles
+     */
     private final MapFileReader mapFileReader;
 
+    /**
+     * Buttons to start the game and switch between available maps
+     * */
     private final GameButton beginGameBtn,nextMap,prevMap;
+
+    /**
+     * This is to change the representation of the player (Color, name, AI/HUMAN/NOTPLAYING)
+     * */
     private final PlayerConfigElement player1,player2,player3,player4;
+
+    /**
+     * This list holds the available mapFiles that are read by the mapfilereader
+     * */
     private final CyclicList<String> mapFiles = new CyclicList<>();
+
 
     private GameMap currentSelctedMap;
     private BufferedImage gameMapPreview;
     private final Font headlineFont;
 
+    /**
+     * Values for easier placement in the UI
+     */
     private static final int START_BUTTON_W=75*2;
     private static final int START_BUTTON_H=20*2;
     private static final int MAP_BUTTONS_WH= 20*2;
@@ -53,6 +80,12 @@ public class NewGamePanel implements GameScreen {
     private static final int SEGMENT_MIDDLE= GameWindow.WINDOW_WIDTH -PREVIEW_MAP_WIDTH-75;
     private static final int SEGMENT_RIGHT=GameWindow.WINDOW_WIDTH -95+20;
 
+
+    /**
+     * In order to create a NewGamePanel, the mapFileReader must be known
+     * The constructor sets up the whole Panel and places all the buttons and important objects
+     * @param mapFileReader to read the .map files
+     */
     public NewGamePanel(MapFileReader mapFileReader) {
         this.mapFileReader = mapFileReader;
         this.mapFiles.addAll(mapFileReader.getAvailableMapFiles());
@@ -98,11 +131,18 @@ public class NewGamePanel implements GameScreen {
         this.loadMap(this.mapFiles.get(0));
     }
 
+    /**
+     * Load a GameMap
+     * @param name is the name of the file
+     */
     private void loadMap(String name) {
         this.currentSelctedMap = mapFileReader.readMap(name);
         this.drawMapPreview();
     }
 
+    /**
+     * creates an image of the drawn map, that is currently selected
+     */
     private void drawMapPreview() {
         this.gameMapPreview = new BufferedImage(GameWindow.WINDOW_WIDTH
                                                ,GameWindow.WINDOW_HEIGHT
@@ -111,13 +151,13 @@ public class NewGamePanel implements GameScreen {
         Graphics2D g2d = this.gameMapPreview.createGraphics();
         this.currentSelctedMap.getTerritories().forEach(t -> t.paint(g2d));
         g2d.dispose();
-
     }
 
     @Override
     public SwingMouseEventDispatcher getMouseEventDispatcher() {
         return this.dispatcher;
     }
+
 
     @Override
     public void paint(Graphics2D g) {
@@ -163,10 +203,16 @@ public class NewGamePanel implements GameScreen {
         this.beginGameBtn.paint(g);
     }
 
+    /**
+     *  @return the current selected gameMap
+     **/
     public GameMap getSelectedGameMap() {
         return this.currentSelctedMap;
     }
 
+    /**
+     * @return a list of players
+     */
     public List<Player> getPlayers() {
         List<Player> players = new ArrayList<>(4);
 
@@ -196,6 +242,7 @@ public class NewGamePanel implements GameScreen {
     public void registerNewGameListener(MouseClickedListener l) {
         this.beginGameBtn.setListener(l);
     }
+
 
     @Override
     public void shown() {

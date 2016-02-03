@@ -3,6 +3,8 @@ package pk.risiko.ui.elements;
 import java.awt.Color;
 
 /**
+ * This Class holds several default values for UI purposes
+ *
  * Created by Wilma on 28.01.2016.
  */
 public class DefaultDesigns {
