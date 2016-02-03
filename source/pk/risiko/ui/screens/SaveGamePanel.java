@@ -18,6 +18,7 @@ import java.util.ArrayList;
 import java.util.Map;
 
 /**
+ * This Panel graphically represents the screen where the user can choose between save slots
  *
  * @author Raphael Ludwig
  * @version 03.02.2016
@@ -26,31 +27,43 @@ public class SaveGamePanel implements GameScreen {
 
     private final SwingMouseEventDispatcher dispatcher = new SwingMouseEventDispatcher();
 
+    /** Number of slots which are displayed **/
     private static final int SAVE_GAME_ROWS = 5;
+    /** Data which represents an non-valid / empty save slots **/
     private static final SaveGameContent EMPTY_SAVE_GAME = new SaveGameContent(null,"EMPTY","",new ArrayList<>(),0,-1);
 
+    /** the ui elements for the load / save stuff **/
     private final SaveGameUIRow[] saveGameUIRows = new SaveGameUIRow[SAVE_GAME_ROWS];
     private final GameButton backToMenuBtn;
 
     private final Font headlineFont;
 
+    /**
+     * After initialization the data of the slots is not loaded, this is done after every time the
+     * Panel is shown. Also default the view is created so that all save buttons are hidden.
+     */
     public SaveGamePanel() {
         final int X_OFFSET = 230;
 
+        //Create all the Save/Load Buttons
         for(int i=0;i<SAVE_GAME_ROWS;i++) {
             saveGameUIRows[i] = new SaveGameUIRow(GameWindow.WINDOW_WIDTH / 2 - SaveGameUIRow.ELEMENT_WIDTH / 2
-                    , i * (20 + DefaultDesigns.BUTTON_HEIGHT) + X_OFFSET, EMPTY_SAVE_GAME
-                    , false, true,i);
+                                                 , i * (20 + DefaultDesigns.BUTTON_HEIGHT) + X_OFFSET, EMPTY_SAVE_GAME
+                                                 , false, true,i);
             this.dispatcher.registerListener(saveGameUIRows[i]);
         }
 
+        //Create the Back to menu button
         this.backToMenuBtn = new GameButton(new Rectangle2D.Double(15
                                                                   ,GameWindow.WINDOW_HEIGHT-95
                                                                   ,100
                                                                   ,35),"Back to Menu");
         this.dispatcher.registerListener(this.backToMenuBtn);
 
+
+        //set headline front (like mainmenu)
         this.headlineFont = FontLoader.loadFont(DefaultDesigns.HEADLINE_FONT,MainMenuPanel.HEADLINE_FONT_SIZE);
+        //default the menu allows only loading
         this.loadGameOnly();
     }
 
@@ -60,6 +73,9 @@ public class SaveGamePanel implements GameScreen {
         return this.dispatcher;
     }
 
+    /**
+     * After the screen is shown the meta data of all saves is loaded again
+     */
     @Override
     public void shown() {
         final SaveGameDAO dao = new SaveGameDAO(SettingsProvider.getInstance().getSavefileDirectory());
@@ -85,17 +101,33 @@ public class SaveGamePanel implements GameScreen {
         this.backToMenuBtn.paint(g);
     }
 
+    /**
+     * @return the button which is responsible to go back to the menu
+     */
     public GameButton getBackToMenuBtn() {
         return this.backToMenuBtn;
     }
 
+    /**
+     * Registers the listener to all load buttons, these can be identified by the data in the SaveGameContent Data
+     * @param l a listener
+     */
     public void registerLoadGameListener(MouseClickedListener l) {
         for(int i=0;i<SAVE_GAME_ROWS;i++) saveGameUIRows[i].setLoadBtnListener(l);
     }
+
+    /**
+     * Registers the listener to all save buttons, these can be identified by the data in the SaveGameContent Data
+     * @param l a listener
+     */
     public void registerSaveGameListener(MouseClickedListener l) {
         for(int i=0;i<SAVE_GAME_ROWS;i++) saveGameUIRows[i].setSaveGameListener(l);
     }
 
+    /**
+     * Hides all the Load Buttons in the screen
+     * unhides all the save buttons in the screen if hidden
+     */
     public void saveGameOnly() {
         for(int i=0;i<SAVE_GAME_ROWS;i++) {
             saveGameUIRows[i].setHideLoadBtn(true);
@@ -103,6 +135,10 @@ public class SaveGamePanel implements GameScreen {
         }
     }
 
+    /**
+     * Hides all the Save Buttons in the screen
+     * Unhides all the Load Buttons if hidden
+     */
     public void loadGameOnly() {
         for(int i=0;i<SAVE_GAME_ROWS;i++) {
             saveGameUIRows[i].setHideSaveBtn(true);

@@ -32,7 +32,7 @@ public class AsyncAIActionDispatcher {
     private final Vector<String> verboseActions = new Vector<>();
 
     /**
-     * This class does handle the logic and wotk in the run Method:
+     * This class does handle the logic and work in the run Method:
      */
     private final Runnable dispatcher = new Runnable() {
         @Override

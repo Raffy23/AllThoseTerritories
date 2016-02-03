@@ -10,7 +10,8 @@ import java.awt.event.MouseEvent;
 import java.awt.geom.Rectangle2D;
 
 /**
- *
+ * Graphical Object which represents the 3 buttons that are viewed
+ * at the GameSavePanel
  *
  * @author Raphael ludwig
  * @version 03.02.2016
