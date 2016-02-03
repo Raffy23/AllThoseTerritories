@@ -2,6 +2,7 @@ package pk.risiko.ui.screens;
 
 import pk.risiko.pojo.GameState;
 import pk.risiko.pojo.MouseState;
+import pk.risiko.pojo.Territory;
 import pk.risiko.ui.Drawable;
 import pk.risiko.ui.GameWindow;
 import pk.risiko.ui.MouseEventHandler;
@@ -10,13 +11,18 @@ import pk.risiko.ui.elements.GameButton;
 import pk.risiko.ui.elements.InGameMenu;
 import pk.risiko.ui.elements.WinLoseDialog;
 import pk.risiko.ui.listener.MouseClickedListener;
+import pk.risiko.util.ImageStore;
+import pk.risiko.util.SettingsProvider;
 
+import javax.swing.*;
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.geom.Ellipse2D;
 import java.awt.geom.Rectangle2D;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Class handles all the Interaction with non MapStuff in the Game
@@ -53,6 +59,9 @@ public class UserInterface extends MouseAdapter implements Drawable, MouseClicke
 
     @Override
     public void paint(Graphics2D g2d) {
+
+        if (!this.menu.isActive())
+            master.changeState(GameState.HIDE_MENU);
         g2d.setColor(BACKGROUND_COLOR);
         g2d.fillRect(0,0, GameWindow.WINDOW_WIDTH,BAR_HEIGHT);
         g2d.setColor(Color.WHITE);
@@ -71,8 +80,6 @@ public class UserInterface extends MouseAdapter implements Drawable, MouseClicke
                 case SET_UNIT:
                     break;
             }
-        } else {
-
         }
 
         final int headStatusLength = g2d.getFontMetrics().stringWidth("Player: ");
@@ -128,10 +135,28 @@ public class UserInterface extends MouseAdapter implements Drawable, MouseClicke
 
     @Override
     public void mouseMoved(MouseEvent e) {
+        checkHover(e.getX(), e.getY());
+
         this.menuButton.mouseMoved(e);
         this.nextButton.mouseMoved(e);
         this.menu.mouseMoved(e);
         this.winLoseDialog.mouseMoved(e);
+    }
+
+    private boolean checkHover(int x, int y) {
+        if (master.getGameState()!=GameState.ATTACK_OR_MOVE_UNIT||master.getCurrentPlayer().getCurrentActiveTerritory()==null)
+            return false;
+        for(Territory t:master.getCurrentPlayer().getCurrentActiveTerritory().getNeighbours())
+            if( t.isMouseIn(x,y-BAR_HEIGHT) ) {
+                if (t.getOwner()==master.getCurrentPlayer()) {
+                    this.nextButton.setImage(ImageStore.getInstance().getImage("Shield"));
+                }
+                else
+                    this.nextButton.setImage(ImageStore.getInstance().getImage("Swords"));
+                return true;
+            }
+        this.nextButton.setImage(null);
+        return false;
     }
 
     @Override

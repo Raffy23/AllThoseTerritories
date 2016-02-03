@@ -2,10 +2,10 @@ package pk.risiko.ui.elements;
 
 import pk.risiko.ui.listener.MouseClickedListener;
 
-import java.awt.Color;
-import java.awt.Font;
-import java.awt.Graphics2D;
-import java.awt.Shape;
+import javax.accessibility.AccessibleContext;
+import javax.swing.*;
+import javax.swing.plaf.UIResource;
+import java.awt.*;
 
 /**
  * This Element is simply a Button which can be drawn to the Screen,
@@ -31,6 +31,8 @@ public class GameButton extends UIElement {
     /** The size of the font of the button text **/
     private int fontSize = 12;
 
+    private Image defaultImage=null;
+
     /**
      * To construct a game Button a shape must be give (it can have any closed shape)
      *
@@ -47,21 +49,42 @@ public class GameButton extends UIElement {
         g2d.setColor(backgroundColor);
         g2d.fill(this.getElementShape());
 
+        double radiusX = this.getElementShape().getBounds2D().getWidth()/2;
+        double radiusY = this.getElementShape().getBounds2D().getHeight()/2;
+
+        double diagonalX=Math.sqrt(radiusX*radiusX + radiusX*radiusX)-radiusX;
+        //double a = diagonalX/Math.sqrt(2);
+        int a = (int) (diagonalX/Math.sqrt(2));
+        double diagonalY=Math.sqrt(radiusY*radiusY + radiusY*radiusY)-radiusY;
+        //double b = diagonalY/Math.sqrt(2);
+        int b = (int)(diagonalY/Math.sqrt(2));
+
+        double circleX= this.getElementShape().getBounds2D().getX() + a;
+        double circleY= this.getElementShape().getBounds2D().getY() + b;
+
         g2d.setColor(borderColor);
         g2d.draw(this.getElementShape());
 
-        final Font oldFont = g2d.getFont();
-        g2d.setFont(oldFont.deriveFont((float)this.fontSize));
+        if(defaultImage!=null)
+            g2d.drawImage(defaultImage, (int)circleX, (int)circleY,
+                    (int)(2*radiusX-2*a),
+                    (int)(2*radiusY-2*b), null);
+        else
+        {
+            final Font oldFont = g2d.getFont();
+            g2d.setFont(oldFont.deriveFont((float)this.fontSize));
 
-        g2d.setColor(textColor);
-        final int fontHeight = g2d.getFontMetrics().getHeight();
-        final int fontWidth  = g2d.getFontMetrics().stringWidth(this.text);
+            g2d.setColor(textColor);
+            final int fontHeight = g2d.getFontMetrics().getHeight();
+            final int fontWidth  = g2d.getFontMetrics().stringWidth(this.text);
 
-        g2d.drawString(this.text
-                      ,(float)this.getElementShape().getBounds2D().getCenterX()-fontWidth/2
-                      ,(float)this.getElementShape().getBounds2D().getCenterY()+fontHeight/3);
+            g2d.drawString(this.text
+                    ,(float)this.getElementShape().getBounds2D().getCenterX()-fontWidth/2
+                    ,(float)this.getElementShape().getBounds2D().getCenterY()+fontHeight/3);
 
-        g2d.setFont(oldFont);
+            g2d.setFont(oldFont);
+        }
+
     }
 
     /**
@@ -119,5 +142,17 @@ public class GameButton extends UIElement {
      */
     public void setText(String text) {
         this.text = text;
+    }
+
+
+    /**
+     * Sets the button's default image.
+     *
+     * @param image the icon used as the default image
+     * @beaninfo
+     *     description: The button's default image
+     */
+    public void setImage(Image image) {
+        this.defaultImage=image;
     }
 }

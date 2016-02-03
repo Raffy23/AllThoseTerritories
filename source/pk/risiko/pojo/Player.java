@@ -267,8 +267,4 @@ public class Player {
     public int getMoveCount() {
         return moveCount;
     }
-
-    public boolean getAttackAvailable() {
-        return attackAvailable;
-    }
 }

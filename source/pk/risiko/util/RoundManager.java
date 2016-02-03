@@ -143,7 +143,7 @@ public class RoundManager {
 
                         if( p.getCurrentActiveTerritory().getOwner().equals(targetTerritory.getOwner()) && p.getMoveCount()==0 )
                             lastAction = p.getName() + " moves units to " + targetTerritory.getName();
-                        else if (p.getAttackAvailable())
+                        else //if (p.getAttackAvailable())
                             lastAction = p.getName() + " attacks " + targetTerritory.getName();
 
                         p.attackOrMove(targetTerritory);
