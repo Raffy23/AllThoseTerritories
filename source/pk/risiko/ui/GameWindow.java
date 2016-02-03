@@ -40,7 +40,6 @@ public class GameWindow extends JFrame {
     private final WindowPainter painterTimer;
 
     private BufferedImage background;
-    private BufferedImage icon;
 
     private SwingMouseEventDispatcher dispatcher;
 
