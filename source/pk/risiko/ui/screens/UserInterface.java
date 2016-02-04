@@ -210,8 +210,10 @@ public class UserInterface extends MouseAdapter implements Drawable, MouseClicke
                 }
                 else
                     this.nextButton.setImage(ImageStore.getInstance().getImage("Swords"));
+                return;
             }
         this.nextButton.setImage(null);
+        return;
     }
 
     /**
